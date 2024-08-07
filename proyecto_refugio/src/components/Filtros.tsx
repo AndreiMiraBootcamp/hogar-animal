@@ -14,16 +14,21 @@ const Filtros: React.FC = () => {
     'Pontevedra', 'Salamanca', 'Santa Cruz de Tenerife', 'Segovia', 
     'Sevilla', 'Soria', 'Tarragona', 'Teruel', 'Toledo', 'Valencia', 
     'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
-];
+  ];
 
   const animales = [
     'Perro', 'Gato', 'Ave', 'Caballo', 'Otro'
   ];
 
   return (
+<<<<<<< HEAD
     <div className="flex justify-center items-start w-3/4 pt-12">
   <div className="w-full max-w-4xl p-6 bg-white shadow-md">
     <h2 className="text-2xl mb-6 font-semibold text-gray-800 text-center">Filtros</h2>
+=======
+    <div className="flex justify-center items-start bg-gray-100 pt-12">
+  <div className="w-full max-w-4xl p-6 bg-white shadow-md">
+>>>>>>> 79ec7b6522d87e7cce15e63231917517ad12cf92
     <div className="flex space-x-4 mb-6">
       <div className="flex-1">
         <label className="block mb-2 text-lg text-gray-700">Provincia:</label>

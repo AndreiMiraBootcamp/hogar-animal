@@ -2,7 +2,6 @@ import React from 'react';
 import Filtros from './components/Filtros';
 import Footer from './components/Footer';
 
-
 const App: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
@@ -16,9 +15,12 @@ const App: React.FC = () => {
       <a href="#contact" className="hover:text-white-400">Contacto</a>
     </div>
       </header>
+<<<<<<< HEAD
       <main className="flex flex-1 justify-center items-center">
+=======
+      <main className="flex flex-1 justify-center items-start">
+>>>>>>> 79ec7b6522d87e7cce15e63231917517ad12cf92
         <Filtros />
-
       </main>
 
       <Footer />
