@@ -8,7 +8,8 @@ import About from './components/About';
 const App: React.FC = () => {
   return (
     <Router>
-    <div className="min-h-screen flex flex-col bg-gray-100">
+    <div className="min-h-screen flex flex-col bg-gray-100 items-center">
+      <div className='w-[1200px] bg-white'>
 
       <Header />
       <Routes>
@@ -21,6 +22,7 @@ const App: React.FC = () => {
       </main>
 
       <Footer />
+    </div>
     </div>
     </Router>
   );

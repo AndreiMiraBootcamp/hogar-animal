@@ -23,7 +23,7 @@ const Filtros: React.FC = () => {
 
   return (
 <div className="background-image flex justify-center items-start w-full">
-<div className="flex justify-center items-start w-3/4 mt-12">
+<div className="flex justify-center items-center w-3/4 mt-12">
   <div className="w-full max-w-4xl p-6 bg-white shadow-md rounded-lg">
     <div className="flex space-x-4 mb-6">
       <div className="flex-1">
@@ -53,7 +53,7 @@ const Filtros: React.FC = () => {
         </select>
       </div>
     </div>
-    <button className="bg-indigo-500 text-white p-3 w-full rounded-lg hover:bg-indigo-600">Buscar</button>
+    <button className="bg-gray-700 text-white p-3 w-full rounded-lg hover:bg-gray-800">Buscar</button>
   </div>
 </div>
 </div>
