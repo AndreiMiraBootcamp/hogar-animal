@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 const Filtros: React.FC = () => {
   const [provincia, setProvincia] = useState('');
   const [animal, setAnimal] = useState('');
@@ -21,10 +22,9 @@ const Filtros: React.FC = () => {
   ];
 
   return (
-    
-<div className="flex justify-center items-start w-3/4 pt-12">
-  <div className="w-full max-w-4xl p-6 bg-white shadow-md">
-    <h2 className="text-2xl mb-6 font-semibold text-gray-800 text-center">Filtros</h2>
+<div className="background-image flex justify-center items-start w-full">
+<div className="flex justify-center items-start w-3/4 mt-12">
+  <div className="w-full max-w-4xl p-6 bg-white shadow-md rounded-lg">
     <div className="flex space-x-4 mb-6">
       <div className="flex-1">
         <label className="block mb-2 text-lg text-gray-700">Provincia:</label>
@@ -56,8 +56,7 @@ const Filtros: React.FC = () => {
     <button className="bg-indigo-500 text-white p-3 w-full rounded-lg hover:bg-indigo-600">Buscar</button>
   </div>
 </div>
-
-
+</div>
   );
 }
 
