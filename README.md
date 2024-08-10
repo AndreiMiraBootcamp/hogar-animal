@@ -1,6 +1,6 @@
-# PetFinder
+# Hogar Animal
 
-PetFinder es una aplicación web diseñada para conectar a personas que buscan adoptar animales con refugios locales que tienen animales disponibles para adopción. Nuestro objetivo es facilitar el proceso de adopción y ayudar a los animales a encontrar un hogar amoroso.
+Hogar Animal es una aplicación web diseñada para conectar a personas que buscan adoptar animales con refugios locales que tienen animales disponibles para adopción. Nuestro objetivo es facilitar el proceso de adopción y ayudar a los animales a encontrar un hogar amoroso.
 
 ## Funcionalidades
 
@@ -19,11 +19,11 @@ PetFinder es una aplicación web diseñada para conectar a personas que buscan a
 
 1. Clona el repositorio:
     ```bash
-    git clone https://github.com/tu-usuario/petfinder.git
+    git clone https://github.com/tu-usuario/Hogar Animal.git
     ```
 2. Navega al directorio del proyecto:
     ```bash
-    cd petfinder
+    cd Hogar Animal
     ```
 3. Importa el proyecto en tu IDE preferido (Eclipse, IntelliJ, etc.).
 4. Configura tu base de datos MySQL en el archivo `application.properties`.
