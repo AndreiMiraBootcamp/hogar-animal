@@ -7,10 +7,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.animal.hogar.entities.AdoptionCenter;
+import es.animal.hogar.model.AdoptionCenter;
 import es.animal.hogar.entities.Follow;
 import es.animal.hogar.entities.User;
-import es.animal.hogar.repositories.AdoptionCenterRepository;
+import es.animal.hogar.repository.AdoptionCenterRepository;
 import es.animal.hogar.repositories.FollowRepository;
 import es.animal.hogar.repositories.UserRepository;
 
@@ -26,9 +26,9 @@ public class FollowService {
     @Autowired
     private AdoptionCenterRepository adoptionCenterRepository;
 
-    public Follow createFollow(Integer userId, Integer centerId) {
+    public Follow createFollow(Integer userId, Long centerId) {
         Optional<User> userOpt = userRepository.findById(userId);
-        Optional<AdoptionCenter> centerOpt = adoptionCenterRepository.findById(centerId);
+        Optional<AdoptionCenter> centerOpt = Optional.ofNullable(adoptionCenterRepository.findById(centerId));
 
         if (userOpt.isPresent() && centerOpt.isPresent()) {
             Follow follow = new Follow();

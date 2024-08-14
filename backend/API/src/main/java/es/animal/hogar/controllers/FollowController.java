@@ -18,10 +18,10 @@ public class FollowController {
     private FollowService followService;
 
     @PostMapping
-    public ResponseEntity<Follow> createFollow(@RequestBody Map<String, Map<String, Integer>> body) {
-        Integer userId = body.get("user").get("userId");
-        Integer centerId = body.get("center").get("centerId");
-        
+    public ResponseEntity<Follow> createFollow(@RequestBody Map<String, Map<String, Object>> body) {
+        Integer userId = (Integer) body.get("user").get("userId");
+        Long centerId = Long.valueOf(body.get("center").get("centerId").toString());
+
         Follow createdFollow = followService.createFollow(userId, centerId);
         return ResponseEntity.ok(createdFollow);
     }
