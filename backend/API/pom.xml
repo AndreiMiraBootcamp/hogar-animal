@@ -9,7 +9,6 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>es.animal.hogar</groupId>
-	<groupId>es.animal.hogar</groupId>
 	<artifactId>API</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>API</name>
