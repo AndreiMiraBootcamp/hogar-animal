@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Entidades de Andrei ###
+src/main/java/es.animal.hogar.entities.Pet
+src/main/java/es.animal.hogar.entities.AdoptionCenter
+src/main/java/es.animal.hogar.repositories.AdoptionCenterRepository
