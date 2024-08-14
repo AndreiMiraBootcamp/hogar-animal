@@ -24,9 +24,24 @@ public class CenterImageRepository {
         return jdbcTemplate.query(sql, new CenterImageRowMapper(), centerId);
     }
 
+    public CenterImage findById(Long id) {
+        String sql = "SELECT * FROM center_images WHERE center_image_id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new CenterImageRowMapper());
+    }
+
     public int save(CenterImage centerImage) {
         String sql = "INSERT INTO center_images (center_id, image) VALUES (?, ?)";
         return jdbcTemplate.update(sql, centerImage.getCenterId(), centerImage.getImage());
+    }
+
+    public int update(CenterImage centerImage) {
+        String sql = "UPDATE center_images SET image = ? WHERE center_image_id = ?";
+        return jdbcTemplate.update(sql, centerImage.getImage(), centerImage.getCenterImageId());
+    }
+
+    public int delete(Long id) {
+        String sql = "DELETE FROM center_images WHERE center_image_id = ?";
+        return jdbcTemplate.update(sql, id);
     }
 
     private static class CenterImageRowMapper implements RowMapper<CenterImage> {

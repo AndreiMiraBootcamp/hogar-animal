@@ -1,6 +1,5 @@
 package es.animal.hogar.service;
 
-
 import org.springframework.stereotype.Service;
 
 import es.animal.hogar.model.PetImage;
@@ -23,5 +22,17 @@ public class PetImageService {
 
     public void addPetImage(PetImage petImage) {
         petImageRepository.save(petImage);
+    }
+
+    public void updatePetImage(Long id, PetImage petImage) {
+        PetImage existingImage = petImageRepository.findById(id);
+        if (existingImage != null) {
+            existingImage.setImage(petImage.getImage());
+            petImageRepository.update(existingImage);
+        }
+    }
+
+    public void deletePetImage(Long id) {
+        petImageRepository.delete(id);
     }
 }

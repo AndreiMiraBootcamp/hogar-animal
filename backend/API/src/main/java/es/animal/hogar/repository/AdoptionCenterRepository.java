@@ -24,11 +24,30 @@ public class AdoptionCenterRepository {
         return jdbcTemplate.query(sql, new AdoptionCenterRowMapper());
     }
 
+    @SuppressWarnings("deprecation")
+	public AdoptionCenter findById(Long id) {
+        String sql = "SELECT * FROM adoption_centers WHERE center_id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new AdoptionCenterRowMapper());
+    }
+
     public int save(AdoptionCenter center) {
         String sql = "INSERT INTO adoption_centers (user_id, name, address, city, state, postal_code, phone, website, foundation_year) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         return jdbcTemplate.update(sql, center.getUserId(), center.getName(), center.getAddress(), center.getCity(),
                 center.getState(), center.getPostalCode(), center.getPhone(), center.getWebsite(), center.getFoundationYear());
+    }
+
+    public int update(AdoptionCenter center) {
+        String sql = "UPDATE adoption_centers SET user_id = ?, name = ?, address = ?, city = ?, state = ?, " +
+                     "postal_code = ?, phone = ?, website = ?, foundation_year = ? WHERE center_id = ?";
+        return jdbcTemplate.update(sql, center.getUserId(), center.getName(), center.getAddress(), center.getCity(),
+                center.getState(), center.getPostalCode(), center.getPhone(), center.getWebsite(), center.getFoundationYear(),
+                center.getCenterId());
+    }
+
+    public int delete(Long id) {
+        String sql = "DELETE FROM adoption_centers WHERE center_id = ?";
+        return jdbcTemplate.update(sql, id);
     }
 
     private static class AdoptionCenterRowMapper implements RowMapper<AdoptionCenter> {

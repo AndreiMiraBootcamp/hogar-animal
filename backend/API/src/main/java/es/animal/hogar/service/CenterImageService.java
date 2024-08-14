@@ -23,4 +23,16 @@ public class CenterImageService {
     public void addCenterImage(CenterImage centerImage) {
         centerImageRepository.save(centerImage);
     }
+
+    public void updateCenterImage(Long id, CenterImage centerImage) {
+        CenterImage existingImage = centerImageRepository.findById(id);
+        if (existingImage != null) {
+            existingImage.setImage(centerImage.getImage());
+            centerImageRepository.update(existingImage);
+        }
+    }
+
+    public void deleteCenterImage(Long id) {
+        centerImageRepository.delete(id);
+    }
 }

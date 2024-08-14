@@ -8,22 +8,32 @@ import es.animal.hogar.service.AdoptionCenterService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/centers")
+@RequestMapping("/centers")
 public class AdoptionCenterController {
 
-	private final AdoptionCenterService adoptionCenterService;
+    private final AdoptionCenterService adoptionCenterService;
 
-	public AdoptionCenterController(AdoptionCenterService adoptionCenterService) {
-		this.adoptionCenterService = adoptionCenterService;
-	}
+    public AdoptionCenterController(AdoptionCenterService adoptionCenterService) {
+        this.adoptionCenterService = adoptionCenterService;
+    }
 
-	@GetMapping
-	public List<AdoptionCenter> getAllCenters() {
-		return adoptionCenterService.getAllCenters();
-	}
+    @GetMapping("all")
+    public List<AdoptionCenter> getAllCenters() {
+        return adoptionCenterService.getAllCenters();
+    }
 
-	@PostMapping
-	public void addCenter(@RequestBody AdoptionCenter center) {
-		adoptionCenterService.addCenter(center);
-	}
+    @PostMapping("add")
+    public void addCenter(@RequestBody AdoptionCenter center) {
+        adoptionCenterService.addCenter(center);
+    }
+
+    @PutMapping("update/{id}")
+    public void updateCenter(@PathVariable Long id, @RequestBody AdoptionCenter center) {
+        adoptionCenterService.updateCenter(id, center);
+    }
+
+    @DeleteMapping("delete/{id}")
+    public void deleteCenter(@PathVariable Long id) {
+        adoptionCenterService.deleteCenter(id);
+    }
 }
