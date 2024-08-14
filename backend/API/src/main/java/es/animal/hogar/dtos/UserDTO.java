@@ -1,6 +1,5 @@
 package es.animal.hogar.dtos;
 
-import java.sql.Timestamp;
 import es.animal.hogar.entities.User;
 import lombok.Data;
 
@@ -15,5 +14,5 @@ public class UserDTO {
     private String city;
     private String state;
     private Integer postalCode;
-    private Timestamp createdAt;
+    private byte[] image;
 }

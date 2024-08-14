@@ -2,8 +2,12 @@ package es.animal.hogar.controllers;
 
 import java.io.IOException;
 import java.util.List;
+import org.springframework.core.io.ClassPathResource;
+import java.nio.file.Files;
+import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +35,7 @@ public class UserController {
             @RequestParam("city") String city,
             @RequestParam("state") String state,
             @RequestParam("postalCode") Integer postalCode,
-            @RequestParam("image") MultipartFile image) {
+            @RequestParam(value = "image", required = false) MultipartFile image) {
 
         User user = new User();
         user.setUsername(username);
@@ -45,13 +49,26 @@ public class UserController {
         user.setPostalCode(postalCode);
 
         try {
-            user.setImage(image.getBytes());
+            if (image != null && !image.isEmpty()) {
+                user.setImage(image.getBytes());
+            } else {
+                ClassPathResource imgFile = new ClassPathResource("static/images/default-profile.jpg");
+                byte[] defaultImageBytes = Files.readAllBytes(imgFile.getFile().toPath());
+                user.setImage(defaultImageBytes);
+            }
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process image");
         }
 
-        User savedUser = userService.createUser(user);
-        return ResponseEntity.ok().body("User created successfully with ID: " + savedUser.getUserId());
+        try {
+            User savedUser = userService.createUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully with ID: " + savedUser.getUserId());
+        } catch (DataIntegrityViolationException e) {
+            String errorMessage = extractConstraintViolationMessage(e);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error inesperado.");
+        }
     }
 
     @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
@@ -88,9 +105,15 @@ public class UserController {
             }
         }
 
-        User updatedUser = userService.updateUser(user);
-
-        return ResponseEntity.ok().body("User updated successfully with ID: " + updatedUser.getUserId());
+        try {
+            User updatedUser = userService.updateUser(user);
+            return ResponseEntity.ok().body("User updated successfully with ID: " + updatedUser.getUserId());
+        } catch (DataIntegrityViolationException e) {
+            String errorMessage = extractConstraintViolationMessage(e);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error inesperado.");
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -176,8 +199,24 @@ public class UserController {
             }
         }
 
-        User updatedUser = userService.patchUser(user);
-
-        return ResponseEntity.ok().body("User patched successfully with ID: " + updatedUser.getUserId());
+        try {
+            User updatedUser = userService.patchUser(user);
+            return ResponseEntity.ok().body("User patched successfully with ID: " + updatedUser.getUserId());
+        } catch (DataIntegrityViolationException e) {
+            String errorMessage = extractConstraintViolationMessage(e);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error inesperado.");
+        }
+    }
+    
+    private String extractConstraintViolationMessage(DataIntegrityViolationException e) {
+        if (e.getMessage().contains("users.username")) {
+            return "El nombre de usuario ya está en uso.";
+        } else if (e.getMessage().contains("users.email")) {
+            return "El correo electrónico ya está en uso.";
+        } else {
+            return "Se ha producido un error de integridad de datos.";
+        }
     }
 }
