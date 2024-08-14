@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.animal.hogar.entities.Favorite;
-import es.animal.hogar.repositories.FavoriteRepository;
+import es.animal.hogar.repository.FavoriteRepository;
 
 @Service
 public class FavoriteService {

@@ -7,12 +7,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.animal.hogar.model.AdoptionCenter;
+import es.animal.hogar.entities.AdoptionCenter;
 import es.animal.hogar.entities.Follow;
 import es.animal.hogar.entities.User;
 import es.animal.hogar.repository.AdoptionCenterRepository;
-import es.animal.hogar.repositories.FollowRepository;
-import es.animal.hogar.repositories.UserRepository;
+import es.animal.hogar.repository.FollowRepository;
+import es.animal.hogar.repository.UserRepository;
 
 @Service
 public class FollowService {

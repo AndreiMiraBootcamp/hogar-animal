@@ -1,4 +1,4 @@
-package es.animal.hogar.repositories;
+package es.animal.hogar.repository;
 
 import java.util.List;
 

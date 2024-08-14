@@ -1,7 +1,7 @@
 package es.animal.hogar.controllers;
 
 import es.animal.hogar.entities.User;
-import es.animal.hogar.repositories.UserRepository;
+import es.animal.hogar.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

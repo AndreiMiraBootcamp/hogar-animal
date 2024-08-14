@@ -1,8 +1,8 @@
-package es.animal.hogar.service;
+package es.animal.hogar.services;
 
 import org.springframework.stereotype.Service;
 
-import es.animal.hogar.model.CenterImage;
+import es.animal.hogar.entities.CenterImage;
 import es.animal.hogar.repository.CenterImageRepository;
 
 import java.util.List;

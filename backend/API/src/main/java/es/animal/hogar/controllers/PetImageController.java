@@ -1,9 +1,9 @@
-package es.animal.hogar.controller;
+package es.animal.hogar.controllers;
 
 import org.springframework.web.bind.annotation.*;
 
-import es.animal.hogar.model.PetImage;
-import es.animal.hogar.service.PetImageService;
+import es.animal.hogar.entities.PetImage;
+import es.animal.hogar.services.PetImageService;
 
 import java.util.List;
 

@@ -1,10 +1,8 @@
-package es.animal.hogar.model;
+package es.animal.hogar.entities;
 
 import java.util.Date;
 
 import es.animal.hogar.entities.Pet;
-import es.animal.hogar.entities.Pet.Gender;
-import es.animal.hogar.entities.Pet.Species;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

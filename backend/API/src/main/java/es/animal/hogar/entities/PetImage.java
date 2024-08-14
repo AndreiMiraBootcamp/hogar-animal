@@ -1,4 +1,4 @@
-package es.animal.hogar.model;
+package es.animal.hogar.entities;
 
 public class PetImage {
 

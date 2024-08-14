@@ -4,7 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import es.animal.hogar.model.CenterImage;
+import es.animal.hogar.entities.CenterImage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

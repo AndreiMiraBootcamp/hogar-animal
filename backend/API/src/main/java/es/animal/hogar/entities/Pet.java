@@ -18,62 +18,85 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import es.animal.hogar.model.AdoptionCenter;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "pets", schema = "db_pet_finder", indexes = {
-        @Index(name = "center_id", columnList = "center_id")
-})
-public class Pet implements Serializable {
+public class Pet {
 
-    private static final long serialVersionUID = 1L;
-
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pet_id")
-    private Integer petId;
-
-    @ManyToOne
-    @JoinColumn(name = "center_id", nullable = false)
-    private AdoptionCenter center;
-
-    @Column(name = "name", nullable = false, length = 100)
+    private Long petId;
+    private Long centerId;
     private String name;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "species", nullable = false)
-    private Species species;
-
-    @Column(name = "breed", length = 100)
+    private String species;
     private String breed;
-
-    @Column(name = "age")
     private Integer age;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gender")
-    private Gender gender;
-
-    @Column(name = "description")
+    private String gender;
     private String description;
-
-    @Column(name = "available")
+    private String photoUrl;
     private Boolean available;
-
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    public enum Species {
-        dog,
-        cat,
-        other
-    }
-
-    public enum Gender {
-        male,
-        female
-    }
+    
+    
+	public Long getPetId() {
+		return petId;
+	}
+	public void setPetId(Long petId) {
+		this.petId = petId;
+	}
+	public Long getCenterId() {
+		return centerId;
+	}
+	public void setCenterId(Long centerId) {
+		this.centerId = centerId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getSpecies() {
+		return species;
+	}
+	public void setSpecies(String species) {
+		this.species = species;
+	}
+	public String getBreed() {
+		return breed;
+	}
+	public void setBreed(String breed) {
+		this.breed = breed;
+	}
+	public Integer getAge() {
+		return age;
+	}
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getPhotoUrl() {
+		return photoUrl;
+	}
+	public void setPhotoUrl(String photoUrl) {
+		this.photoUrl = photoUrl;
+	}
+	public Boolean getAvailable() {
+		return available;
+	}
+	public void setAvailable(Boolean available) {
+		this.available = available;
+	}
 }

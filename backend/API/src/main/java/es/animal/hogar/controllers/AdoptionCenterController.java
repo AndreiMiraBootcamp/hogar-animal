@@ -1,9 +1,9 @@
-package es.animal.hogar.controller;
+package es.animal.hogar.controllers;
 
 import org.springframework.web.bind.annotation.*;
 
-import es.animal.hogar.model.AdoptionCenter;
-import es.animal.hogar.service.AdoptionCenterService;
+import es.animal.hogar.entities.AdoptionCenter;
+import es.animal.hogar.services.AdoptionCenterService;
 
 import java.util.List;
 

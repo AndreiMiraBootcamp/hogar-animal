@@ -1,9 +1,9 @@
-package es.animal.hogar.controller;
+package es.animal.hogar.controllers;
 
 import org.springframework.web.bind.annotation.*;
 
-import es.animal.hogar.model.CenterImage;
-import es.animal.hogar.service.CenterImageService;
+import es.animal.hogar.entities.CenterImage;
+import es.animal.hogar.services.CenterImageService;
 
 import java.util.List;
 

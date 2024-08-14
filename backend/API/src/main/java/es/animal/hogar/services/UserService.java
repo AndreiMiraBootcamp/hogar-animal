@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import es.animal.hogar.dtos.UserDTO;
 import es.animal.hogar.entities.User;
-import es.animal.hogar.repositories.UserRepository;
+import es.animal.hogar.repository.UserRepository;
 
 @Service
 public class UserService {
