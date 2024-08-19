@@ -31,12 +31,12 @@ public class UserController {
             @RequestParam("username") String username,
             @RequestParam("password") String password,
             @RequestParam("email") String email,
-            @RequestParam("role") String role,
-            @RequestParam("phoneNumber") String phoneNumber,
-            @RequestParam("address") String address,
-            @RequestParam("cityId") Integer cityId,  // Cambiado a cityId
-            @RequestParam("stateId") Integer stateId,  // Cambiado a stateId
-            @RequestParam("postalCode") Integer postalCode,
+            @RequestParam(value = "role", defaultValue = "adopter") String role,
+            @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+            @RequestParam(value = "address", required = false) String address,
+            @RequestParam(value = "cityId", required = false) Integer cityId,
+            @RequestParam(value = "stateId", required = false) Integer stateId,
+            @RequestParam(value = "postalCode", required = false) Integer postalCode,
             @RequestParam(value = "image", required = false) MultipartFile image) {
 
         User user = new User();
@@ -44,20 +44,26 @@ public class UserController {
         user.setPassword(password);
         user.setEmail(email);
         user.setRole(User.Role.valueOf(role));
-        user.setPhoneNumber(phoneNumber);
-        user.setAddress(address);
 
-        City city = userService.getCityById(cityId);
-        State state = userService.getStateById(stateId);
-        user.setCity(city);
-        user.setState(state);
+        if (phoneNumber != null) user.setPhoneNumber(phoneNumber);
+        if (address != null) user.setAddress(address);
 
-        user.setPostalCode(postalCode);
+        if (cityId != null) {
+            City city = userService.getCityById(cityId);
+            user.setCity(city);
+        }
+        if (stateId != null) {
+            State state = userService.getStateById(stateId);
+            user.setState(state);
+        }
+
+        if (postalCode != null) user.setPostalCode(postalCode);
 
         try {
             if (image != null && !image.isEmpty()) {
                 user.setImage(image.getBytes());
             } else {
+                // Imagen por defecto
                 ClassPathResource imgFile = new ClassPathResource("static/images/default-profile.jpg");
                 byte[] defaultImageBytes = Files.readAllBytes(imgFile.getFile().toPath());
                 user.setImage(defaultImageBytes);
