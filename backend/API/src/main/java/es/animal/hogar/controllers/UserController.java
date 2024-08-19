@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.animal.hogar.dtos.UserDTO;
+import es.animal.hogar.entities.City;
+import es.animal.hogar.entities.State;
 import es.animal.hogar.entities.User;
 import es.animal.hogar.services.UserService;
 
@@ -32,8 +34,8 @@ public class UserController {
             @RequestParam("role") String role,
             @RequestParam("phoneNumber") String phoneNumber,
             @RequestParam("address") String address,
-            @RequestParam("city") String city,
-            @RequestParam("state") String state,
+            @RequestParam("cityId") Integer cityId,  // Cambiado a cityId
+            @RequestParam("stateId") Integer stateId,  // Cambiado a stateId
             @RequestParam("postalCode") Integer postalCode,
             @RequestParam(value = "image", required = false) MultipartFile image) {
 
@@ -44,8 +46,12 @@ public class UserController {
         user.setRole(User.Role.valueOf(role));
         user.setPhoneNumber(phoneNumber);
         user.setAddress(address);
+
+        City city = userService.getCityById(cityId);
+        State state = userService.getStateById(stateId);
         user.setCity(city);
         user.setState(state);
+
         user.setPostalCode(postalCode);
 
         try {
@@ -80,8 +86,8 @@ public class UserController {
             @RequestPart("role") String role,
             @RequestPart("phoneNumber") String phoneNumber,
             @RequestPart("address") String address,
-            @RequestPart("city") String city,
-            @RequestPart("state") String state,
+            @RequestPart("cityId") Integer cityId,  // Cambiado a cityId
+            @RequestPart("stateId") Integer stateId,  // Cambiado a stateId
             @RequestPart("postalCode") Integer postalCode,
             @RequestPart(value = "image", required = false) MultipartFile image) {
 
@@ -93,10 +99,15 @@ public class UserController {
         user.setRole(User.Role.valueOf(role));
         user.setPhoneNumber(phoneNumber);
         user.setAddress(address);
+
+        // Buscar City y State usando los IDs
+        City city = userService.getCityById(cityId);
+        State state = userService.getStateById(stateId);
         user.setCity(city);
         user.setState(state);
+
         user.setPostalCode(postalCode);
-        
+
         if (image != null && !image.isEmpty()) {
             try {
                 user.setImage(image.getBytes());
@@ -175,8 +186,8 @@ public class UserController {
             @RequestPart(value = "role", required = false) String role,
             @RequestPart(value = "phoneNumber", required = false) String phoneNumber,
             @RequestPart(value = "address", required = false) String address,
-            @RequestPart(value = "city", required = false) String city,
-            @RequestPart(value = "state", required = false) String state,
+            @RequestPart(value = "cityId", required = false) Integer cityId,  // Cambiado a cityId
+            @RequestPart(value = "stateId", required = false) Integer stateId,  // Cambiado a stateId
             @RequestPart(value = "postalCode", required = false) Integer postalCode,
             @RequestPart(value = "image", required = false) MultipartFile image) {
 
@@ -188,8 +199,16 @@ public class UserController {
         if (role != null) user.setRole(User.Role.valueOf(role));
         if (phoneNumber != null) user.setPhoneNumber(phoneNumber);
         if (address != null) user.setAddress(address);
-        if (city != null) user.setCity(city);
-        if (state != null) user.setState(state);
+
+        if (cityId != null) {
+            City city = userService.getCityById(cityId);
+            user.setCity(city);
+        }
+        if (stateId != null) {
+            State state = userService.getStateById(stateId);
+            user.setState(state);
+        }
+
         if (postalCode != null) user.setPostalCode(postalCode);
         if (image != null && !image.isEmpty()) {
             try {

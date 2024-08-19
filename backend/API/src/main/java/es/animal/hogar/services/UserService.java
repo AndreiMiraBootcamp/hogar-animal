@@ -1,7 +1,5 @@
 package es.animal.hogar.services;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.animal.hogar.dtos.UserDTO;
+import es.animal.hogar.entities.City;
+import es.animal.hogar.entities.State;
 import es.animal.hogar.entities.User;
+import es.animal.hogar.repository.CityRepository;
+import es.animal.hogar.repository.StateRepository;
 import es.animal.hogar.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -19,12 +21,18 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-    
+
+    @Autowired
+    private CityRepository cityRepository;
+
+    @Autowired
+    private StateRepository stateRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public User createUser(User user) {
-    	user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -92,14 +100,22 @@ public class UserService {
             if (user.getRole() != null) existingUser.setRole(user.getRole());
             if (user.getPhoneNumber() != null) existingUser.setPhoneNumber(user.getPhoneNumber());
             if (user.getAddress() != null) existingUser.setAddress(user.getAddress());
-            if (user.getCity() != null) existingUser.setCity(user.getCity());
-            if (user.getState() != null) existingUser.setState(user.getState());
+            if (user.getCity() != null) existingUser.setCity(getCityById(user.getCity().getCityId()));
+            if (user.getState() != null) existingUser.setState(getStateById(user.getState().getStateId()));
             if (user.getPostalCode() != null) existingUser.setPostalCode(user.getPostalCode());
             if (user.getImage() != null) existingUser.setImage(user.getImage());
             return userRepository.save(existingUser);
         } else {
             throw new RuntimeException("User not found");
         }
+    }
+
+    public City getCityById(Integer cityId) {
+        return cityRepository.findById(cityId).orElse(null);
+    }
+
+    public State getStateById(Integer stateId) {
+        return stateRepository.findById(stateId).orElse(null);
     }
 
     private UserDTO mapToDTO(User user) {
@@ -110,8 +126,8 @@ public class UserService {
         dto.setRole(user.getRole());
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setAddress(user.getAddress());
-        dto.setCity(user.getCity());
-        dto.setState(user.getState());
+        dto.setCity(user.getCity() != null ? user.getCity().getName() : null);
+        dto.setState(user.getState() != null ? user.getState().getName() : null);
         dto.setPostalCode(user.getPostalCode());
         dto.setImage(user.getImage());
         return dto;

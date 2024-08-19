@@ -3,15 +3,7 @@ package es.animal.hogar.entities;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,11 +41,13 @@ public class User implements Serializable {
     @Column(name = "address", length = 75)
     private String address;
 
-    @Column(name = "city", length = 45)
-    private String city;
+    @ManyToOne
+    @JoinColumn(name = "city_id", nullable = true)
+    private City city;
 
-    @Column(name = "state", length = 45)
-    private String state;
+    @ManyToOne
+    @JoinColumn(name = "state_id", nullable = true)
+    private State state;
 
     @Column(name = "postal_code")
     private Integer postalCode;
