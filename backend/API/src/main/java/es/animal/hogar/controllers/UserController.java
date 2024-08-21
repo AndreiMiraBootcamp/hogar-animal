@@ -35,7 +35,6 @@ public class UserController {
             @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
             @RequestParam(value = "address", required = false) String address,
             @RequestParam(value = "cityId", required = false) Integer cityId,
-            @RequestParam(value = "stateId", required = false) Integer stateId,
             @RequestParam(value = "postalCode", required = false) Integer postalCode,
             @RequestParam(value = "image", required = false) MultipartFile image) {
 
@@ -43,7 +42,6 @@ public class UserController {
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
-        user.setRole(User.Role.valueOf(role));
 
         if (phoneNumber != null) user.setPhoneNumber(phoneNumber);
         if (address != null) user.setAddress(address);
@@ -52,10 +50,6 @@ public class UserController {
             City city = userService.getCityById(cityId);
             user.setCity(city);
         }
-        if (stateId != null) {
-            State state = userService.getStateById(stateId);
-            user.setState(state);
-        }
 
         if (postalCode != null) user.setPostalCode(postalCode);
 
@@ -63,7 +57,6 @@ public class UserController {
             if (image != null && !image.isEmpty()) {
                 user.setImage(image.getBytes());
             } else {
-                // Imagen por defecto
                 ClassPathResource imgFile = new ClassPathResource("static/images/default-profile.jpg");
                 byte[] defaultImageBytes = Files.readAllBytes(imgFile.getFile().toPath());
                 user.setImage(defaultImageBytes);
@@ -93,7 +86,6 @@ public class UserController {
             @RequestPart("phoneNumber") String phoneNumber,
             @RequestPart("address") String address,
             @RequestPart("cityId") Integer cityId,  // Cambiado a cityId
-            @RequestPart("stateId") Integer stateId,  // Cambiado a stateId
             @RequestPart("postalCode") Integer postalCode,
             @RequestPart(value = "image", required = false) MultipartFile image) {
 
@@ -102,15 +94,12 @@ public class UserController {
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
-        user.setRole(User.Role.valueOf(role));
         user.setPhoneNumber(phoneNumber);
         user.setAddress(address);
 
         // Buscar City y State usando los IDs
         City city = userService.getCityById(cityId);
-        State state = userService.getStateById(stateId);
         user.setCity(city);
-        user.setState(state);
 
         user.setPostalCode(postalCode);
 
@@ -202,17 +191,12 @@ public class UserController {
         if (username != null) user.setUsername(username);
         if (password != null) user.setPassword(password);
         if (email != null) user.setEmail(email);
-        if (role != null) user.setRole(User.Role.valueOf(role));
         if (phoneNumber != null) user.setPhoneNumber(phoneNumber);
         if (address != null) user.setAddress(address);
 
         if (cityId != null) {
             City city = userService.getCityById(cityId);
             user.setCity(city);
-        }
-        if (stateId != null) {
-            State state = userService.getStateById(stateId);
-            user.setState(state);
         }
 
         if (postalCode != null) user.setPostalCode(postalCode);

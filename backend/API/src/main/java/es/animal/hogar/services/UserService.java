@@ -99,11 +99,9 @@ public class UserService {
             if (user.getUsername() != null) existingUser.setUsername(user.getUsername());
             if (user.getPassword() != null) existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
             if (user.getEmail() != null) existingUser.setEmail(user.getEmail());
-            if (user.getRole() != null) existingUser.setRole(user.getRole());
             if (user.getPhoneNumber() != null) existingUser.setPhoneNumber(user.getPhoneNumber());
             if (user.getAddress() != null) existingUser.setAddress(user.getAddress());
             if (user.getCity() != null) existingUser.setCity(getCityById(user.getCity().getCityId()));
-            if (user.getState() != null) existingUser.setState(getStateById(user.getState().getStateId()));
             if (user.getPostalCode() != null) existingUser.setPostalCode(user.getPostalCode());
             if (user.getImage() != null) existingUser.setImage(user.getImage());
             return userRepository.save(existingUser);
@@ -125,11 +123,26 @@ public class UserService {
         dto.setUserId(user.getUserId());
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
-        dto.setRole(user.getRole());
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setAddress(user.getAddress());
-        dto.setCity(user.getCity() != null ? user.getCity().getName() : null);
-        dto.setState(user.getState() != null ? user.getState().getName() : null);
+        
+        // Mapeo de CityDTO
+        if (user.getCity() != null) {
+            UserDTO.CityDTO cityDTO = new UserDTO.CityDTO();
+            cityDTO.setCityId(user.getCity().getCityId());
+            cityDTO.setName(user.getCity().getName());
+            
+            // Mapeo de StateDTO dentro de CityDTO
+            if (user.getCity().getState() != null) {
+                UserDTO.CityDTO.StateDTO stateDTO = new UserDTO.CityDTO.StateDTO();
+                stateDTO.setStateId(user.getCity().getState().getStateId());
+                stateDTO.setName(user.getCity().getState().getName());
+                cityDTO.setState(stateDTO);
+            }
+            
+            dto.setCity(cityDTO);
+        }
+
         dto.setPostalCode(user.getPostalCode());
         dto.setImage(user.getImage());
         return dto;

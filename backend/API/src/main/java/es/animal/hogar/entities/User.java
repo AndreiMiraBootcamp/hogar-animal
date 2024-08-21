@@ -31,10 +31,6 @@ public class User implements Serializable {
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private Role role;
-
     @Column(name = "phone_number", length = 25)
     private String phoneNumber;
 
@@ -45,10 +41,6 @@ public class User implements Serializable {
     @JoinColumn(name = "city_id", nullable = true)
     private City city;
 
-    @ManyToOne
-    @JoinColumn(name = "state_id", nullable = true)
-    private State state;
-
     @Column(name = "postal_code")
     private Integer postalCode;
 
@@ -58,10 +50,4 @@ public class User implements Serializable {
     @Lob
     @Column(name = "image", nullable = true)
     private byte[] image;
-
-    public enum Role {
-        adopter,
-        adoption_center,
-        admin
-    }
 }
