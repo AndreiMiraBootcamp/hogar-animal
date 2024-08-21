@@ -185,17 +185,17 @@ public class UserController {
 
     @PatchMapping(value = "/{id}", consumes = { "multipart/form-data" })
     public ResponseEntity<?> patchUser(
-            @PathVariable Integer id,
-            @RequestPart(value = "username", required = false) String username,
-            @RequestPart(value = "password", required = false) String password,
-            @RequestPart(value = "email", required = false) String email,
-            @RequestPart(value = "role", required = false) String role,
-            @RequestPart(value = "phoneNumber", required = false) String phoneNumber,
-            @RequestPart(value = "address", required = false) String address,
-            @RequestPart(value = "cityId", required = false) Integer cityId,  // Cambiado a cityId
-            @RequestPart(value = "stateId", required = false) Integer stateId,  // Cambiado a stateId
-            @RequestPart(value = "postalCode", required = false) Integer postalCode,
-            @RequestPart(value = "image", required = false) MultipartFile image) {
+    		@PathVariable Integer id,
+    	    @RequestParam(value = "username", required = false) String username,
+    	    @RequestParam(value = "password", required = false) String password,
+    	    @RequestParam(value = "email", required = false) String email,
+    	    @RequestParam(value = "role", required = false) String role,
+    	    @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+    	    @RequestParam(value = "address", required = false) String address,
+    	    @RequestParam(value = "cityId", required = false) Integer cityId,
+    	    @RequestParam(value = "stateId", required = false) Integer stateId,
+    	    @RequestParam(value = "postalCode", required = false) Integer postalCode,
+    	    @RequestPart(value = "image", required = false) MultipartFile image) {
 
         User user = new User();
         user.setUserId(id);
