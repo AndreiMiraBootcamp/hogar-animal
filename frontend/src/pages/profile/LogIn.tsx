@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { useAuth } from "../context/AuthContext"; // Importa el contexto
+import { useAuth } from "../../context/AuthContext"; // Importa el contexto
 
 const LogIn: React.FC = () => {
   const [username, setUsername] = useState("");

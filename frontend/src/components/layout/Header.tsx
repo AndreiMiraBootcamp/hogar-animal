@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Importa el AuthContext
-import SearchBar from './SearchBar';
+import { useAuth } from '../../context/AuthContext'; // Importa el AuthContext
+import SearchBar from '../layout/SearchBar';
 import { Menu, MenuItem, IconButton } from '@mui/material'; // Importa los componentes de MUI
 
 const Header: React.FC = () => {

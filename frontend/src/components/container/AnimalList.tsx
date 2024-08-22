@@ -1,5 +1,5 @@
 import React from 'react';
-import AnimalCard from './AnimalCard';
+import AnimalCard from '../cards/AnimalCard';
 
 interface AnimalListProps {
   animals: {

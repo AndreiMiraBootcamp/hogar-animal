@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import centerData from '../JSON/adoption_centers.json';
 import petData from '../JSON/pet.json'; // Asegúrate de que esta ruta sea correcta
-import AnimalList from '../components/AnimalList'; // Importa el nuevo componente
+import AnimalList from '../components/container/AnimalList'; // Importa el nuevo componente
 
 interface Center {
   center_id: number;

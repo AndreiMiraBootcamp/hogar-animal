@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import ConfirmDialog from '../components/ConfirmDialog';
+import { useAuth } from '../../context/AuthContext';
+import ConfirmDialog from '../others/ConfirmDialog';
 import { useNavigate } from "react-router-dom";
 
 const ResetPassword: React.FC = () => {

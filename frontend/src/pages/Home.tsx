@@ -1,7 +1,7 @@
 import React from 'react';
-import Filtros from '../components/Filtros';
-import AdoptionTips from '../components/AdoptionTips';
-import Destacados from '../components/Destacados';
+import Filtros from '../components/home/Filtros';
+import AdoptionTips from '../components/home/AdoptionTips';
+import Destacados from '../components/home/Destacados';
 
 const Home: React.FC = () => {
   return (

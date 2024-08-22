@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import CenterCard from './CenterCard';
-import centerData from '../JSON/adoption_centers.json';
+import CenterCard from '../cards/CenterCard';
+import centerData from '../../JSON/adoption_centers.json';
 
 interface Center {
   center_id: number;

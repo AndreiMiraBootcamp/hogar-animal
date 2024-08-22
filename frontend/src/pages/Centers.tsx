@@ -1,6 +1,6 @@
 import React from 'react';
-import Mapa from '../components/Mapa';
-import CenterList from '../components/CenterList';
+import Mapa from '../components/others/Mapa';
+import CenterList from '../components/container/CenterList';
 
 
 

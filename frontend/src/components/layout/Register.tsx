@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ConfirmDialog from "../components/ConfirmDialog"; // Ajusta la ruta según la ubicación de tu componente
+import ConfirmDialog from "../others/ConfirmDialog"; // Ajusta la ruta según la ubicación de tu componente
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState("");

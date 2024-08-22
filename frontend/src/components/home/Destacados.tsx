@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import AnimalCard, { Pet } from "./AnimalCard";
-import petData from "../JSON/pet.json";
+import AnimalCard, { Pet } from "../cards/AnimalCard";
+import petData from "../../JSON/pet.json";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 

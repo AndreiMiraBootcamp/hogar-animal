@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { Link } from 'react-router-dom';
-import ConfirmDialog from '../components/ConfirmDialog';
+import ConfirmDialog from '../../components/others/ConfirmDialog';
 import { useNavigate } from 'react-router-dom';
 
 interface State {

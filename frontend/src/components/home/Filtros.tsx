@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AutoComplete from './AutoComplete';
+import AutoComplete from '../others/AutoComplete';
 import { FaDog, FaCat, FaQuestion } from 'react-icons/fa'; 
 
 const Filtros: React.FC = () => {
