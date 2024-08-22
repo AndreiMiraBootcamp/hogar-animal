@@ -12,29 +12,19 @@ import org.springframework.stereotype.Service;
 import es.animal.hogar.dtos.UserDTO;
 import es.animal.hogar.entities.User;
 import es.animal.hogar.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    private String hashPassword(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashedPassword = md.digest(password.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hashedPassword) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error hashing password", e);
-        }
-    }
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User createUser(User user) {
-        user.setPassword(hashPassword(user.getPassword()));
+    	user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -42,18 +32,10 @@ public class UserService {
         if (user.getUserId() == null) {
             throw new RuntimeException("User ID must be provided for update");
         }
-
-        Optional<User> existingUserOpt = userRepository.findById(user.getUserId());
-        if (existingUserOpt.isPresent()) {
-            User existingUser = existingUserOpt.get();
-            // Solo hashear la contraseña si es diferente
-            if (user.getPassword() != null && !user.getPassword().equals(existingUser.getPassword())) {
-                user.setPassword(hashPassword(user.getPassword()));
-            }
-            return userRepository.save(user);
-        } else {
-            throw new RuntimeException("User not found");
+        if (user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
+        return userRepository.save(user);
     }
 
     public void deleteUser(Integer userId) {
@@ -101,14 +83,11 @@ public class UserService {
         if (user.getUserId() == null) {
             throw new RuntimeException("User ID must be provided for patch");
         }
-
         Optional<User> existingUserOpt = userRepository.findById(user.getUserId());
         if (existingUserOpt.isPresent()) {
             User existingUser = existingUserOpt.get();
             if (user.getUsername() != null) existingUser.setUsername(user.getUsername());
-            if (user.getPassword() != null && !user.getPassword().equals(existingUser.getPassword())) {
-                existingUser.setPassword(hashPassword(user.getPassword()));
-            }
+            if (user.getPassword() != null) existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
             if (user.getEmail() != null) existingUser.setEmail(user.getEmail());
             if (user.getRole() != null) existingUser.setRole(user.getRole());
             if (user.getPhoneNumber() != null) existingUser.setPhoneNumber(user.getPhoneNumber());
@@ -132,7 +111,7 @@ public class UserService {
         dto.setAddress(user.getAddress());
         dto.setCity(user.getCity());
         dto.setPostalCode(user.getPostalCode());
-        dto.setCreatedAt(user.getCreatedAt());
+        dto.setImage(user.getImage());
         return dto;
     }
 }
