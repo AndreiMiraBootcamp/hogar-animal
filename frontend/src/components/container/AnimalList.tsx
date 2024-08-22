@@ -1,41 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getAllPets } from '../api/apicalls';
 import AnimalCard from '../cards/AnimalCard';
 
-interface AnimalListProps {
-  animals: {
-    pet_id: number;
-    center_id: number;
-    name: string;
-    species: string;
-    breed: string;
-    age: number;
-    gender: string;
-    description: string;
-    photo_url: string;
-    available: boolean;
-    created_at: string;
-  }[];
+interface Pet {
+  pet_id: number;
+  center_id: number;
+  name: string;
+  species: string;
+  breed: string;
+  age: number;
+  gender: string;
+  description: string;
+  photo_url: string;
+  available: boolean;
+  created_at: string;
 }
 
-const AnimalList: React.FC<AnimalListProps> = ({ animals }) => {
+const AnimalList: React.FC = () => {
+  const [pets, setPets] = useState<Pet[]>([]);
+
+  useEffect(() => {
+    const fetchPets = async () => {
+      const petData = await getAllPets();
+      setPets(petData);
+    };
+
+    fetchPets();
+  }, []);
+
+  if (pets.length === 0) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="w-full flex flex-wrap gap-4">
-  {animals.length > 0 ? (
-    animals.map((animal) => (
-      <div 
-        key={animal.pet_id} 
-        className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-2"
-      >
-        <AnimalCard pet={animal} />
-      </div>
-    ))
-  ) : (
-    <p className="w-full text-center text-gray-600">No hay animales disponibles en este refugio.</p>
-  )}
-</div>
-
-
-
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {pets.map((pet) => (
+        <AnimalCard key={pet.pet_id} pet={pet} />
+      ))}
+    </div>
   );
 };
 
