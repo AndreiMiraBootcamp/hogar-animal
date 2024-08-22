@@ -19,12 +19,10 @@ public class Favorite {
 
     @ManyToOne
     @JoinColumn(name = "pet_id", nullable = false)
-    @JsonIgnore
     private Pet pet;
 
     @ManyToOne
-    @JoinColumn(name = "adopter_id", nullable = false)
-    @JsonIgnore
+    @JoinColumn(name = "user_id", nullable = false)
     private User adopter;
 
     @Column(name = "created_at", nullable = false)
