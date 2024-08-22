@@ -7,12 +7,16 @@ import { useUserPosition } from '../../hooks/useUserPosition';
 import SearchBar from './SearchRefugio';
 import CenterMapOnSelectedCenter from './CenterMapOnSelectedCenter';
 
+// Define el tipo Coordinates
+type Coordinates = [number, number];
+
 const Mapa: React.FC = () => {
-  const [userPosition, setUserPosition] = useUserPosition();
+  const [userPosition] = useUserPosition();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCenter, setSelectedCenter] = useState<Coordinates | null>(null);
 
-  const { centers, filteredCenters, setFilteredCenters } = useFetchCenters();
+  // Pasar searchQuery al hook useFetchCenters
+  const { centers, filteredCenters, setFilteredCenters } = useFetchCenters(searchQuery);
 
   useEffect(() => {
     if (searchQuery) {
@@ -84,8 +88,6 @@ const Mapa: React.FC = () => {
               <div style={{ width: '200px' }}>
                 <img src={center.photoURL} alt={center.name} style={{ width: '100%', height: 'auto' }} />
                 <h3>{center.name}</h3>
-                <p><strong>Teléfono:</strong> {center.phone}</p>
-                <p><strong>Website:</strong> <a href={center.website} target="_blank" rel="noopener noreferrer">{center.website}</a></p>
               </div>
             </Popup>
           </Marker>

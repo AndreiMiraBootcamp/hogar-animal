@@ -16,8 +16,10 @@ interface Center {
   photoURL: string;
 }
 
-export const useFetchCenters = () => {
-  const [centers, setCenters] = useState<{ name: string; position: Coordinates; phone: string; website: string; photoURL: string }[]>([]);
+export const useFetchCenters = (searchQuery: string) => {
+  const [centers, setCenters] = useState<{
+    address: any; name: string; position: Coordinates; phone: string; website: string; photoURL: string 
+}[]>([]);
   const [filteredCenters, setFilteredCenters] = useState<{ name: string; position: Coordinates; phone: string; website: string; photoURL: string }[]>([]);
 
   const getCoordinatesFromAddress = async (
@@ -52,18 +54,32 @@ export const useFetchCenters = () => {
             phone: center.phone,
             website: center.website,
             photoURL: center.photoURL,
+            center_id: center.center_id, // Incluye el center_id si lo necesitas
           };
         }
         return null;
       });
 
-      const centersWithCoordinates = (await Promise.all(centerPromises)).filter((center) => center !== null) as { name: string; position: Coordinates; phone: string; website: string; photoURL: string }[];
+      const centersWithCoordinates = (await Promise.all(centerPromises)).filter((center) => center !== null) as { name: string; position: Coordinates; phone: string; website: string; photoURL: string; center_id: number }[];
       setCenters(centersWithCoordinates);
       setFilteredCenters(centersWithCoordinates);
     };
 
     fetchCenterCoordinates();
   }, []);
+
+  useEffect(() => {
+    if (searchQuery) {
+      const lowercasedQuery = searchQuery.toLowerCase();
+      const filtered = centers.filter(center =>
+        center.name.toLowerCase().includes(lowercasedQuery) ||
+        center.address.toLowerCase().includes(lowercasedQuery) // Puedes incluir otras propiedades en la búsqueda
+      );
+      setFilteredCenters(filtered);
+    } else {
+      setFilteredCenters(centers);
+    }
+  }, [searchQuery, centers]);
 
   return { centers, filteredCenters, setFilteredCenters };
 };

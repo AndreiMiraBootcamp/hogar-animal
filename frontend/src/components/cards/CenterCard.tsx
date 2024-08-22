@@ -16,7 +16,7 @@ interface Center {
 
 const CenterCard: React.FC<{ center: Center }> = ({ center }) => {
   return (
-    <Link to={`/center/${center.center_id}`} className="block bg-white shadow-md rounded-lg overflow-hidden">
+    <Link to={`/center/${center.center_id}`} className="block h-full bg-white shadow-md rounded-lg overflow-hidden">
       <img src={center.photoURL} alt={center.name} className="w-full h-48 object-cover" />
       <div className="p-4">
         <h2 className="text-xl font-bold mb-2">{center.name}</h2>

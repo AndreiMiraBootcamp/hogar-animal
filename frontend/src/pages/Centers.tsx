@@ -9,8 +9,8 @@ const Centers: React.FC = () => {
 
   return (
     <div className="w-full flex flex-col">
-      <div className="flex flex-grow">
-        <div className="flex-grow p-4">
+      
+        <div className="p-4">
           <Mapa />
           <div className="p-4">
             <h2 className="text-xl font-bold mb-4">Centros Disponibles</h2>
@@ -19,8 +19,6 @@ const Centers: React.FC = () => {
           </div>
         </div>
       </div>
-
-    </div>
   );
 };
 
