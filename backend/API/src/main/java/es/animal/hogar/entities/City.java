@@ -28,7 +28,7 @@ public class City {
     @OneToMany(mappedBy = "city")
     @JsonIgnore
     private Set<User> users;
-    
+
     @OneToMany(mappedBy = "city")
     @JsonIgnore
     private Set<AdoptionCenter> adoptionCenters;

@@ -1,7 +1,5 @@
 package es.animal.hogar.services;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,8 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.animal.hogar.dtos.UserDTO;
+import es.animal.hogar.entities.City;
+import es.animal.hogar.entities.State;
 import es.animal.hogar.entities.User;
+import es.animal.hogar.repository.CityRepository;
+import es.animal.hogar.repository.StateRepository;
 import es.animal.hogar.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
@@ -19,22 +22,19 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private String hashPassword(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashedPassword = md.digest(password.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hashedPassword) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error hashing password", e);
-        }
-    }
+    @Autowired
+    private CityRepository cityRepository;
+
+    @Autowired
+    private StateRepository stateRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User createUser(User user) {
-        user.setPassword(hashPassword(user.getPassword()));
+        if (user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return userRepository.save(user);
     }
 
@@ -42,18 +42,10 @@ public class UserService {
         if (user.getUserId() == null) {
             throw new RuntimeException("User ID must be provided for update");
         }
-
-        Optional<User> existingUserOpt = userRepository.findById(user.getUserId());
-        if (existingUserOpt.isPresent()) {
-            User existingUser = existingUserOpt.get();
-            // Solo hashear la contraseña si es diferente
-            if (user.getPassword() != null && !user.getPassword().equals(existingUser.getPassword())) {
-                user.setPassword(hashPassword(user.getPassword()));
-            }
-            return userRepository.save(user);
-        } else {
-            throw new RuntimeException("User not found");
+        if (user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
+        return userRepository.save(user);
     }
 
     public void deleteUser(Integer userId) {
@@ -101,19 +93,15 @@ public class UserService {
         if (user.getUserId() == null) {
             throw new RuntimeException("User ID must be provided for patch");
         }
-
         Optional<User> existingUserOpt = userRepository.findById(user.getUserId());
         if (existingUserOpt.isPresent()) {
             User existingUser = existingUserOpt.get();
             if (user.getUsername() != null) existingUser.setUsername(user.getUsername());
-            if (user.getPassword() != null && !user.getPassword().equals(existingUser.getPassword())) {
-                existingUser.setPassword(hashPassword(user.getPassword()));
-            }
+            if (user.getPassword() != null) existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
             if (user.getEmail() != null) existingUser.setEmail(user.getEmail());
-            if (user.getRole() != null) existingUser.setRole(user.getRole());
             if (user.getPhoneNumber() != null) existingUser.setPhoneNumber(user.getPhoneNumber());
             if (user.getAddress() != null) existingUser.setAddress(user.getAddress());
-            if (user.getCity() != null) existingUser.setCity(user.getCity());
+            if (user.getCity() != null) existingUser.setCity(getCityById(user.getCity().getCityId()));
             if (user.getPostalCode() != null) existingUser.setPostalCode(user.getPostalCode());
             if (user.getImage() != null) existingUser.setImage(user.getImage());
             return userRepository.save(existingUser);
@@ -122,17 +110,41 @@ public class UserService {
         }
     }
 
+    public City getCityById(Integer cityId) {
+        return cityRepository.findById(cityId).orElse(null);
+    }
+
+    public State getStateById(Integer stateId) {
+        return stateRepository.findById(stateId).orElse(null);
+    }
+
     private UserDTO mapToDTO(User user) {
         UserDTO dto = new UserDTO();
         dto.setUserId(user.getUserId());
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
-        dto.setRole(user.getRole());
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setAddress(user.getAddress());
-        dto.setCity(user.getCity());
+        
+        // Mapeo de CityDTO
+        if (user.getCity() != null) {
+            UserDTO.CityDTO cityDTO = new UserDTO.CityDTO();
+            cityDTO.setCityId(user.getCity().getCityId());
+            cityDTO.setName(user.getCity().getName());
+            
+            // Mapeo de StateDTO dentro de CityDTO
+            if (user.getCity().getState() != null) {
+                UserDTO.CityDTO.StateDTO stateDTO = new UserDTO.CityDTO.StateDTO();
+                stateDTO.setStateId(user.getCity().getState().getStateId());
+                stateDTO.setName(user.getCity().getState().getName());
+                cityDTO.setState(stateDTO);
+            }
+            
+            dto.setCity(cityDTO);
+        }
+
         dto.setPostalCode(user.getPostalCode());
-        dto.setCreatedAt(user.getCreatedAt());
+        dto.setImage(user.getImage());
         return dto;
     }
 }

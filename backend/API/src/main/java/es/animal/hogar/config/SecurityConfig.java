@@ -30,7 +30,9 @@ public class SecurityConfig {
 				.requestMatchers("/api/**").permitAll()
 				.requestMatchers("/v3/api-docs/**").permitAll()
 				.requestMatchers("/swagger-ui/**").permitAll() // Swagger UI
-				.requestMatchers("/protected/api/**").authenticated()
+				.requestMatchers("/images/**").permitAll()
+            	.requestMatchers("/protected/api/**").authenticated() // Requiere autenticación para rutas protegidas
+            	.requestMatchers("/api/auth/change-password**").authenticated()
 				// Cualquier otra solicitud debe estar autenticada
 				.anyRequest().authenticated()
 				)

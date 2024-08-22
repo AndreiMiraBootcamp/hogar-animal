@@ -65,4 +65,52 @@ public class AuthController {
             throw new BadCredentialsException("Invalid credentials");
         }
     }
+    
+    @PostMapping("/change-password")
+    public String changePassword(@RequestBody ChangePasswordRequest request) {
+        // Buscar el usuario por el ID
+        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> 
+            new IllegalArgumentException("Usuario no encontrado"));
+
+        // Verificar si la contraseña actual es correcta
+        if (passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            // Cambiar la contraseña
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            userRepository.save(user);
+            return "Contraseña actualizada con éxito";
+        } else {
+            throw new IllegalArgumentException("La contraseña actual es incorrecta");
+        }
+    }
+}
+
+class ChangePasswordRequest {
+    private Integer userId;
+    private String oldPassword;
+    private String newPassword;
+
+    // Getters y setters
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
 }
