@@ -30,6 +30,7 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorize) -> authorize
             	.requestMatchers("/api/**").permitAll() // Permite acceso sin autenticación a rutas públicas
             	.requestMatchers("/v3/api-docs/**").permitAll()
+            	.requestMatchers("/images/**").permitAll()
             	.requestMatchers("/protected/api/**").authenticated() // Requiere autenticación para rutas protegidas
             	.requestMatchers("/api/auth/change-password**").authenticated()
                 .anyRequest().authenticated() // Requiere autenticación para cualquier otra solicitud 

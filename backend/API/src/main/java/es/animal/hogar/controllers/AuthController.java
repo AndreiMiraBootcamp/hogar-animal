@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Key;
-import java.security.Principal;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -58,7 +57,7 @@ public class AuthController {
                     .setSubject(username)
                     .claim("userId", user.getUserId())
                     .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + 986400000)) // 24 horas
+                    .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 24 horas
                     .signWith(getKey(), SignatureAlgorithm.HS256)
                     .compact();
             return jwt;
