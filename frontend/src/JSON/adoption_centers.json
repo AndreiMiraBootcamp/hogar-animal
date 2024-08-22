@@ -1,0 +1,48 @@
+[
+    {
+      "center_id": 1,
+      "user_id": 123,
+      "name": "Centro de Adopción de Animales",
+      "city_id": 456,
+      "address": "123 Calle de Ejemplo, Tarragona",
+      "postal_code": "43202",
+      "phone": "123-456-7890",
+      "website": "https://www.ejemplo.com",
+      "foundation_year": 2005,
+      "photoURL": "https://www.ejemplo.com/foto.jpg"
+    },
+    {
+      "center_id": 2,
+      "user_id": 124,
+      "name": "Refugio Animal Feliz, Barcelona",
+      "city_id": 457,
+      "address": "456 Avenida Ejemplo",
+      "postal_code": "08029",
+      "phone": "987-654-3210",
+      "website": "https://www.refugiofeliz.com",
+      "foundation_year": 2010,
+      "photoURL": "https://www.refugiofeliz.com/foto.jpg"
+    },
+    {
+        "center_id": 3,
+        "user_id": 123,
+        "name": "Refugi Baix Camp",
+        "address": "123 Calle Ejemplo, Reus, España",
+        "postal_code": "43210",
+        "phone": "123-456-789",
+        "website": "https://example.com",
+        "foundation_year": 2005,
+        "photoURL": "https://example.com/image1.jpg"
+      },
+      {
+        "center_id": 4,
+        "user_id": 456,
+        "name": "Refugi de Barcelona",
+        "address": "456 Avenida Ejemplo, Barcelona, España",
+        "postal_code": "08001",
+        "phone": "987-654-321",
+        "website": "https://example.com",
+        "foundation_year": 2010,
+        "photoURL": "https://example.com/image2.jpg"
+      }
+  ]
