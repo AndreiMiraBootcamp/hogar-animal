@@ -11,41 +11,56 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import es.animal.hogar.config.JwtRequestFilter;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtRequestFilter jwtRequestFilter;
+	private final JwtRequestFilter jwtRequestFilter;
 
-    public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
-        this.jwtRequestFilter = jwtRequestFilter;
-    }
+	public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
+		this.jwtRequestFilter = jwtRequestFilter;
+	}
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(AbstractHttpConfigurer::disable) // Desactivar CSRF porque no estamos usando sesiones
-            .authorizeHttpRequests((authorize) -> authorize
-            	.requestMatchers("/api/**").permitAll() // Permite acceso sin autenticación a rutas públicas
-            	.requestMatchers("/v3/api-docs/**").permitAll()
-            	.requestMatchers("/protected/api/**").authenticated() // Requiere autenticación para rutas protegidas
-                .anyRequest().authenticated() // Requiere autenticación para cualquier otra solicitud 
-            )
-            .sessionManagement((session) -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Indica que no se deben usar sesiones
-            );
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http
+		.csrf(AbstractHttpConfigurer::disable) // Desactivar CSRF porque no estamos usando sesiones
+		.authorizeHttpRequests((authorize) -> authorize
+				// Permitir acceso sin autenticación a rutas públicas y Swagger UI
+				.requestMatchers("/api/**").permitAll()
+				.requestMatchers("/v3/api-docs/**").permitAll()
+				.requestMatchers("/swagger-ui/**").permitAll() // Swagger UI
+				.requestMatchers("/protected/api/**").authenticated()
+				// Cualquier otra solicitud debe estar autenticada
+				.anyRequest().authenticated()
+				)
+		.sessionManagement((session) -> session
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Indica que no se deben usar sesiones
+				);
 
-        // Añadir el filtro JWT antes del filtro de autenticación de Spring
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		// Añadir el filtro JWT antes del filtro de autenticación de Spring
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
-    
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+		return http.build();
+	}
+//	
+//	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//	    http
+//	        .csrf(AbstractHttpConfigurer::disable)
+//	        .authorizeHttpRequests((authorize) -> authorize
+//	            .anyRequest().permitAll() // Permitir todas las solicitudes temporalmente
+//	        )
+//	        .sessionManagement((session) -> session
+//	            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//	        );
+//
+//	    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//
+//	    return http.build();
+//	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }
-

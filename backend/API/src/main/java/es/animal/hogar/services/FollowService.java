@@ -1,18 +1,12 @@
 package es.animal.hogar.services;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
+import es.animal.hogar.entities.Follow;
+import es.animal.hogar.repository.FollowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.animal.hogar.entities.AdoptionCenter;
-import es.animal.hogar.entities.Follow;
-import es.animal.hogar.entities.User;
-import es.animal.hogar.repository.AdoptionCenterRepository;
-import es.animal.hogar.repository.FollowRepository;
-import es.animal.hogar.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FollowService {
@@ -20,70 +14,33 @@ public class FollowService {
     @Autowired
     private FollowRepository followRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private AdoptionCenterRepository adoptionCenterRepository;
-
-    public Follow createFollow(Integer userId, Long centerId) {
-        Optional<User> userOpt = userRepository.findById(userId);
-        Optional<AdoptionCenter> centerOpt = Optional.ofNullable(adoptionCenterRepository.findById(centerId));
-
-        if (userOpt.isPresent() && centerOpt.isPresent()) {
-            Follow follow = new Follow();
-            follow.setUser(userOpt.get());
-            follow.setCenter(centerOpt.get());
-            follow.setCreatedAt(new Date()); // Set current date/time
-
-            return followRepository.save(follow);
-        } else {
-            // Handle the case where either the user or center is not found
-            throw new RuntimeException("User or Adoption Center not found");
-        }
-    }
-
-    public Follow updateFollow(Follow follow) {
-        return followRepository.save(follow);
-    }
-
-    public void deleteFollow(Integer followId) {
-        followRepository.deleteById(followId);
-    }
-
-    public Follow getFollowById(Integer followId) {
-        Optional<Follow> follow = followRepository.findById(followId);
-        return follow.orElse(null);
-    }
-
     public List<Follow> getAllFollows() {
         return followRepository.findAll();
     }
 
-    public List<Follow> getFollowsByUserId(Integer userId) {
-        return followRepository.findByUserUserId(userId);
+    public Follow getFollowById(Integer id) {
+        Optional<Follow> optionalFollow = followRepository.findById(id);
+        return optionalFollow.orElse(null); // Devuelve null si no se encuentra
     }
 
-    public List<Follow> getFollowsByCenterId(Integer centerId) {
-        return followRepository.findByCenterCenterId(centerId);
+    public Follow createFollow(Follow follow) {
+        return followRepository.save(follow);
     }
 
-    public Follow patchFollow(Integer id, Follow followDetails) {
-        Optional<Follow> existingFollow = followRepository.findById(id);
-        if (existingFollow.isPresent()) {
-            Follow follow = existingFollow.get();
-            if (followDetails.getUser() != null) {
-                follow.setUser(followDetails.getUser());
-            }
-            if (followDetails.getCenter() != null) {
-                follow.setCenter(followDetails.getCenter());
-            }
-            if (followDetails.getCreatedAt() != null) {
-                follow.setCreatedAt(followDetails.getCreatedAt());
-            }
+    public Follow updateFollow(Integer id, Follow followDetails) {
+        return followRepository.findById(id).map(follow -> {
+            follow.setUser(followDetails.getUser());
+            follow.setAdoptionCenter(followDetails.getAdoptionCenter());
+            follow.setCreatedAt(followDetails.getCreatedAt());
             return followRepository.save(follow);
-        } else {
-            return null;
+        }).orElse(null); // Devuelve null si no se encuentra
+    }
+
+    public boolean deleteFollow(Integer id) {
+        if (followRepository.existsById(id)) {
+            followRepository.deleteById(id);
+            return true;
         }
+        return false;
     }
 }

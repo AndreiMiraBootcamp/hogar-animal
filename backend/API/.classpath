@@ -51,7 +51,7 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/roman/Documents/Bootcamp/T7 Java/mysql-connector-j-9.0.0/mysql-connector-j-9.0.0.jar">
+	<classpathentry kind="lib" path="C:/mysql-connector-j-9.0.0/mysql-connector-j-9.0.0.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

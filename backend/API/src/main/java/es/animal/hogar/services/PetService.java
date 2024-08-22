@@ -2,45 +2,51 @@ package es.animal.hogar.services;
 
 import es.animal.hogar.entities.Pet;
 import es.animal.hogar.repository.PetRepository;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PetService {
 
-    private final PetRepository petRepository;
-
-    public PetService(PetRepository petRepository) {
-        this.petRepository = petRepository;
-    }
+    @Autowired
+    private PetRepository petRepository;
 
     public List<Pet> getAllPets() {
         return petRepository.findAll();
     }
 
-    public void addPet(Pet pet) {
-        petRepository.save(pet);
+    public Pet getPetById(Integer id) {
+        Optional<Pet> optionalPet = petRepository.findById(id);
+        return optionalPet.orElse(null); // Devuelve null si no se encuentra
     }
 
-    public void updatePet(Long id, Pet pet) {
-        Pet existingPet = petRepository.findById(id);
-        if (existingPet != null) {
-            existingPet.setCenterId(pet.getCenterId());
-            existingPet.setName(pet.getName());
-            existingPet.setSpecies(pet.getSpecies());
-            existingPet.setBreed(pet.getBreed());
-            existingPet.setAge(pet.getAge());
-            existingPet.setGender(pet.getGender());
-            existingPet.setDescription(pet.getDescription());
-            existingPet.setPhotoUrl(pet.getPhotoUrl());
-            existingPet.setAvailable(pet.getAvailable());
-            petRepository.update(existingPet);
+    public Pet createPet(Pet pet) {
+        return petRepository.save(pet);
+    }
+
+    public Pet updatePet(Integer id, Pet petDetails) {
+        return petRepository.findById(id).map(pet -> {
+            pet.setName(petDetails.getName());
+            pet.setSpecies(petDetails.getSpecies());
+            pet.setBreed(petDetails.getBreed());
+            pet.setAge(petDetails.getAge());
+            pet.setGender(petDetails.getGender());
+            pet.setDescription(petDetails.getDescription());
+            pet.setPhotoUrl(petDetails.getPhotoUrl());
+            pet.setAvailable(petDetails.getAvailable());
+            pet.setCreatedAt(petDetails.getCreatedAt());
+            return petRepository.save(pet);
+        }).orElse(null); // Devuelve null si no se encuentra
+    }
+
+    public boolean deletePet(Integer id) {
+        if (petRepository.existsById(id)) {
+            petRepository.deleteById(id);
+            return true;
         }
-    }
-
-    public void deletePet(Long id) {
-        petRepository.delete(id);
+        return false;
     }
 }

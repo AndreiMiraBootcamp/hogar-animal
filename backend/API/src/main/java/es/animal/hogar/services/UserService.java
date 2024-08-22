@@ -42,7 +42,18 @@ public class UserService {
         if (user.getUserId() == null) {
             throw new RuntimeException("User ID must be provided for update");
         }
-        return userRepository.save(user);
+
+        Optional<User> existingUserOpt = userRepository.findById(user.getUserId());
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
+            // Solo hashear la contraseña si es diferente
+            if (user.getPassword() != null && !user.getPassword().equals(existingUser.getPassword())) {
+                user.setPassword(hashPassword(user.getPassword()));
+            }
+            return userRepository.save(user);
+        } else {
+            throw new RuntimeException("User not found");
+        }
     }
 
     public void deleteUser(Integer userId) {
@@ -90,17 +101,19 @@ public class UserService {
         if (user.getUserId() == null) {
             throw new RuntimeException("User ID must be provided for patch");
         }
+
         Optional<User> existingUserOpt = userRepository.findById(user.getUserId());
         if (existingUserOpt.isPresent()) {
             User existingUser = existingUserOpt.get();
             if (user.getUsername() != null) existingUser.setUsername(user.getUsername());
-            if (user.getPassword() != null) existingUser.setPassword(user.getPassword());
+            if (user.getPassword() != null && !user.getPassword().equals(existingUser.getPassword())) {
+                existingUser.setPassword(hashPassword(user.getPassword()));
+            }
             if (user.getEmail() != null) existingUser.setEmail(user.getEmail());
             if (user.getRole() != null) existingUser.setRole(user.getRole());
             if (user.getPhoneNumber() != null) existingUser.setPhoneNumber(user.getPhoneNumber());
             if (user.getAddress() != null) existingUser.setAddress(user.getAddress());
             if (user.getCity() != null) existingUser.setCity(user.getCity());
-            if (user.getState() != null) existingUser.setState(user.getState());
             if (user.getPostalCode() != null) existingUser.setPostalCode(user.getPostalCode());
             if (user.getImage() != null) existingUser.setImage(user.getImage());
             return userRepository.save(existingUser);
@@ -118,7 +131,6 @@ public class UserService {
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setAddress(user.getAddress());
         dto.setCity(user.getCity());
-        dto.setState(user.getState());
         dto.setPostalCode(user.getPostalCode());
         dto.setCreatedAt(user.getCreatedAt());
         return dto;

@@ -1,13 +1,12 @@
 package es.animal.hogar.services;
 
-import java.util.List;
-import java.util.Optional;
-
+import es.animal.hogar.entities.Favorite;
+import es.animal.hogar.repository.FavoriteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.animal.hogar.entities.Favorite;
-import es.animal.hogar.repository.FavoriteRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FavoriteService {
@@ -15,55 +14,33 @@ public class FavoriteService {
     @Autowired
     private FavoriteRepository favoriteRepository;
 
-    public Favorite createFavorite(Favorite favorite) {
-        return favoriteRepository.save(favorite);
-    }
-
-    public Favorite updateFavorite(Favorite favorite) {
-        return favoriteRepository.save(favorite);
-    }
-
-    public void deleteFavorite(Integer favoriteId) {
-        favoriteRepository.deleteById(favoriteId);
-    }
-
-    public Favorite getFavoriteById(Integer favoriteId) {
-        Optional<Favorite> favorite = favoriteRepository.findById(favoriteId);
-        return favorite.orElse(null);
-    }
-
     public List<Favorite> getAllFavorites() {
         return favoriteRepository.findAll();
     }
 
-    public List<Favorite> getFavoritesByUserId(Integer userId) {
-        return favoriteRepository.findByUserUserId(userId);
+    public Favorite getFavoriteById(Integer id) {
+        Optional<Favorite> optionalFavorite = favoriteRepository.findById(id);
+        return optionalFavorite.orElse(null); // Devuelve null si no se encuentra
     }
 
-    public List<Favorite> getFavoritesByPetId(Integer petId) {
-        return favoriteRepository.findByPetPetId(petId);
+    public Favorite createFavorite(Favorite favorite) {
+        return favoriteRepository.save(favorite);
     }
 
-    public Favorite patchFavorite(Integer id, Favorite favoriteDetails) {
-        Optional<Favorite> existingFavorite = favoriteRepository.findById(id);
-        if (existingFavorite.isPresent()) {
-            Favorite favorite = existingFavorite.get();
-            if (favoriteDetails.getPet() != null) {
-                if (favoriteDetails.getPet().getPetId() != null) {
-                    favorite.setPet(favoriteDetails.getPet());
-                }
-            }
-            if (favoriteDetails.getUser() != null) {
-                if (favoriteDetails.getUser().getUserId() != null) {
-                    favorite.setUser(favoriteDetails.getUser());
-                }
-            }
-            if (favoriteDetails.getCreatedAt() != null) {
-                favorite.setCreatedAt(favoriteDetails.getCreatedAt());
-            }
+    public Favorite updateFavorite(Integer id, Favorite favoriteDetails) {
+        return favoriteRepository.findById(id).map(favorite -> {
+            favorite.setPet(favoriteDetails.getPet());
+            favorite.setAdopter(favoriteDetails.getAdopter());
+            favorite.setCreatedAt(favoriteDetails.getCreatedAt());
             return favoriteRepository.save(favorite);
-        } else {
-            return null;
+        }).orElse(null); // Devuelve null si no se encuentra
+    }
+
+    public boolean deleteFavorite(Integer id) {
+        if (favoriteRepository.existsById(id)) {
+            favoriteRepository.deleteById(id);
+            return true;
         }
+        return false;
     }
 }

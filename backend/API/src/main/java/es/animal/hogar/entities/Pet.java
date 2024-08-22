@@ -1,102 +1,64 @@
 package es.animal.hogar.entities;
 
-import java.io.Serializable;
-import java.util.Date;
+import jakarta.persistence.*;
+import lombok.*;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import java.util.Set;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@Table(name = "pets", schema = "db_hogar_animal")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pet {
-
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long petId;
-    private Long centerId;
+    private Integer petId;
+
+    @ManyToOne
+    @JoinColumn(name = "center_id", nullable = false)
+    @JsonIgnore
+    private AdoptionCenter adoptionCenter;
+
+    @Column(nullable = false, length = 100)
     private String name;
-    private String species;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Species species;
+
+    @Column(length = 100)
     private String breed;
+
     private Integer age;
-    private String gender;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Gender gender;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "photoURL", length = 255)
     private String photoUrl;
+
+    @Column(nullable = false)
     private Boolean available;
+
+    @Column(name = "created_at")
+    private java.sql.Date createdAt;
+
+    @OneToMany(mappedBy = "pet")
+    @JsonIgnore
+    private Set<Favorite> favorites;
     
-    
-	public Long getPetId() {
-		return petId;
-	}
-	public void setPetId(Long petId) {
-		this.petId = petId;
-	}
-	public Long getCenterId() {
-		return centerId;
-	}
-	public void setCenterId(Long centerId) {
-		this.centerId = centerId;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getSpecies() {
-		return species;
-	}
-	public void setSpecies(String species) {
-		this.species = species;
-	}
-	public String getBreed() {
-		return breed;
-	}
-	public void setBreed(String breed) {
-		this.breed = breed;
-	}
-	public Integer getAge() {
-		return age;
-	}
-	public void setAge(Integer age) {
-		this.age = age;
-	}
-	public String getGender() {
-		return gender;
-	}
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public String getPhotoUrl() {
-		return photoUrl;
-	}
-	public void setPhotoUrl(String photoUrl) {
-		this.photoUrl = photoUrl;
-	}
-	public Boolean getAvailable() {
-		return available;
-	}
-	public void setAvailable(Boolean available) {
-		this.available = available;
-	}
+    public enum Species {
+        dog, cat, other
+    }
+
+    public enum Gender {
+        male, female
+    }
 }

@@ -1,39 +1,45 @@
 package es.animal.hogar.controllers;
 
-import org.springframework.web.bind.annotation.*;
-
 import es.animal.hogar.entities.Pet;
 import es.animal.hogar.services.PetService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/pets")
+@RequestMapping("/api/pets")
 public class PetController {
 
-    private final PetService petService;
+    @Autowired
+    private PetService petService;
 
-    public PetController(PetService petService) {
-        this.petService = petService;
-    }
-
-    @GetMapping("all")
+    @GetMapping
     public List<Pet> getAllPets() {
         return petService.getAllPets();
     }
 
-    @PostMapping("add")
-    public void addPet(@RequestBody Pet pet) {
-        petService.addPet(pet);
+    @GetMapping("/{id}")
+    public ResponseEntity<Pet> getPetById(@PathVariable Integer id) {
+        Pet pet = petService.getPetById(id);
+        return pet != null ? ResponseEntity.ok(pet) : ResponseEntity.notFound().build();
     }
 
-    @PutMapping("update/{id}")
-    public void updatePet(@PathVariable Long id, @RequestBody Pet pet) {
-        petService.updatePet(id, pet);
+    @PostMapping
+    public Pet createPet(@RequestBody Pet pet) {
+        return petService.createPet(pet);
     }
 
-    @DeleteMapping("delete/{id}")
-    public void deletePet(@PathVariable Long id) {
-        petService.deletePet(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<Pet> updatePet(
+            @PathVariable Integer id, @RequestBody Pet petDetails) {
+        Pet updatedPet = petService.updatePet(id, petDetails);
+        return updatedPet != null ? ResponseEntity.ok(updatedPet) : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePet(@PathVariable Integer id) {
+        return petService.deletePet(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

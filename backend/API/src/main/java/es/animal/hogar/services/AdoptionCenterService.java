@@ -1,46 +1,52 @@
 package es.animal.hogar.services;
 
-import org.springframework.stereotype.Service;
-
 import es.animal.hogar.entities.AdoptionCenter;
 import es.animal.hogar.repository.AdoptionCenterRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdoptionCenterService {
 
-    private final AdoptionCenterRepository adoptionCenterRepository;
+    @Autowired
+    private AdoptionCenterRepository adoptionCenterRepository;
 
-    public AdoptionCenterService(AdoptionCenterRepository adoptionCenterRepository) {
-        this.adoptionCenterRepository = adoptionCenterRepository;
-    }
-
-    public List<AdoptionCenter> getAllCenters() {
+    public List<AdoptionCenter> getAllAdoptionCenters() {
         return adoptionCenterRepository.findAll();
     }
 
-    public void addCenter(AdoptionCenter center) {
-        adoptionCenterRepository.save(center);
+    public AdoptionCenter getAdoptionCenterById(Integer id) {
+        Optional<AdoptionCenter> optionalAdoptionCenter = adoptionCenterRepository.findById(id);
+        return optionalAdoptionCenter.orElse(null); // Devuelve null si no se encuentra
     }
 
-    public void updateCenter(Long id, AdoptionCenter center) {
-        AdoptionCenter existingCenter = adoptionCenterRepository.findById(id);
-        if (existingCenter != null) {
-            existingCenter.setUserId(center.getUserId());
-            existingCenter.setName(center.getName());
-            existingCenter.setAddress(center.getAddress());
-            existingCenter.setCity(center.getCity());
-            existingCenter.setState(center.getState());
-            existingCenter.setPostalCode(center.getPostalCode());
-            existingCenter.setPhone(center.getPhone());
-            existingCenter.setWebsite(center.getWebsite());
-            existingCenter.setFoundationYear(center.getFoundationYear());
-            adoptionCenterRepository.update(existingCenter);
+    public AdoptionCenter createAdoptionCenter(AdoptionCenter adoptionCenter) {
+        return adoptionCenterRepository.save(adoptionCenter);
+    }
+
+    public AdoptionCenter updateAdoptionCenter(Integer id, AdoptionCenter adoptionCenterDetails) {
+        return adoptionCenterRepository.findById(id).map(adoptionCenter -> {
+            adoptionCenter.setName(adoptionCenterDetails.getName());
+            adoptionCenter.setCity(adoptionCenterDetails.getCity());
+            adoptionCenter.setUser(adoptionCenterDetails.getUser());
+            adoptionCenter.setAddress(adoptionCenterDetails.getAddress());
+            adoptionCenter.setPostalCode(adoptionCenterDetails.getPostalCode());
+            adoptionCenter.setPhone(adoptionCenterDetails.getPhone());
+            adoptionCenter.setWebsite(adoptionCenterDetails.getWebsite());
+            adoptionCenter.setFoundationYear(adoptionCenterDetails.getFoundationYear());
+            adoptionCenter.setPhotoUrl(adoptionCenterDetails.getPhotoUrl());
+            return adoptionCenterRepository.save(adoptionCenter);
+        }).orElse(null); // Devuelve null si no se encuentra
+    }
+
+    public boolean deleteAdoptionCenter(Integer id) {
+        if (adoptionCenterRepository.existsById(id)) {
+            adoptionCenterRepository.deleteById(id);
+            return true;
         }
-    }
-
-    public void deleteCenter(Long id) {
-        adoptionCenterRepository.delete(id);
+        return false;
     }
 }
