@@ -1,7 +1,8 @@
 package es.animal.hogar.dtos;
 
+import es.animal.hogar.entities.City;
 import es.animal.hogar.entities.User;
-import lombok.Data;
+import lombok.*;
 
 @Data
 public class UserDTO {
