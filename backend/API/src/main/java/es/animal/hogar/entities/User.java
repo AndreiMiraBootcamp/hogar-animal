@@ -24,6 +24,7 @@ public class User {
     @Column(name = "username", nullable = false, length = 50, unique = true)
     private String username;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
@@ -39,7 +40,6 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "city_id", nullable = false)
-    @JsonIgnore
     private City city;
 
     @Column(name = "address", length = 255)
@@ -50,6 +50,7 @@ public class User {
     
     @Lob
     @Column(name = "image")
+    @JsonIgnore
     private byte[] image;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -61,11 +62,11 @@ public class User {
         admin
     }
     
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<Follow> follows;
-
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<AdoptionCenter> adoptionCenters;
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    private List<Follow> follows;
+//
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    private List<AdoptionCenter> adoptionCenters;
 }

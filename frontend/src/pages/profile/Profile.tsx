@@ -281,7 +281,7 @@ const Profile: React.FC = () => {
           <button
             type="button"
             onClick={() => document.getElementById("imageUpload")?.click()}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-2"
+            className="p-2 text-sm bg-gray-700 text-white rounded-lg hover:bg-gray-800"
           >
             Subir Nueva Foto
           </button>
@@ -392,7 +392,7 @@ const Profile: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
+              className="p-2 text-sm bg-gray-700 text-white rounded-lg hover:bg-gray-800"
             >
               Actualizar Información
             </button>
