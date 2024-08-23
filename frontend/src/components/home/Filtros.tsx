@@ -44,12 +44,15 @@ const Filtros: React.FC = () => {
         Tu navegador no admite este vídeo.
       </video>
 
-      <div className="relative flex flex-col items-center justify-center w-full h-full">
-        <div className="absolute top-10 text-center text-white">
-          <h1 className="text-4xl font-bold mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Hogar Animal</h1>
-          <p className="text-xl" style={{ fontFamily: 'Quicksand, sans-serif' }}>Encuentra a tu amigo fiel</p>
+      <div className="relative flex flex-col items-center justify-center w-full h-full">  
+        <div className="absolute top-10 p-6 text-center text-white">
+          <h1 className="text-5xl font-bold mb-4 text-white" style={{ fontFamily: 'Poppins, sans-serif', textShadow: '2px 2px 10px rgba(0, 0, 0, 0.7)' }}>
+            Hogar Animal
+          </h1>
+          <p className="text-2xl" style={{ fontFamily: 'Quicksand, sans-serif', textShadow: '1px 1px 5px rgba(0, 0, 0, 0.7)' }}>
+            Encuentra a tu amigo fiel
+          </p>
         </div>
-
         <div className="relative flex justify-center items-center w-full h-full mt-20">
           <div className="w-full md:w-3/4 lg:w-2/3 p-6 bg-black bg-opacity-30 rounded-lg">
             <div className="flex flex-col space-y-6 mb-6">
