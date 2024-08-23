@@ -16,14 +16,12 @@ interface Center {
   photoURL: string;
 }
 
-export const useFetchCenters = () => {
-  const [centers, setCenters] = useState<{ name: string; position: Coordinates; phone: string; website: string; photoURL: string }[]>([]);
-  const [filteredCenters, setFilteredCenters] = useState<{ name: string; position: Coordinates; phone: string; website: string; photoURL: string }[]>([]);
+export const useFetchCenters = (searchQuery: string) => {
+  const [centers, setCenters] = useState<Center[]>([]);
+  const [filteredCenters, setFilteredCenters] = useState<Center[]>([]);
+  const [loading, setLoading] = useState(true); // Nuevo estado para la carga
 
-  const getCoordinatesFromAddress = async (
-    address: string,
-    postalCode: string
-  ): Promise<Coordinates | null> => {
+  const getCoordinatesFromAddress = async (address: string, postalCode: string): Promise<Coordinates | null> => {
     const fullAddress = `${address}, ${postalCode}`;
     const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullAddress)}`;
     try {
@@ -42,28 +40,40 @@ export const useFetchCenters = () => {
 
   useEffect(() => {
     const fetchCenterCoordinates = async () => {
+      setLoading(true); // Indicar que la carga ha comenzado
       const centerPromises = centersData.map(async (center: Center) => {
         const coordinates = await getCoordinatesFromAddress(center.address, center.postal_code);
 
         if (coordinates) {
           return {
-            name: center.name,
+            ...center,
             position: coordinates,
-            phone: center.phone,
-            website: center.website,
-            photoURL: center.photoURL,
           };
         }
         return null;
       });
 
-      const centersWithCoordinates = (await Promise.all(centerPromises)).filter((center) => center !== null) as { name: string; position: Coordinates; phone: string; website: string; photoURL: string }[];
+      const centersWithCoordinates = (await Promise.all(centerPromises)).filter((center) => center !== null) as Center[];
       setCenters(centersWithCoordinates);
       setFilteredCenters(centersWithCoordinates);
+      setLoading(false); // Indicar que la carga ha terminado
     };
 
     fetchCenterCoordinates();
   }, []);
 
-  return { centers, filteredCenters, setFilteredCenters };
+  useEffect(() => {
+    if (searchQuery) {
+      const lowercasedQuery = searchQuery.toLowerCase();
+      const filtered = centers.filter(center =>
+        center.name.toLowerCase().includes(lowercasedQuery) ||
+        center.address.toLowerCase().includes(lowercasedQuery)
+      );
+      setFilteredCenters(filtered);
+    } else {
+      setFilteredCenters(centers);
+    }
+  }, [searchQuery, centers]);
+
+  return { centers, filteredCenters, setFilteredCenters, loading };
 };

@@ -6,12 +6,14 @@ import lombok.*;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "cities", schema = "db_hogar_animal")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +26,12 @@ public class City {
     @JoinColumn(name = "state_id", nullable = false)
     private State state;
 
-    @OneToMany(mappedBy = "city")
-    @JsonIgnore
-    private Set<User> users;
-
-    @OneToMany(mappedBy = "city")
-    @JsonIgnore
-    private Set<AdoptionCenter> adoptionCenters;
+//    @OneToMany(mappedBy = "city")
+//    @JsonIgnore
+//    private Set<User> users;
+//
+//    @OneToMany(mappedBy = "city")
+//    @JsonIgnore
+//    private Set<AdoptionCenter> adoptionCenters;
 
 }
