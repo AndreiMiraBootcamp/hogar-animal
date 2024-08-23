@@ -1,35 +1,28 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext'; 
-import SearchBar from '../layout/SearchBar';
-import { Menu, MenuItem, IconButton } from '@mui/material';
+import { Menu, MenuItem, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const Header: React.FC = () => {
-  const navigate = useNavigate();
   const { userData, logout } = useAuth();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollTop, setLastScrollTop] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const handleSearch = (query: string) => {
-    navigate(`/search?q=${query}`);
-  };
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleScroll = () => {
     const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
     if (currentScrollTop > lastScrollTop) {
       setIsVisible(false);
     } else {
       setIsVisible(true);
     }
-
     setLastScrollTop(currentScrollTop <= 0 ? 0 : currentScrollTop);
   };
 
   React.useEffect(() => {
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -43,14 +36,15 @@ const Header: React.FC = () => {
     setAnchorEl(null);
   };
 
+  const toggleDrawer = (open: boolean) => () => {
+    setDrawerOpen(open);
+  };
+
   return (
-    <header
-      className={`text-black p-4 flex justify-between items-center transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'
-        } bg-white shadow-md`}
-    >
+    <header className={`text-black py-4 px-10 flex justify-between items-center transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} bg-white shadow-md`}>
       <div className="flex items-center space-x-4">
-        <Link to="/" className="block items-center">
-          <img src="./images/Logo.png" alt="Logo" className="h-9" />
+        <Link to="/" className="block">
+          <img src="./images/Logo.png" alt="Logo" className="h-9 object-contain" />
         </Link>
       </div>
 
@@ -67,60 +61,28 @@ const Header: React.FC = () => {
       </nav>
 
       <div className="flex items-center space-x-4">
-        <SearchBar onSearch={handleSearch} />
         {!userData ? (
-          <Link
-            to="/login"
-            className="p-2 text-sm bg-gray-700 text-white rounded-lg hover:bg-gray-800"
-          >
+          <Link to="/login" className="p-2 text-sm bg-gray-700 text-white rounded-lg hover:bg-gray-800">
             Log In
           </Link>
         ) : (
           <>
-            <IconButton
-              onClick={handleMenuOpen}
-              sx={{
-                padding: 0,
-                '&:hover': {
-                  backgroundColor: 'transparent',
-                },
-              }}
-            >
+            <IconButton onClick={handleMenuOpen}>
               <img
                 src={`data:image/jpeg;base64,${userData.image}`}
                 alt="Profile"
                 className="w-10 h-10 rounded-full cursor-pointer"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                }}
               />
             </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              PaperProps={{
-                style: {
-                  width: '200px',
-                },
-              }}
-            >
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
               <MenuItem onClick={handleMenuClose}>
-                <Link to="/profile" className="text-gray-700 hover:text-gray-900 w-full">
-                  Editar Perfil
-                </Link>
+                <Link to="/profile" className="text-gray-700 hover:text-gray-900 w-full">Editar Perfil</Link>
               </MenuItem>
               <MenuItem onClick={handleMenuClose}>
-                <Link to="/liked-pets" className="text-gray-700 hover:text-gray-900 w-full">
-                  Mascotas Favoritas
-                </Link>
+                <Link to="/liked-pets" className="text-gray-700 hover:text-gray-900 w-full">Mascotas Favoritas</Link>
               </MenuItem>
               <MenuItem onClick={handleMenuClose}>
-                <Link to="/favorite-centers" className="text-gray-700 hover:text-gray-900 w-full">
-                  Centros Favoritos
-                </Link>
+                <Link to="/favorite-centers" className="text-gray-700 hover:text-gray-900 w-full">Centros Favoritos</Link>
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -137,11 +99,22 @@ const Header: React.FC = () => {
 
       {/* Menú desplegable en dispositivos móviles */}
       <div className="md:hidden flex items-center">
-        <button onClick={handleMenuOpen} className="text-gray-700 focus:outline-none">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
+        <IconButton onClick={toggleDrawer(true)}>
+          <MenuIcon />
+        </IconButton>
+        <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+          <List>
+            <ListItem button component={Link} to="/centers" onClick={toggleDrawer(false)}>
+              <ListItemText primary="Refugios y Protectoras" />
+            </ListItem>
+            <ListItem button component={Link} to="/about" onClick={toggleDrawer(false)}>
+              <ListItemText primary="Sobre Nosotros" />
+            </ListItem>
+            <ListItem button component={Link} to="/colabora" onClick={toggleDrawer(false)}>
+              <ListItemText primary="Contacto" />
+            </ListItem>
+          </List>
+        </Drawer>
       </div>
     </header>
   );
