@@ -3,17 +3,8 @@ import { useAuth } from "../../context/AuthContext";
 import { Link } from 'react-router-dom';
 import ConfirmDialog from '../../components/others/ConfirmDialog';
 import { useNavigate } from 'react-router-dom';
-
-interface State {
-  stateId: number;
-  name: string;
-}
-
-interface City {
-  cityId: number;
-  name: string;
-  state: State;
-}
+import { City } from "../../interfaces/City";
+import { State } from "../../interfaces/State";
 
 const Profile: React.FC = () => {
   const { userData, login } = useAuth();

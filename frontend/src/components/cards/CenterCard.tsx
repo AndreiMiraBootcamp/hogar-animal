@@ -1,29 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-interface Center {
-  centerId: number;
-  name: string;
-  city: {
-    cityId: number;
-    name: string;
-  };
-  address: string;
-  postalCode: string;
-  phone: string;
-  website: string;
-  foundationYear: number;
-  photoUrl: string;
-  imageUrl?: string; // URL almacenada en el objeto del centro
-}
+import { Center } from '../../interfaces/Center';
 
 const CenterCard: React.FC<{ center: Center }> = ({ center }) => {
-  // Usar la URL de la imagen si está disponible en el objeto Center
-  const imageUrl = center.imageUrl || 'http://localhost:8080/images/centers/1/image1.jpg';
 
   return (
     <div className="flex">
-      <img src={imageUrl} alt={center.name} className="w-36 h-36 object-cover rounded mr-4" />
+      <img src={center.imageUrl} alt={center.name} className="w-40 h-40 object-cover rounded mr-4" />
       <div className="flex flex-col justify-between">
         <div>
           <h2 className="text-lg font-semibold">
