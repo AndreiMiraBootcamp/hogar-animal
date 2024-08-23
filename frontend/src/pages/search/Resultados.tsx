@@ -5,8 +5,8 @@ import { Pet } from '../../interfaces/pet';
 import { getAllPets } from '../../api/pets';
 
 interface LocationState {
-  provincia: string; // No se usa en esta versión
-  animal: string;    // Tipo de especie para filtrar
+  provincia: string;
+  animal: string;
 }
 
 const Resultados: React.FC = () => {
@@ -32,7 +32,6 @@ const Resultados: React.FC = () => {
     fetchPetsData();
   }, []);
 
-  // Filtrar mascotas basadas en el tipo de especie
   const filteredPets = pets.filter((pet: Pet) => {
     return animal ? pet.species === animal : true;
   });
@@ -51,10 +50,10 @@ const Resultados: React.FC = () => {
         <h1 className="text-2xl font-bold mb-4">Resultados de la búsqueda</h1>
       </div>
 
-      <div className="w-full p-6 mb-6">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {filteredPets.length > 0 ? (
           filteredPets.map((pet) => (
-            <div key={pet.petId} className="px-2 mb-4">
+            <div key={pet.petId} className="w-full">
               <AnimalCard pet={pet} />
             </div>
           ))
