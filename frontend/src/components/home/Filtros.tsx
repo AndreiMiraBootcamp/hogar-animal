@@ -27,9 +27,9 @@ const Filtros: React.FC = () => {
   };
 
   const animals = [
-    { name: 'Perro', icon: <FaDog size={40} /> },
-    { name: 'Gato', icon: <FaCat size={40} /> },
-    { name: 'Otro', icon: <FaQuestion size={40} /> },
+    { name: 'Perro', value: 'dog', icon: <FaDog size={40} /> },
+    { name: 'Gato',  value: 'cat', icon: <FaCat size={40} /> },
+    { name: 'Otro',  value: 'other', icon: <FaQuestion size={40} /> },
   ];
 
   return (
@@ -59,10 +59,10 @@ const Filtros: React.FC = () => {
               <div className="flex justify-center space-x-4"> {/* Centra los iconos horizontalmente */}
                 {animals.map((animalOption) => (
                   <button
-                    key={animalOption.name}
+                    key={animalOption.value}
                     className={`p-4 rounded-lg flex flex-col items-center 
-                      ${animal === animalOption.name ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}
-                    onClick={() => setAnimal(animalOption.name)}
+                      ${animal === animalOption.value ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}
+                    onClick={() => setAnimal(animalOption.value)}
                   >
                     {animalOption.icon}
                     <span className="mt-2 text-sm">{animalOption.name}</span>

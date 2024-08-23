@@ -1,29 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import petData from '../JSON/pet.json'; // Asegúrate de que esta ruta sea correcta
-
-interface Pet {
-  pet_id: number;
-  center_id: number;
-  name: string;
-  species: string;
-  breed: string;
-  age: number;
-  gender: string;
-  description: string;
-  photo_url: string;
-  available: boolean;
-  created_at: string;
-}
+import { getPetById } from '../api/pets'; // Ajusta la ruta según sea necesario
+import { Pet } from '../interfaces/pet';
 
 const AnimalDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [pet, setPet] = useState<Pet | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const foundPet = petData.find((p) => p.pet_id === Number(id));
-    setPet(foundPet || null);
+    const fetchPetData = async () => {
+      try {
+        if (id) {
+          // Obtener el animal con el ID proporcionado
+          const petData = await getPetById(Number(id));
+          setPet(petData);
+        }
+      } catch (err) {
+        setError('Failed to fetch pet data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPetData();
   }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   if (!pet) {
     return <div>No se encontró el animal.</div>;
@@ -31,7 +41,11 @@ const AnimalDetail: React.FC = () => {
 
   return (
     <div className="mt-4 p-4 flex flex-col lg:flex-row items-center lg:items-start">
-      <img src={pet.photo_url} alt={pet.name} className="w-full lg:w-1/2 h-72 object-cover mb-4 lg:mb-0 lg:mr-4 rounded-lg shadow-lg" />
+      <img
+        src={`/images/pets/pet_${pet.petId}.jpg`}
+        alt={pet.name}
+        className="w-full lg:w-1/2 h-72 object-cover mb-4 lg:mb-0 lg:mr-4 rounded-lg shadow-lg"
+      />
       <div className="w-full lg:w-1/2">
         <h1 className="text-3xl font-bold mb-4">{pet.name}</h1>
         <p className="text-lg mb-2"><strong>Especie:</strong> {pet.species}</p>
