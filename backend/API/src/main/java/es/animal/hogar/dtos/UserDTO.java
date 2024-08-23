@@ -1,6 +1,5 @@
 package es.animal.hogar.dtos;
 
-import es.animal.hogar.entities.User;
 import lombok.Data;
 
 @Data

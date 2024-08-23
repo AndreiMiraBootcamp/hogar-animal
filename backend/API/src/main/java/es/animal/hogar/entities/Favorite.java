@@ -23,7 +23,7 @@ public class Favorite {
     private Pet pet;
 
     @ManyToOne
-    @JoinColumn(name = "adopter_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private User adopter;
 
