@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; // Importa el AuthContext
+import { useAuth } from '../../context/AuthContext'; 
 import SearchBar from '../layout/SearchBar';
-import { Menu, MenuItem, IconButton } from '@mui/material'; // Importa los componentes de MUI
+import { Menu, MenuItem, IconButton } from '@mui/material';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const { userData, logout } = useAuth(); // Usa el contexto para obtener los datos de usuario y la función de logout
+  const { userData, logout } = useAuth();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollTop, setLastScrollTop] = useState(0);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null); // Manejador del menú
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleSearch = (query: string) => {
     navigate(`/search?q=${query}`);
@@ -36,11 +36,11 @@ const Header: React.FC = () => {
   }, [lastScrollTop]);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget); // Establece la posición del menú
+    setAnchorEl(event.currentTarget);
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null); // Cierra el menú
+    setAnchorEl(null);
   };
 
   return (
@@ -54,7 +54,7 @@ const Header: React.FC = () => {
         </Link>
       </div>
 
-      <nav className="flex space-x-8">
+      <nav className="hidden md:flex space-x-8">
         <Link to="/centers" className="text-lg text-gray-700 hover:text-gray-900">
           Refugios y Protectoras
         </Link>
@@ -80,9 +80,9 @@ const Header: React.FC = () => {
             <IconButton
               onClick={handleMenuOpen}
               sx={{
-                padding: 0, // Eliminar padding extra que añade MUI
+                padding: 0,
                 '&:hover': {
-                  backgroundColor: 'transparent', // Eliminar cualquier efecto de hover
+                  backgroundColor: 'transparent',
                 },
               }}
             >
@@ -133,6 +133,15 @@ const Header: React.FC = () => {
             </Menu>
           </>
         )}
+      </div>
+
+      {/* Menú desplegable en dispositivos móviles */}
+      <div className="md:hidden flex items-center">
+        <button onClick={handleMenuOpen} className="text-gray-700 focus:outline-none">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
       </div>
     </header>
   );

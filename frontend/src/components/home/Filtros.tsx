@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AutoComplete from '../others/AutoComplete';
-import { FaDog, FaCat, FaQuestion } from 'react-icons/fa'; 
+import { FaDog, FaCat, FaQuestion } from 'react-icons/fa';
 
 const Filtros: React.FC = () => {
   const [provincia, setProvincia] = useState('');
@@ -33,7 +33,7 @@ const Filtros: React.FC = () => {
   ];
 
   return (
-    <div className="relative w-[1520px] h-[400px] ">
+    <div className="relative w-screen h-[600px]">
       <video 
         autoPlay 
         muted 
@@ -44,39 +44,46 @@ const Filtros: React.FC = () => {
         Tu navegador no admite este vídeo.
       </video>
 
-      <div className="relative flex justify-center items-start w-full">
-        <div className="w-3/4 mt-12 p-6 bg-black bg-opacity-30 rounded-lg max-w-4xl">
-          <div className="flex flex-col space-y-6 mb-6">
-            <div className="flex-1">
-              <AutoComplete
-                options={provincias}
-                value={provincia}
-                onChange={setProvincia}
-                onSelect={setProvincia}
-              />
-            </div>
-            <div className="flex-1">
-              <div className="flex justify-center space-x-4"> {/* Centra los iconos horizontalmente */}
-                {animals.map((animalOption) => (
-                  <button
-                    key={animalOption.name}
-                    className={`p-4 rounded-lg flex flex-col items-center 
-                      ${animal === animalOption.name ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}
-                    onClick={() => setAnimal(animalOption.name)}
-                  >
-                    {animalOption.icon}
-                    <span className="mt-2 text-sm">{animalOption.name}</span>
-                  </button>
-                ))}
+      <div className="relative flex flex-col items-center justify-center w-full h-full">
+        <div className="absolute top-10 text-center text-white">
+          <h1 className="text-4xl font-bold mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Hogar Animal</h1>
+          <p className="text-xl" style={{ fontFamily: 'Quicksand, sans-serif' }}>Encuentra a tu amigo fiel</p>
+        </div>
+
+        <div className="relative flex justify-center items-center w-full h-full mt-20">
+          <div className="w-full md:w-3/4 lg:w-2/3 p-6 bg-black bg-opacity-30 rounded-lg">
+            <div className="flex flex-col space-y-6 mb-6">
+              <div className="w-full">
+                <AutoComplete
+                  options={provincias}
+                  value={provincia}
+                  onChange={setProvincia}
+                  onSelect={setProvincia}
+                />
+              </div>
+              <div className="w-full">
+                <div className="flex justify-center space-x-4 flex-wrap">
+                  {animals.map((animalOption) => (
+                    <button
+                      key={animalOption.name}
+                      className={`p-4 rounded-lg flex flex-col items-center 
+                        ${animal === animalOption.name ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}
+                      onClick={() => setAnimal(animalOption.name)}
+                    >
+                      {animalOption.icon}
+                      <span className="mt-2 text-sm">{animalOption.name}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
+            <button
+              className="bg-gray-700 text-white p-3 w-full rounded-lg hover:bg-gray-800"
+              onClick={handleSearch}
+            >
+              Buscar
+            </button>
           </div>
-          <button
-            className="bg-gray-700 text-white p-3 w-full rounded-lg hover:bg-gray-800"
-            onClick={handleSearch}
-          >
-            Buscar
-          </button>
         </div>
       </div>
     </div>
