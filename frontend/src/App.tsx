@@ -39,8 +39,13 @@ const App: React.FC = () => {
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacity" element={<Privacity />} />
                 <Route path="/center/:id" element={<CenterDetail />} />
-                <Route path="/animal/:id" element={<AnimalDetail />} /> {/* Nueva ruta */}
-              </Routes>
+                <Route path="/animal/:id" element={
+                  <>
+                    <AnimalDetail />
+                    <CenterDetail />
+                  </>
+                } />              
+                </Routes>
             </div>
           </div>
         </Layout>

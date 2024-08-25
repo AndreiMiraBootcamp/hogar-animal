@@ -1,6 +1,6 @@
 package es.animal.hogar.controllers;
 
-import es.animal.hogar.entities.City;
+import es.animal.hogar.dtos.CityDTO;
 import es.animal.hogar.services.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,25 +16,25 @@ public class CityController {
     private CityService cityService;
 
     @GetMapping
-    public List<City> getAllCities() {
+    public List<CityDTO> getAllCities() {
         return cityService.getAllCities();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<City> getCityById(@PathVariable Integer id) {
-        City city = cityService.getCityById(id);
+    public ResponseEntity<CityDTO> getCityById(@PathVariable Integer id) {
+        CityDTO city = cityService.getCityById(id);
         return city != null ? ResponseEntity.ok(city) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public City createCity(@RequestBody City city) {
-        return cityService.createCity(city);
+    public CityDTO createCity(@RequestBody CityDTO cityDTO) {
+        return cityService.createCity(cityDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<City> updateCity(
-            @PathVariable Integer id, @RequestBody City cityDetails) {
-        City updatedCity = cityService.updateCity(id, cityDetails);
+    public ResponseEntity<CityDTO> updateCity(
+            @PathVariable Integer id, @RequestBody CityDTO cityDTO) {
+        CityDTO updatedCity = cityService.updateCity(id, cityDTO);
         return updatedCity != null ? ResponseEntity.ok(updatedCity) : ResponseEntity.notFound().build();
     }
 

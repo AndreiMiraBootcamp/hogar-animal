@@ -1,5 +1,6 @@
 package es.animal.hogar.services;
 
+import es.animal.hogar.dtos.StateDTO;
 import es.animal.hogar.entities.State;
 import es.animal.hogar.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StateService {
@@ -14,24 +16,32 @@ public class StateService {
     @Autowired
     private StateRepository stateRepository;
 
-    public List<State> getAllStates() {
-        return stateRepository.findAll();
+    public List<StateDTO> getAllStates() {
+        List<State> states = stateRepository.findAll();
+        return states.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    public State getStateById(Integer id) {
+    public StateDTO getStateById(Integer id) {
         Optional<State> optionalState = stateRepository.findById(id);
-        return optionalState.orElse(null); // Devuelve null si no se encuentra
+        return optionalState.map(this::convertToDTO).orElse(null);
     }
 
-    public State createState(State state) {
-        return stateRepository.save(state);
+    public StateDTO createState(StateDTO stateDTO) {
+        State state = convertToEntity(stateDTO);
+        State savedState = stateRepository.save(state);
+        return convertToDTO(savedState);
     }
 
-    public State updateState(Integer id, State stateDetails) {
-        return stateRepository.findById(id).map(state -> {
-            state.setName(stateDetails.getName());
-            return stateRepository.save(state);
-        }).orElse(null); // Devuelve null si no se encuentra
+    public StateDTO updateState(Integer id, StateDTO stateDTO) {
+        Optional<State> optionalState = stateRepository.findById(id);
+        if (optionalState.isPresent()) {
+            State state = optionalState.get();
+            state.setName(stateDTO.getName());
+            State updatedState = stateRepository.save(state);
+            return convertToDTO(updatedState);
+        } else {
+            return null;
+        }
     }
 
     public boolean deleteState(Integer id) {
@@ -40,5 +50,13 @@ public class StateService {
             return true;
         }
         return false;
+    }
+
+    private StateDTO convertToDTO(State state) {
+        return new StateDTO(state.getStateId(), state.getName());
+    }
+
+    private State convertToEntity(StateDTO stateDTO) {
+        return new State(stateDTO.getStateId(), stateDTO.getName(), null);
     }
 }

@@ -1,0 +1,28 @@
+/* slick-custom.css */
+
+/* Cambiar el color de las flechas */
+.slick-prev, .slick-next {
+    background-color: #4A4AE5; /* Color morado que se ajusta al diseño de tu página */
+    border-radius: 50%; /* Para hacerlas circulares */
+    width: 40px;
+    height: 40px;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Efecto hover */
+  .slick-prev:hover, .slick-next:hover {
+    background-color: #3737B1; /* Color más oscuro al hacer hover */
+  }
+  
+  /* Ajustar la posición de las flechas */
+  .slick-prev {
+    left: -50px;
+  }
+  
+  .slick-next {
+    right: -50px;
+  }
+  

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import org.springframework.core.io.ClassPathResource;
 import java.nio.file.Files;
-import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import es.animal.hogar.dtos.UserDTO;
 import es.animal.hogar.entities.City;
-import es.animal.hogar.entities.State;
 import es.animal.hogar.entities.User;
 import es.animal.hogar.services.UserService;
 

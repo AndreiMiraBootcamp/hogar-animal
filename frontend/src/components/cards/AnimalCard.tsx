@@ -16,7 +16,7 @@ const AnimalCard: React.FC<{ pet: Pet }> = ({ pet }) => {
     >
       <img
         className="w-full h-72 object-cover"
-        src={`/images/pets/pet_${pet.petId}.jpg`}
+        src={`/images/pets/pet_${pet.petId}/pet_1.jpg`}
         alt={`Foto de ${pet.name}`}
       />
       <div className="px-4 py-2 h-36">

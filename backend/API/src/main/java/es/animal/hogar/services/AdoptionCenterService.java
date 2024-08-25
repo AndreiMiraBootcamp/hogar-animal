@@ -1,12 +1,18 @@
 package es.animal.hogar.services;
 
+import es.animal.hogar.dtos.AdoptionCenterDTO;
 import es.animal.hogar.entities.AdoptionCenter;
+import es.animal.hogar.entities.City;
+import es.animal.hogar.entities.User;
 import es.animal.hogar.repository.AdoptionCenterRepository;
+import es.animal.hogar.repository.CityRepository;
+import es.animal.hogar.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AdoptionCenterService {
@@ -14,32 +20,41 @@ public class AdoptionCenterService {
     @Autowired
     private AdoptionCenterRepository adoptionCenterRepository;
 
-    public List<AdoptionCenter> getAllAdoptionCenters() {
-        return adoptionCenterRepository.findAll();
+    @Autowired
+    private CityRepository cityRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public List<AdoptionCenterDTO> getAllAdoptionCenters() {
+        return adoptionCenterRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    public AdoptionCenter getAdoptionCenterById(Integer id) {
+    public AdoptionCenterDTO getAdoptionCenterById(Integer id) {
         Optional<AdoptionCenter> optionalAdoptionCenter = adoptionCenterRepository.findById(id);
-        return optionalAdoptionCenter.orElse(null); // Devuelve null si no se encuentra
+        return optionalAdoptionCenter.map(this::convertToDTO).orElse(null);
     }
 
-    public AdoptionCenter createAdoptionCenter(AdoptionCenter adoptionCenter) {
-        return adoptionCenterRepository.save(adoptionCenter);
+    public AdoptionCenterDTO createAdoptionCenter(AdoptionCenterDTO adoptionCenterDTO) {
+        AdoptionCenter adoptionCenter = convertToEntity(adoptionCenterDTO);
+        AdoptionCenter savedAdoptionCenter = adoptionCenterRepository.save(adoptionCenter);
+        return convertToDTO(savedAdoptionCenter);
     }
 
-    public AdoptionCenter updateAdoptionCenter(Integer id, AdoptionCenter adoptionCenterDetails) {
+    public AdoptionCenterDTO updateAdoptionCenter(Integer id, AdoptionCenterDTO adoptionCenterDTO) {
         return adoptionCenterRepository.findById(id).map(adoptionCenter -> {
-            adoptionCenter.setName(adoptionCenterDetails.getName());
-            adoptionCenter.setCity(adoptionCenterDetails.getCity());
-            adoptionCenter.setUser(adoptionCenterDetails.getUser());
-            adoptionCenter.setAddress(adoptionCenterDetails.getAddress());
-            adoptionCenter.setPostalCode(adoptionCenterDetails.getPostalCode());
-            adoptionCenter.setPhone(adoptionCenterDetails.getPhone());
-            adoptionCenter.setWebsite(adoptionCenterDetails.getWebsite());
-            adoptionCenter.setFoundationYear(adoptionCenterDetails.getFoundationYear());
-            adoptionCenter.setPhotoUrl(adoptionCenterDetails.getPhotoUrl());
-            return adoptionCenterRepository.save(adoptionCenter);
-        }).orElse(null); // Devuelve null si no se encuentra
+            adoptionCenter.setName(adoptionCenterDTO.getName());
+            adoptionCenter.setCity(cityRepository.findById(adoptionCenterDTO.getCityId()).orElse(null));
+            adoptionCenter.setUser(userRepository.findById(adoptionCenterDTO.getUserId()).orElse(null));
+            adoptionCenter.setAddress(adoptionCenterDTO.getAddress());
+            adoptionCenter.setPostalCode(adoptionCenterDTO.getPostalCode());
+            adoptionCenter.setPhone(adoptionCenterDTO.getPhone());
+            adoptionCenter.setWebsite(adoptionCenterDTO.getWebsite());
+            adoptionCenter.setFoundationYear(adoptionCenterDTO.getFoundationYear());
+            adoptionCenter.setPhotoUrl(adoptionCenterDTO.getPhotoUrl());
+            AdoptionCenter updatedAdoptionCenter = adoptionCenterRepository.save(adoptionCenter);
+            return convertToDTO(updatedAdoptionCenter);
+        }).orElse(null);
     }
 
     public boolean deleteAdoptionCenter(Integer id) {
@@ -48,5 +63,38 @@ public class AdoptionCenterService {
             return true;
         }
         return false;
+    }
+
+    private AdoptionCenterDTO convertToDTO(AdoptionCenter adoptionCenter) {
+        return new AdoptionCenterDTO(
+            adoptionCenter.getCenterId(),
+            adoptionCenter.getName(),
+            adoptionCenter.getCity().getCityId(),
+            adoptionCenter.getUser().getUserId(),
+            adoptionCenter.getAddress(),
+            adoptionCenter.getPostalCode(),
+            adoptionCenter.getPhone(),
+            adoptionCenter.getWebsite(),
+            adoptionCenter.getFoundationYear(),
+            adoptionCenter.getPhotoUrl()
+        );
+    }
+
+    private AdoptionCenter convertToEntity(AdoptionCenterDTO adoptionCenterDTO) {
+        City city = cityRepository.findById(adoptionCenterDTO.getCityId()).orElse(null);
+        User user = userRepository.findById(adoptionCenterDTO.getUserId()).orElse(null);
+        return new AdoptionCenter(
+            adoptionCenterDTO.getCenterId(),
+            adoptionCenterDTO.getName(),
+            city,
+            user,
+            adoptionCenterDTO.getAddress(),
+            adoptionCenterDTO.getPostalCode(),
+            adoptionCenterDTO.getPhone(),
+            adoptionCenterDTO.getWebsite(),
+            adoptionCenterDTO.getFoundationYear(),
+            adoptionCenterDTO.getPhotoUrl(),
+            null // Ignoramos la relación de Pets aquí
+        );
     }
 }
