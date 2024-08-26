@@ -8,6 +8,7 @@ export interface Pet {
     description: string;
     photoUrl: string;
     available: boolean;
+    centerId: number;
     createdAt: string;
   }
   

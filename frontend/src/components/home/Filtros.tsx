@@ -22,7 +22,7 @@ const Filtros: React.FC = () => {
 
   const handleSearch = () => {
     navigate('/resultados', {
-      state: { provincia, animal }
+      state: { search: provincia, animal }
     });
   };
 
