@@ -41,8 +41,8 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className={`text-black py-4 px-10 flex justify-between items-center transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} bg-white shadow-md`}>
-      <div className="flex items-center space-x-4">
+    <header className={`text-black py-4 px-10 flex justify-around items-center transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} bg-white shadow-md`}>
+      <div className="flex items-center">
         <Link to="/" className="block">
           <img src="./images/Logo.png" alt="Logo" className="h-9 object-contain" />
         </Link>
