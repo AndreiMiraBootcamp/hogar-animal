@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import es.animal.hogar.entities.Pet.Gender;
 import es.animal.hogar.entities.Pet.Species;
+import java.sql.Date; // Importar java.sql.Date
 
 @Data
 @NoArgsConstructor
@@ -20,4 +21,5 @@ public class PetDTO {
     private String photoUrl;
     private Boolean available;
     private Integer centerId;
+    private Date createdAt; // Usar java.sql.Date
 }
