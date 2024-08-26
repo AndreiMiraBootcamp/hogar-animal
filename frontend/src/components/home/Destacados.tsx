@@ -28,19 +28,29 @@ const Destacados: React.FC = () => {
     const fetchPets = async () => {
       try {
         const petsData = await getAllPets();
-        
-        // Filtrar los datos para obtener solo los animales disponibles y que han sido publicados hace un tiempo
-        const filterPets = petsData.filter((pet) => {
-          const isAvailable = pet.available;
-          const isOldEnough =
-            new Date().getTime() - new Date(pet.createdAt).getTime() >
-            30 * 24 * 60 * 60 * 1000; // Más de 30 días
-          return isAvailable && isOldEnough;
-        });
+        const daysToFilter = 365;
+        const now = new Date().getTime();
+        const daysInMillis = daysToFilter * 24 * 60 * 60 * 1000;
+
+        const filterPets = petsData
+          .filter((pet) => {
+            const isAvailable = pet.available;
+            const createdAtDate = new Date(pet.createdAt);
+            
+            // Verificamos si la conversión fue exitosa y si createdAtDate es una instancia de Date válida
+            if (isNaN(createdAtDate.getTime())) {
+              console.error(`Invalid date: ${pet.createdAt}`);
+              return false;
+            }
+
+            const isRecent = now - createdAtDate.getTime() <= daysInMillis;
+            return isAvailable && isRecent;
+          })
+          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()); // Ordenar de más reciente a más antiguo
         
         setPets(filterPets);
       } catch (err) {
-        setError('Failed to fetch pets');
+        setError("Failed to fetch pets");
       } finally {
         setLoading(false);
       }
@@ -57,12 +67,16 @@ const Destacados: React.FC = () => {
     return <p>Error: {error}</p>;
   }
 
+  if (pets.length === 0) {
+    return null; // No mostrar el componente si no hay mascotas
+  }
+
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3, 
-    slidesToScroll: 3, 
+    slidesToShow: 3,
+    slidesToScroll: 3,
     nextArrow: <CustomArrow type="next" />,
     prevArrow: <CustomArrow type="prev" />,
     responsive: [

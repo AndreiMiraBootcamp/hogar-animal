@@ -69,7 +69,8 @@ public class PetService {
             pet.getDescription(),
             pet.getPhotoUrl(),
             pet.getAvailable(),
-            pet.getAdoptionCenter() != null ? pet.getAdoptionCenter().getCenterId() : null
+            pet.getAdoptionCenter() != null ? pet.getAdoptionCenter().getCenterId() : null,
+            pet.getCreatedAt() // Incluir el campo createdAt
         );
     }
 
@@ -87,7 +88,9 @@ public class PetService {
         pet.setPhotoUrl(petDTO.getPhotoUrl());
         pet.setAvailable(petDTO.getAvailable());
         pet.setAdoptionCenter(adoptionCenter);
+        pet.setCreatedAt(petDTO.getCreatedAt());
 
         return pet;
     }
+
 }
