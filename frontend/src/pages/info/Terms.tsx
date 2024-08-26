@@ -55,7 +55,7 @@ const TermsOfService: React.FC = () => {
         <br />
         <strong className="font-semibold text-gray-800">Email:</strong> <a href="mailto:contacto@hogaranimal.com" className="text-blue-500 hover:underline">contacto@hogaranimal.com</a>
         <br />
-        <strong className="font-semibold text-gray-800">Dirección:</strong> Calle Ejemplo 123, Ciudad, País
+        <strong className="font-semibold text-gray-800">Dirección:</strong> Carrer Sant Joan 13, Reus, España
       </p>
     </div>
   );

@@ -20,7 +20,7 @@ import AnimalDetail from "./pages/AnimalDetail";
 
 const App: React.FC = () => {
   return (
-    <AuthProvider> {/* Envolvemos la aplicación con AuthProvider */}
+    <AuthProvider> 
       <Router>
         <Layout>
           <div className="flex justify-center">

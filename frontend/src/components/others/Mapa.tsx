@@ -89,7 +89,7 @@ const Mapa: React.FC = () => {
     <div className='w-full mt-5 justify-center items-center'>
       <MapContainer
         center={userPosition || [40.4168, -3.7038]} // Madrid como centro si no hay ubicación del usuario
-        zoom={userPosition ? 13 : 6} // Ajuste de zoom
+        zoom={userPosition ? 13 : 6} 
         style={{ height: '400px', width: '100%' }}
       >
         <TileLayer
