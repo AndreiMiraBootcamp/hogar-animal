@@ -111,7 +111,7 @@ const AnimalDetail: React.FC = () => {
         <p className="text-lg text-gray-700"><strong>Especie:</strong> {translateSpecies(pet.species)}</p>
         <p className="text-lg text-gray-700"><strong>Raza:</strong> {pet.breed}</p>
         <p className="text-lg text-gray-700"><strong>Edad:</strong> {pet.age} años</p>
-        <p className="text-lg text-gray-700"><strong>Género:</strong> {translateGender(pet.gender)}</p>
+        <p className="text-lg text-gray-700"><strong>Sexo:</strong> {translateGender(pet.gender)}</p>
         <p className="text-lg text-gray-700"><strong>Descripción:</strong> {pet.description}</p>
         <p className="text-lg text-gray-700"><strong>Disponibilidad:</strong> {pet.available ? 'Disponible' : 'No Disponible'}</p>
 

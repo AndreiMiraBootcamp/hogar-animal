@@ -7,7 +7,7 @@ export const translateSpecies = (species: string): string => {
 		case "other":
 			return "Otro";
 		default:
-			return species; // Retorna la especie original si no hay traducción disponible
+			return species;
 	}
 };
 export const translateGender = (gender: string): string => {
@@ -17,6 +17,6 @@ export const translateGender = (gender: string): string => {
 		case "female":
 			return "Hembra";
 		default:
-			return gender; // Retorna el género original si no hay traducción disponible
+			return gender;
 	}
 };
