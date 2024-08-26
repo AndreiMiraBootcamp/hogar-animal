@@ -1,22 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 
 const ScrollUpButton: React.FC = () => {
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  };
+	const [isVisible, setIsVisible] = useState<boolean>(false);
 
-  return (
-    <button
-      onClick={scrollToTop}
-      className="fixed bottom-4 right-4 bg-gray-700 text-white p-3 rounded-full shadow-lg hover:bg-gray-600 focus:outline-none"
-      aria-label="Scroll to top"
-    >
-      ↑
-    </button>
-  );
+	const handleScroll = () => {
+		if (window.scrollY > 300) {
+			setIsVisible(true);
+		} else {
+			setIsVisible(false);
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener("scroll", handleScroll);
+
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+		};
+	}, []);
+
+	const scrollToTop = () => {
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth",
+		});
+	};
+
+	return (
+		<>
+			{isVisible && (
+				<button
+					onClick={scrollToTop}
+					className="fixed bottom-4 right-4 bg-gray-700 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg hover:bg-gray-600 focus:outline-none"
+					aria-label="Scroll to top"
+				>
+					<span className="text-2xl">↑</span>
+				</button>
+			)}
+		</>
+	);
 };
 
 export default ScrollUpButton;
