@@ -26,12 +26,12 @@ public class City {
     @JoinColumn(name = "state_id", nullable = false)
     private State state;
 
-//    @OneToMany(mappedBy = "city")
-//    @JsonIgnore
-//    private Set<User> users;
-//
-//    @OneToMany(mappedBy = "city")
-//    @JsonIgnore
-//    private Set<AdoptionCenter> adoptionCenters;
+    @OneToMany(mappedBy = "city")
+    @JsonIgnore
+    private Set<User> users;
+
+    @OneToMany(mappedBy = "city")
+    @JsonIgnore
+    private Set<AdoptionCenter> adoptionCenters;
 
 }

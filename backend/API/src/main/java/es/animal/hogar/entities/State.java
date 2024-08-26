@@ -22,7 +22,7 @@ public class State {
     @Column(nullable = false, length = 45)
     private String name;
 
-//    @OneToMany(mappedBy = "state")
-//    @JsonIgnore
-//    private Set<City> cities;
+    @OneToMany(mappedBy = "state")
+    @JsonIgnore
+    private Set<City> cities;
 }

@@ -26,8 +26,11 @@ public class AdoptionCenterService {
     @Autowired
     private UserRepository userRepository;
 
+    // Obtener todos los centros de adopción
     public List<AdoptionCenterDTO> getAllAdoptionCenters() {
-        return adoptionCenterRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+        return adoptionCenterRepository.findAll().stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
     }
 
     public AdoptionCenterDTO getAdoptionCenterById(Integer id) {
@@ -44,7 +47,7 @@ public class AdoptionCenterService {
     public AdoptionCenterDTO updateAdoptionCenter(Integer id, AdoptionCenterDTO adoptionCenterDTO) {
         return adoptionCenterRepository.findById(id).map(adoptionCenter -> {
             adoptionCenter.setName(adoptionCenterDTO.getName());
-            adoptionCenter.setCity(cityRepository.findById(adoptionCenterDTO.getCityId()).orElse(null));
+            adoptionCenter.setCity(adoptionCenterDTO.getCity());
             adoptionCenter.setUser(userRepository.findById(adoptionCenterDTO.getUserId()).orElse(null));
             adoptionCenter.setAddress(adoptionCenterDTO.getAddress());
             adoptionCenter.setPostalCode(adoptionCenterDTO.getPostalCode());
@@ -69,7 +72,7 @@ public class AdoptionCenterService {
         return new AdoptionCenterDTO(
             adoptionCenter.getCenterId(),
             adoptionCenter.getName(),
-            adoptionCenter.getCity().getCityId(),
+            adoptionCenter.getCity(),
             adoptionCenter.getUser().getUserId(),
             adoptionCenter.getAddress(),
             adoptionCenter.getPostalCode(),
@@ -80,9 +83,10 @@ public class AdoptionCenterService {
         );
     }
 
+    // Convertir DTO a entidad
     private AdoptionCenter convertToEntity(AdoptionCenterDTO adoptionCenterDTO) {
-        City city = cityRepository.findById(adoptionCenterDTO.getCityId()).orElse(null);
-        User user = userRepository.findById(adoptionCenterDTO.getUserId()).orElse(null);
+        City city = adoptionCenterDTO.getCity(); // Se obtiene el objeto City directamente del DTO
+        User user = userRepository.findById(adoptionCenterDTO.getUserId()).orElse(null); // Se busca el User usando el userId
         return new AdoptionCenter(
             adoptionCenterDTO.getCenterId(),
             adoptionCenterDTO.getName(),

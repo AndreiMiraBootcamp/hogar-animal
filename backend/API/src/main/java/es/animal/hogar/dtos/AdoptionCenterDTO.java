@@ -2,6 +2,7 @@ package es.animal.hogar.dtos;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import es.animal.hogar.entities.City;
 import lombok.AllArgsConstructor;
 
 @Data
@@ -10,7 +11,7 @@ import lombok.AllArgsConstructor;
 public class AdoptionCenterDTO {
     private Integer centerId;
     private String name;
-    private Integer cityId;
+    private City city;
     private Integer userId;
     private String address;
     private String postalCode;
