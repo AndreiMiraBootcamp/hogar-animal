@@ -78,12 +78,6 @@ const Header: React.FC = () => {
               <MenuItem onClick={handleMenuClose}>
                 <Link to="/profile" className="text-gray-700 hover:text-gray-900 w-full">Editar Perfil</Link>
               </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <Link to="/liked-pets" className="text-gray-700 hover:text-gray-900 w-full">Mascotas Favoritas</Link>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <Link to="/favorite-centers" className="text-gray-700 hover:text-gray-900 w-full">Centros Favoritos</Link>
-              </MenuItem>
               <MenuItem
                 onClick={() => {
                   logout();

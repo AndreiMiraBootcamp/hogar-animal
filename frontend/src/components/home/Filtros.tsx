@@ -20,17 +20,24 @@ const Filtros: React.FC = () => {
     'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
   ];
 
-  const handleSearch = () => {
-    navigate('/resultados', {
-      state: { provincia, animal }
-    });
-  };
-
   const animals = [
     { name: 'Perro', value: 'dog', icon: <FaDog size={40} /> },
     { name: 'Gato',  value: 'cat', icon: <FaCat size={40} /> },
     { name: 'Otro',  value: 'other', icon: <FaQuestion size={40} /> },
   ];
+
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/pets?province=${provincia}&species=${animal}`);
+      if (!response.ok) {
+        throw new Error('Error al buscar mascotas');
+      }
+      const pets = await response.json();
+      navigate('/resultados', { state: { pets, provincia, animal } });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <div className="relative w-screen h-screen overflow-x-hidden">
@@ -70,8 +77,8 @@ const Filtros: React.FC = () => {
                     <button
                       key={animalOption.name}
                       className={`p-4 rounded-lg flex flex-col items-center 
-                        ${animal === animalOption.name ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}
-                      onClick={() => setAnimal(animalOption.name)}
+                        ${animal === animalOption.value ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}
+                      onClick={() => setAnimal(animalOption.value)}
                     >
                       {animalOption.icon}
                       <span className="mt-2 text-sm">{animalOption.name}</span>
