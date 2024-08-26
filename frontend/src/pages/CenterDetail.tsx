@@ -57,19 +57,19 @@ const CenterDetail: React.FC = () => {
           <h1 className="text-3xl font-bold text-green-800 mb-4">{center.name}</h1>
           <p className="text-lg flex items-center mb-2">
             <FaMapMarkerAlt className="text-green-600 mr-2" />
-            <span className="font-semibold">Dirección:</span> {center.address}
+            <span className="font-semibold">Dirección: </span> {center.address}
           </p>
           <p className="text-lg flex items-center mb-2">
             <FaBuilding className="text-green-600 mr-2" />
-            <span className="font-semibold">Código Postal:</span> {center.postalCode}
+            <span className="font-semibold">Código Postal: </span> {center.postalCode}
           </p>
           <p className="text-lg flex items-center mb-2">
             <FaPhone className="text-green-600 mr-2" />
-            <span className="font-semibold">Teléfono:</span> {center.phone}
+            <span className="font-semibold">Teléfono: </span> {center.phone}
           </p>
           <p className="text-lg flex items-center mb-2">
             <FaGlobe className="text-green-600 mr-2" />
-            <span className="font-semibold">Website:</span>
+            <span className="font-semibold">Website: </span>
             <a
               href={center.website}
               target="_blank"

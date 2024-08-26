@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 
+type Coordinates = [number, number];
 interface CenterMapOnSelectedCenterProps {
   position: Coordinates | null;
 }
