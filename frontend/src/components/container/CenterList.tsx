@@ -44,11 +44,11 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
   return (
     <div>
       <h2 className="text-2xl font-bold m-1 mx-auto w-fit">Centros Disponibles</h2>
-      <div className="flex flex-col md:flex-row p-4 items-start"> {/* Cambia a `flex-col` en pantallas pequeñas */}
-        <div className="md:w-1/4 w-full p-4 mb-4 md:mb-0 bg-gray-100 shadow rounded-lg  m-2"> {/* Ocupa todo el ancho en pantallas pequeñas */}
-          <h2 className="border-b pb-2 text-xl font-bold mb-2">Filtrar por:</h2>
+      <div className="flex flex-col md:flex-row p-4 items-start">
+        <div className="md:w-1/4 w-full mb-4 md:mb-0 shadow rounded-lg m-2"> 
+          <h2 className="border-b p-4 text-xl font-bold">Filtrar por:</h2>
 
-          <div className="border-b pb-2 mb-2">
+          <div className="border-b p-4">
             <h3 className="font-semibold mb-2">Tipo de Animal</h3>
             <div className="space-y-2">
               <label className="flex items-center">
@@ -81,7 +81,7 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
             </div>
           </div>
 
-          <div className="pb-2 mb-2">
+          <div className="p-4">
             <label className="block font-semibold mb-2">Ordenar por</label>
             <select
               value={sortOption}

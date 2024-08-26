@@ -42,4 +42,13 @@ public class PetController {
     public ResponseEntity<Void> deletePet(@PathVariable Integer id) {
         return petService.deletePet(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+    
+    @GetMapping("/center/{centerId}")
+    public ResponseEntity<List<Pet>> getPetsByAdoptionCenterId(@PathVariable Integer centerId) {
+        List<Pet> pets = petService.getPetsByAdoptionCenterId(centerId);
+        if (pets.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(pets);
+    }
 }

@@ -49,7 +49,7 @@ public class AdoptionCenter {
     @Column(name = "photoURL", length = 255)
     private String photoUrl;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "adoptionCenter", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Pet> pets;
 }

@@ -26,6 +26,10 @@ public class PetService {
     public Pet createPet(Pet pet) {
         return petRepository.save(pet);
     }
+    
+    public List<Pet> getPetsByAdoptionCenterId(Integer centerId) {
+        return petRepository.findByAdoptionCenterCenterId(centerId);
+    }
 
     public Pet updatePet(Integer id, Pet petDetails) {
         return petRepository.findById(id).map(pet -> {
