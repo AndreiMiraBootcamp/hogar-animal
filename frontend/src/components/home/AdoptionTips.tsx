@@ -5,7 +5,6 @@ const tips = [
   { title: "Evalúa tu hogar", description: "Asegúrate de que tu hogar sea adecuado para la mascota." },
   { title: "Considera tu tiempo", description: "Evalúa el tiempo que puedes dedicar al cuidado de la mascota." },
   { title: "Visita a la mascota", description: "Conoce a la mascota antes de tomar la decisión final." },
-  { title: "Prepara todo", description: "Asegúrate de tener todos los suministros necesarios." }
 ];
 
 const warnings = [
@@ -13,7 +12,6 @@ const warnings = [
   { title: "Costos", description: "Considera los gastos relacionados con el cuidado de la mascota." },
   { title: "Alergias", description: "Asegúrate de que nadie en tu hogar tenga alergias a las mascotas." },
   { title: "Adaptación", description: "Ten paciencia durante el período de adaptación de la mascota." },
-  { title: "Responsabilidad", description: "Asume la responsabilidad de cuidar a tu mascota adecuadamente." }
 ];
 
 const AdoptionTips: React.FC = () => {
