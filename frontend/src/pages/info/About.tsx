@@ -86,7 +86,7 @@ const About: React.FC = () => {
               alt="Mihail" 
               className="w-24 h-24 rounded-full mx-auto mb-4"
             />
-            <h4 className="text-xl font-semibold">Mihail</h4>
+            <h4 className="text-xl font-semibold">Mihai</h4>
             <p className="text-gray-600">Backend Developer</p>
             <p className="mt-2">
               Mihail trabaja en el desarrollo backend con un enfoque en la optimización del rendimiento y la integración de sistemas. Su habilidad en la arquitectura de software y bases de datos es clave para el éxito de nuestros proyectos.

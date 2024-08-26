@@ -5,7 +5,7 @@ import { FaDog, FaCat, FaQuestion } from 'react-icons/fa';
 
 const Filtros: React.FC = () => {
   const [provincia, setProvincia] = useState('');
-  const [animal, setAnimal] = useState('');
+  const [animal, setAnimal] = useState<string | null>(null); // Cambia el tipo de estado
   const navigate = useNavigate();
 
   const provincias = [
@@ -31,6 +31,10 @@ const Filtros: React.FC = () => {
     { name: 'Gato',  value: 'cat', icon: <FaCat size={40} /> },
     { name: 'Otro',  value: 'other', icon: <FaQuestion size={40} /> },
   ];
+
+  const handleAnimalClick = (value: string) => {
+    setAnimal(currentAnimal => currentAnimal === value ? null : value);
+  };
 
   return (
     <div className="relative w-screen h-screen overflow-x-hidden">
@@ -71,7 +75,7 @@ const Filtros: React.FC = () => {
                       key={animalOption.value}
                       className={`p-4 rounded-lg flex flex-col items-center 
                         ${animal === animalOption.value ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}
-                      onClick={() => setAnimal(animalOption.value)}
+                      onClick={() => handleAnimalClick(animalOption.value)}
                     >
                       {animalOption.icon}
                       <span className="mt-2 text-sm">{animalOption.name}</span>
