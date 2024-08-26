@@ -1,6 +1,7 @@
 package es.animal.hogar.controllers;
 
 import es.animal.hogar.dtos.PetDTO;
+import es.animal.hogar.entities.Pet;
 import es.animal.hogar.services.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
