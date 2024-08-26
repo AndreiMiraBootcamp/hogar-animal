@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Slider from "react-slick";
 import { getPetById } from '../api/pets';
-import { Pet } from '../interfaces/pet';
+import { Pet } from '../interfaces/Pet';
 import { FaPaw, FaInfoCircle } from 'react-icons/fa';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";

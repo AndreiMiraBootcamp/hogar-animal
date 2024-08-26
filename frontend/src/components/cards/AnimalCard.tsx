@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Pet } from '../../interfaces/pet';
+import { Pet } from '../../interfaces/Pet';
 
 const AnimalCard: React.FC<{ pet: Pet }> = ({ pet }) => {
   const navigate = useNavigate();

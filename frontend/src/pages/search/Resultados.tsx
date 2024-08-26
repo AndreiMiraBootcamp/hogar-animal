@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import AnimalCard from '../../components/cards/AnimalCard';
-import { Pet } from '../../interfaces/pet';
+import { Pet } from '../../interfaces/Pet';
 import { getAllPets } from '../../api/pets';
 
 interface LocationState {
