@@ -3,11 +3,12 @@ import { useParams } from 'react-router-dom';
 import AnimalList from '../components/container/AnimalList';
 import { Center } from '../interfaces/Center';
 import { FaMapMarkerAlt, FaPhone, FaGlobe, FaBuilding } from 'react-icons/fa';
+import { Pet } from '../interfaces/pet';
 
 const CenterDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [center, setCenter] = useState<Center | null>(null);
-  const [animals, setAnimals] = useState<Animal[]>([]);
+  const [animals, setAnimals] = useState<Pet[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,7 +28,7 @@ const CenterDetail: React.FC = () => {
         if (!animalsResponse.ok) {
           throw new Error('Error al obtener los datos de los animales');
         }
-        const animalsData: Animal[] = await animalsResponse.json();
+        const animalsData: Pet[] = await animalsResponse.json();
         setAnimals(animalsData);
       } catch (error) {
         setError('No se pudieron cargar los datos desde la API');
@@ -65,19 +66,19 @@ const CenterDetail: React.FC = () => {
           <h1 className="text-3xl font-bold text-green-800 mb-4">{center.name}</h1>
           <p className="text-lg flex items-center mb-2">
             <FaMapMarkerAlt className="text-green-600 mr-2" />
-            <span className="font-semibold">Dirección:</span> {center.address}
+            <span className="font-semibold">Dirección: </span> {center.address}
           </p>
           <p className="text-lg flex items-center mb-2">
             <FaBuilding className="text-green-600 mr-2" />
-            <span className="font-semibold">Código Postal:</span> {center.postalCode}
+            <span className="font-semibold">Código Postal: </span> {center.postalCode}
           </p>
           <p className="text-lg flex items-center mb-2">
             <FaPhone className="text-green-600 mr-2" />
-            <span className="font-semibold">Teléfono:</span> {center.phone}
+            <span className="font-semibold">Teléfono: </span> {center.phone}
           </p>
           <p className="text-lg flex items-center mb-2">
             <FaGlobe className="text-green-600 mr-2" />
-            <span className="font-semibold">Website:</span>
+            <span className="font-semibold">Website: </span>
             <a
               href={center.website}
               target="_blank"
@@ -94,7 +95,7 @@ const CenterDetail: React.FC = () => {
       </div>
       <div className="mt-6">
         <h2 className="text-2xl font-bold text-blue-800 mb-4">Animales en el Refugio</h2>
-        <AnimalList animals={animals} />
+        <AnimalList pets={id} />
       </div>
     </div>
   );
