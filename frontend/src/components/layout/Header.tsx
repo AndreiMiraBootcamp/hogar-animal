@@ -90,7 +90,7 @@ const Header: React.FC = () => {
                   handleMenuClose();
                 }}
               >
-                Logout
+                Cerrar sesión
               </MenuItem>
             </Menu>
           </>
@@ -113,6 +113,11 @@ const Header: React.FC = () => {
             <ListItem button component={Link} to="/colabora" onClick={toggleDrawer(false)}>
               <ListItemText primary="Contacto" />
             </ListItem>
+            {userData && (
+              <ListItem button onClick={() => { logout(); toggleDrawer(false)(); }}>
+                <ListItemText primary="Cerrar sesión" />
+              </ListItem>
+            )}
           </List>
         </Drawer>
       </div>

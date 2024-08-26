@@ -8,8 +8,8 @@ interface Center {
   user_id: number;
   name: string;
   city_id: number;
-  city_name: string; // Nombre de la ciudad
-  province_name: string; // Nombre de la provincia
+  city_name: string; 
+  province_name: string; 
   address: string;
   postal_code: string;
   phone: string;
