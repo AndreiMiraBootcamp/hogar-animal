@@ -1,48 +1,74 @@
 [
-    {
-      "center_id": 1,
-      "user_id": 123,
-      "name": "Centro de Adopción de Animales",
-      "city_id": 456,
-      "address": "123 Calle de Ejemplo, Tarragona",
-      "postal_code": "43202",
-      "phone": "123-456-7890",
-      "website": "https://www.ejemplo.com",
-      "foundation_year": 2005,
-      "photoURL": "https://www.ejemplo.com/foto.jpg"
-    },
-    {
-      "center_id": 2,
-      "user_id": 124,
-      "name": "Refugio Animal Feliz, Barcelona",
-      "city_id": 457,
-      "address": "456 Avenida Ejemplo",
-      "postal_code": "08029",
-      "phone": "987-654-3210",
-      "website": "https://www.refugiofeliz.com",
-      "foundation_year": 2010,
-      "photoURL": "https://www.refugiofeliz.com/foto.jpg"
-    },
-    {
-        "center_id": 3,
-        "user_id": 123,
-        "name": "Refugi Baix Camp",
-        "address": "123 Calle Ejemplo, Reus, España",
-        "postal_code": "43210",
-        "phone": "123-456-789",
-        "website": "https://example.com",
-        "foundation_year": 2005,
-        "photoURL": "https://example.com/image1.jpg"
-      },
-      {
-        "center_id": 4,
-        "user_id": 456,
-        "name": "Refugi de Barcelona",
-        "address": "456 Avenida Ejemplo, Barcelona, España",
-        "postal_code": "08001",
-        "phone": "987-654-321",
-        "website": "https://example.com",
-        "foundation_year": 2010,
-        "photoURL": "https://example.com/image2.jpg"
-      }
-  ]
+  {
+    "center_id": 1,
+    "user_id": 125,
+    "name": "Casa de la Cultura de Valencia",
+    "city_id": 458,
+    "address": "Carrer de Sant Vicent Màrtir, 44",
+    "postal_code": "46002",
+    "phone": "963-521-100",
+    "website": "https://www.culturalvalencia.com",
+    "foundation_year": 1998,
+    "photoURL": "https://www.culturalvalencia.com/foto.jpg"
+  },
+  {
+    "center_id": 6,
+    "user_id": 126,
+    "name": "Biblioteca Pública de Madrid",
+    "city_id": 459,
+    "address": "Calle de Felipe el Hermoso, 4",
+    "postal_code": "28010",
+    "phone": "915-912-250",
+    "website": "https://www.bibliotecamadrid.com",
+    "foundation_year": 1980,
+    "photoURL": "https://www.bibliotecamadrid.com/foto.jpg"
+  },
+  {
+    "center_id": 7,
+    "user_id": 127,
+    "name": "Centro Cívico El Carmen, Zaragoza",
+    "city_id": 460,
+    "address": "Paseo de la Mina, 14",
+    "postal_code": "50001",
+    "phone": "976-721-015",
+    "website": "https://www.centrocivicozaragoza.com",
+    "foundation_year": 2003,
+    "photoURL": "https://www.centrocivicozaragoza.com/foto.jpg"
+  },
+  {
+    "center_id": 8,
+    "user_id": 128,
+    "name": "Parque de la Ciudadela, Barcelona",
+    "city_id": 461,
+    "address": "Passeig de Picasso, 21",
+    "postal_code": "08003",
+    "phone": "933-101-300",
+    "website": "https://www.parquecitadella.com",
+    "foundation_year": 1881,
+    "photoURL": "https://www.parquecitadella.com/foto.jpg"
+  },
+  {
+    "center_id": 9,
+    "user_id": 129,
+    "name": "Palacio de Exposiciones y Congresos de Sevilla",
+    "city_id": 462,
+    "address": "Avenida Alcalde Luis Uruñuela, 1",
+    "postal_code": "41020",
+    "phone": "954-478-700",
+    "website": "https://www.fibessevilla.com",
+    "foundation_year": 1991,
+    "photoURL": "https://www.fibessevilla.com/foto.jpg"
+  },
+  {
+    "center_id": 10,
+    "user_id": 130,
+    "name": "Teatro Principal de Alicante",
+    "city_id": 463,
+    "address": "Plaza Ruperto Chapí, s/n",
+    "postal_code": "03001",
+    "phone": "965-203-100",
+    "website": "https://www.teatroprincipalalicante.com",
+    "foundation_year": 1847,
+    "photoURL": "https://www.teatroprincipalalicante.com/foto.jpg"
+  }
+]

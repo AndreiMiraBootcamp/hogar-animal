@@ -17,6 +17,7 @@ import Privacity from "./pages/info/Privacity";
 import Terms from "./pages/info/Terms";
 import CenterDetail from "./pages/CenterDetail";
 import AnimalDetail from "./pages/AnimalDetail";
+import ScrollUpButton from "./components/others/ScrollUpButton";
 
 const App: React.FC = () => {
   return (
@@ -38,6 +39,7 @@ const App: React.FC = () => {
                 <Route path="/centers" element={<Centers />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacity" element={<Privacity />} />
+                <Route path="/scrollupbutton" element={<ScrollUpButton />} />
                 <Route path="/center/:id" element={<CenterDetail />} />
                 <Route path="/animal/:id" element={
                   <>

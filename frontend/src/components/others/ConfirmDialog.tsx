@@ -66,9 +66,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                 <Button
                     onClick={onConfirm}
                     variant="contained"
-                    color="primary"
+                    color="inherit"
                     style={{
-                        fontWeight: 'bold',
                         padding: '8px 16px',
                         fontSize: '0.9rem',
                         borderRadius: '8px'

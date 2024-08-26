@@ -31,6 +31,10 @@ public class PetService {
         Pet savedPet = petRepository.save(pet);
         return convertToDTO(savedPet);
     }
+    
+    public List<Pet> getPetsByAdoptionCenterId(Integer centerId) {
+        return petRepository.findByAdoptionCenterCenterId(centerId);
+    }
 
     public PetDTO updatePet(Integer id, PetDTO petDTO) {
         return petRepository.findById(id).map(pet -> {

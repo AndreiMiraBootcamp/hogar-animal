@@ -17,9 +17,8 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer petId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "center_id", nullable = false)
-    @JsonIgnore
     private AdoptionCenter adoptionCenter;
 
     @Column(nullable = false, length = 100)

@@ -19,14 +19,13 @@ public class Follow {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "center_id", nullable = false)
-    @JsonIgnore
     private AdoptionCenter adoptionCenter;
 
     @Column(name = "created_at", nullable = false)
+    @JsonIgnore
     private Date createdAt;
 }

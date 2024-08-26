@@ -2,6 +2,7 @@ import React from 'react';
 import Filtros from '../components/home/Filtros';
 import AdoptionTips from '../components/home/AdoptionTips';
 import Destacados from '../components/home/Destacados';
+import ScrollUpButton from '../components/others/ScrollUpButton';
 
 const Home: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ const Home: React.FC = () => {
         <Filtros />
         <Destacados />
         <AdoptionTips />
+        <ScrollUpButton />
     </main>
     
   );

@@ -1,7 +1,7 @@
 [
     {
         "pet_id": 1,
-        "center_id": 1,
+        "center_id": 5,
         "name": "Max",
         "species": "Perro",
         "breed": "Golden Retriever",
@@ -14,7 +14,7 @@
     },
     {
         "pet_id": 2,
-        "center_id": 2,
+        "center_id": 6,
         "name": "Luna",
         "species": "Gato",
         "breed": "Siamés",
@@ -27,7 +27,7 @@
     },
     {
         "pet_id": 3,
-        "center_id": 3,
+        "center_id": 5,
         "name": "Rocky",
         "species": "Perro",
         "breed": "Bulldog Francés",
@@ -40,7 +40,7 @@
     },
     {
         "pet_id": 4,
-        "center_id": 4,
+        "center_id": 7,
         "name": "Mila",
         "species": "Gato",
         "breed": "Persa",
