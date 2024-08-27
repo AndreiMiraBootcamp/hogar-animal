@@ -18,6 +18,7 @@ import Terms from "./pages/info/Terms";
 import CenterDetail from "./pages/CenterDetail";
 import AnimalDetail from "./pages/AnimalDetail";
 import ScrollUpButton from "./components/others/ScrollUpButton";
+import AdminPanel from "./pages/profile/AdminPanel";
 
 const App: React.FC = () => {
   return (
@@ -41,12 +42,14 @@ const App: React.FC = () => {
                 <Route path="/privacity" element={<Privacity />} />
                 <Route path="/scrollupbutton" element={<ScrollUpButton />} />
                 <Route path="/center/:id" element={<CenterDetail />} />
+                <Route path="/admin" element={<AdminPanel />} /> 
                 <Route path="/animal/:id" element={
                   <>
                     <AnimalDetail />
                     <CenterDetail />
                   </>
-                } />              
+                } />      
+                       
                 </Routes>
             </div>
           </div>

@@ -34,10 +34,6 @@ const Resultados: React.FC = () => {
               const matchCity = search ? center.city.name.toLowerCase() === search.toLowerCase() : true;
               const matchPostalCode = search ? center.postalCode === search : true;
 
-              console.log("State " + matchState);
-              console.log("City " + matchCity);
-              console.log("PostalCode " + matchPostalCode);
-
               // Compara con al menos uno de los campos
               if (matchState || matchCity || matchPostalCode) {
                 return animal ? (pet.species === animal ? pet : null) : pet;
