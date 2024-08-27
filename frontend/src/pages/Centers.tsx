@@ -1,4 +1,3 @@
-// src/pages/Centers.tsx
 import React, { useEffect, useState } from 'react';
 import Mapa from '../components/others/Mapa';
 import CenterList from '../components/container/CenterList';
@@ -16,6 +15,20 @@ const Centers: React.FC = () => {
       try {
         const centersData = await fetchCenters();
         setCenters(centersData);
+
+        // Opcional: actualizar el estado si se detectan cambios en el almacenamiento
+        const handleStorageUpdate = () => {
+          const updatedCenters = localStorage.getItem('centers');
+          if (updatedCenters) {
+            setCenters(JSON.parse(updatedCenters));
+          }
+        };
+
+        window.addEventListener('centers-updated', handleStorageUpdate);
+
+        return () => {
+          window.removeEventListener('centers-updated', handleStorageUpdate);
+        };
       } catch (error) {
         setError('Error al cargar los datos de la API');
       } finally {
