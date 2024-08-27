@@ -41,6 +41,15 @@ public class UserController {
         user.setPassword(password);
         user.setEmail(email);
 
+        // Convertir la cadena de texto del rol al enum correspondiente
+        User.Role userRole;
+        try {
+            userRole = User.Role.valueOf(role);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rol inválido: " + role);
+        }
+        user.setRole(userRole);
+
         if (phoneNumber != null) user.setPhoneNumber(phoneNumber);
         if (address != null) user.setAddress(address);
 
