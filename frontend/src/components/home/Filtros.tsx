@@ -5,7 +5,7 @@ import { FaDog, FaCat, FaQuestion } from 'react-icons/fa';
 
 const Filtros: React.FC = () => {
   const [provincia, setProvincia] = useState('');
-  const [animal, setAnimal] = useState('');
+  const [animal, setAnimal] = useState<string | null>(null); // Cambia el tipo de estado
   const navigate = useNavigate();
 
   const provincias = [
@@ -20,23 +20,20 @@ const Filtros: React.FC = () => {
     'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
   ];
 
+  const handleSearch = () => {
+    navigate('/resultados', {
+      state: { search: provincia, animal }
+    });
+  };
+
   const animals = [
     { name: 'Perro', value: 'dog', icon: <FaDog size={40} /> },
     { name: 'Gato',  value: 'cat', icon: <FaCat size={40} /> },
     { name: 'Otro',  value: 'other', icon: <FaQuestion size={40} /> },
   ];
 
-  const handleSearch = async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/api/pets?province=${provincia}&species=${animal}`);
-      if (!response.ok) {
-        throw new Error('Error al buscar mascotas');
-      }
-      const pets = await response.json();
-      navigate('/resultados', { state: { pets, provincia, animal } });
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  const handleAnimalClick = (value: string) => {
+    setAnimal(currentAnimal => currentAnimal === value ? null : value);
   };
 
   return (
@@ -75,10 +72,10 @@ const Filtros: React.FC = () => {
                 <div className="flex justify-center space-x-4 flex-wrap">
                   {animals.map((animalOption) => (
                     <button
-                      key={animalOption.name}
+                      key={animalOption.value}
                       className={`p-4 rounded-lg flex flex-col items-center 
                         ${animal === animalOption.value ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}
-                      onClick={() => setAnimal(animalOption.value)}
+                      onClick={() => handleAnimalClick(animalOption.value)}
                     >
                       {animalOption.icon}
                       <span className="mt-2 text-sm">{animalOption.name}</span>
