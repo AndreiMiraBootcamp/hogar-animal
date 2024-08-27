@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import AnimalCard from '../../components/cards/AnimalCard';
 import { Pet } from '../../interfaces/Pet';
 import { getAllPets } from '../../api/pets';
-import { getCenterById } from '../../api/centers';
+import { fetchCenterDetail } from '../../api/centerDetail';
 
 interface LocationState {
   search: string;
@@ -26,7 +26,7 @@ const Resultados: React.FC = () => {
         // Filtrar por búsqueda y/o animal
         const filteredPets = await Promise.all(
           allPets.map(async (pet) => {
-            const center = await getCenterById(pet.centerId);
+            const center = await fetchCenterDetail(pet.centerId);
 
             if (center) {
               // Compara el valor de búsqueda con estado, ciudad y código postal

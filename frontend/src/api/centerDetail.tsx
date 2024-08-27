@@ -2,7 +2,7 @@ import { Center } from '../interfaces/Center';
 import { Pet } from '../interfaces/Pet';
 
 // Función para obtener los detalles del centro desde la API
-export const fetchCenterDetail = async (id: string): Promise<Center> => {
+export const fetchCenterDetail = async (id: number): Promise<Center> => {
     const response = await fetch(`http://localhost:8080/api/adoption-centers/${id}`);
     if (!response.ok) {
         throw new Error('Error al obtener los datos del centro');
