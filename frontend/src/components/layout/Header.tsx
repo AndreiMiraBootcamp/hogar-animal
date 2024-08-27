@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; 
+import { useAuth } from '../../context/AuthContext';
 import { Menu, MenuItem, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -78,6 +78,9 @@ const Header: React.FC = () => {
               <MenuItem onClick={handleMenuClose}>
                 <Link to="/profile" className="text-gray-700 hover:text-gray-900 w-full">Editar Perfil</Link>
               </MenuItem>
+                <MenuItem onClick={handleMenuClose}>
+                  <Link to="/admin" className="text-gray-700 hover:text-gray-900 w-full">Panel de Administración</Link>
+                </MenuItem>
               <MenuItem
                 onClick={() => {
                   logout();
@@ -108,9 +111,14 @@ const Header: React.FC = () => {
               <ListItemText primary="Contacto" />
             </ListItem>
             {userData && (
-              <ListItem button onClick={() => { logout(); toggleDrawer(false)(); }}>
-                <ListItemText primary="Cerrar sesión" />
-              </ListItem>
+              <>
+                <ListItem button component={Link} to="/admin" onClick={toggleDrawer(false)}>
+                    <ListItemText primary="Panel de Administración" />
+                  </ListItem>
+                <ListItem button onClick={() => { logout(); toggleDrawer(false)(); }}>
+                  <ListItemText primary="Cerrar sesión" />
+                </ListItem>
+              </>
             )}
           </List>
         </Drawer>

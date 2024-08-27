@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 // Define la estructura de los datos del usuario
 interface UserData {
+    isAdmin: any;
     userId: number;
     username: string;
     email: string;
