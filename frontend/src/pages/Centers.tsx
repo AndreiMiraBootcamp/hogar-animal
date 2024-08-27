@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Mapa from '../components/others/Mapa';
 import CenterList from '../components/container/CenterList';
 import { Center } from '../interfaces/Center';
-import { fetchCenters } from '../api/centers'; // Importar la función desde la API
+import { loadCenters } from '../api/centers'; // Importar la función desde la API
 
 const Centers: React.FC = () => {
   const [centers, setCenters] = useState<Center[]>([]);
@@ -11,12 +11,12 @@ const Centers: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
-    const loadCenters = async () => {
+    const loadCentersData = async () => {
       try {
-        const centersData = await fetchCenters();
+        const centersData = await loadCenters();
         setCenters(centersData);
 
-        // Opcional: actualizar el estado si se detectan cambios en el almacenamiento
+        // Escuchar el evento para actualizar los datos si cambian
         const handleStorageUpdate = () => {
           const updatedCenters = localStorage.getItem('centers');
           if (updatedCenters) {
@@ -36,7 +36,7 @@ const Centers: React.FC = () => {
       }
     };
 
-    loadCenters();
+    loadCentersData();
   }, []);
 
   if (loading) {

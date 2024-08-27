@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Link } from 'react-router-dom'; // Importar Link de react-router-dom
+import { Link } from 'react-router-dom';
 import { Center } from '../../interfaces/Center';
 import SearchBar from './SearchBarCenters';
-import { FaCrosshairs } from 'react-icons/fa'; // Importa un ícono para el botón
+import { FaCrosshairs } from 'react-icons/fa';
 
 interface MapaProps {
   centers: Center[];
@@ -13,16 +13,14 @@ interface MapaProps {
   onSearch: (query: string) => void;
 }
 
-const ChangeMapView: React.FC<{ position: [number, number] | null }> = ({ position }) => {
+const HandleUserLocation: React.FC<{ position: [number, number] | null; zoom: number }> = ({ position, zoom }) => {
   const map = useMap();
 
   useEffect(() => {
     if (position) {
-      map.flyTo(position, 13);
-    } else {
-      map.setView([40.1168, -2.7038], 6);
+      map.setView(position, zoom);
     }
-  }, [position, map]);
+  }, [position, zoom, map]);
 
   return null;
 };
@@ -30,16 +28,34 @@ const ChangeMapView: React.FC<{ position: [number, number] | null }> = ({ positi
 const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
   const [selectedCenter, setSelectedCenter] = useState<[number, number] | null>(null);
+  const [zoomLevel, setZoomLevel] = useState(6);
+  const [userIcon, setUserIcon] = useState<L.Icon | null>(null);
 
-  const userIcon = new L.Icon({
-    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-    iconSize: [30, 46],
-    iconAnchor: [15, 46],
-    popupAnchor: [0, -46],
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-    shadowSize: [41, 41],
-    shadowAnchor: [13, 41],
-  });
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    if (userData && userData.image) {
+      const imageUrl = `data:image/jpeg;base64,${userData.image}`;
+      const userIcon = L.divIcon({
+        className: 'user-icon',
+        html: `<div class="user-icon-image" style="background-image: url('${imageUrl}');"></div>`,
+        iconSize: [40, 40], // Tamaño del icono
+        iconAnchor: [20, 40], // Punto de anclaje
+        popupAnchor: [0, -40], // Anclaje del popup
+      });
+      setUserIcon(userIcon);
+    } else {
+      const defaultIcon = new L.Icon({
+        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+        iconSize: [30, 46],
+        iconAnchor: [15, 46],
+        popupAnchor: [0, -46],
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        shadowSize: [41, 41],
+        shadowAnchor: [13, 41],
+      });
+      setUserIcon(defaultIcon);
+    }
+  }, []);
 
   const centerIcon = new L.Icon({
     iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
@@ -51,16 +67,16 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
   const filteredCenters = centers.filter((center) =>
     center.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     center.city.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    center.address.toLowerCase().includes(searchQuery.toLowerCase()) // Agregar filtrado por dirección
+    center.address.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   useEffect(() => {
-    if (searchQuery === '') {
-      setSelectedCenter(null); // Esto hará que el mapa vuelva a su vista inicial
-    } else if (filteredCenters.length > 0 && searchQuery) {
+    if (searchQuery.trim() === '') {
+    } else if (filteredCenters.length > 0) {
       const position = filteredCenters[0]?.position;
       if (position) {
         setSelectedCenter(position);
+        setZoomLevel(13);
       }
     }
   }, [filteredCenters, searchQuery]);
@@ -72,6 +88,7 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
           const { latitude, longitude } = position.coords;
           setUserPosition([latitude, longitude]);
           setSelectedCenter([latitude, longitude]);
+          setZoomLevel(13);
         },
         async (error) => {
           console.error("Error al obtener la ubicación del usuario:", error);
@@ -82,6 +99,7 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
             if (coordinates) {
               setUserPosition(coordinates);
               setSelectedCenter(coordinates);
+              setZoomLevel(13);
             }
           } else {
             alert("No se pudo obtener la ubicación actual ni la ubicación guardada.");
@@ -114,18 +132,24 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
     return null;
   };
 
+  const resetZoom = () => {
+    setZoomLevel(6);
+    setSelectedCenter([40.1168, -2.7038]);
+  };
+
   return (
     <div className="relative w-full mt-5 justify-center items-center">
       <MapContainer
         center={userPosition || [40.1168, -2.7038]}
-        zoom={userPosition ? 13 : 6}
+        zoom={zoomLevel}
         style={{ height: '500px', width: '100%', borderRadius: '20px', overflow: 'hidden' }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; OpenStreetMap contributors'
         />
-        {userPosition && (
+        <HandleUserLocation position={selectedCenter} zoom={zoomLevel} />
+        {userPosition && userIcon && (
           <Marker position={userPosition} icon={userIcon}>
             <Popup>
               <p>Tu ubicación actual</p>
@@ -144,6 +168,7 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
                 click: () => {
                   if (center.position) {
                     setSelectedCenter(center.position);
+                    setZoomLevel(13);
                   }
                 },
               }}
@@ -158,16 +183,15 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
             </Marker>
           );
         })}
-        <ChangeMapView position={selectedCenter} />
       </MapContainer>
 
       <div className="absolute top-5 right-2" style={{ zIndex: 1000 }}>
-        <SearchBar onSearch={onSearch} />
+        <SearchBar onSearch={onSearch} onResetZoom={resetZoom} />
       </div>
 
       <button
         onClick={handleLocateUser}
-        className="absolute bottom-5 right-5 bg-blue-500 text-white p-3 rounded-full shadow-lg"
+        className="absolute bottom-5 right-5 text-white p-3 rounded-full shadow-lg bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800"
         style={{ zIndex: 1000 }}
       >
         <FaCrosshairs size={20} />

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pets")
@@ -51,5 +52,14 @@ public class PetController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(pets);
+    }
+    
+    @GetMapping("/center/{centerId}/species-count")
+    public ResponseEntity<Map<String, Long>> getPetCountsBySpeciesInCenter(@PathVariable Integer centerId) {
+        Map<String, Long> speciesCounts = petService.getPetCountsBySpeciesInCenter(centerId);
+        if (speciesCounts.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(speciesCounts);
     }
 }
