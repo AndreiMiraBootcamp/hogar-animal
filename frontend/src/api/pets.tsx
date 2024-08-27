@@ -1,4 +1,4 @@
-import { Pet } from '../interfaces/pet';
+import { Pet } from '../interfaces/Pet';
 
 // Función para obtener todos los animales
 export const getAllPets = async (): Promise<Pet[]> => {

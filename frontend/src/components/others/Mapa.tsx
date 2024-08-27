@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { Link } from 'react-router-dom'; // Importar Link de react-router-dom
 import { Center } from '../../interfaces/Center';
 import SearchBar from './SearchBarCenters';
 import { FaCrosshairs } from 'react-icons/fa'; // Importa un ícono para el botón
@@ -55,7 +56,6 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
 
   useEffect(() => {
     if (searchQuery === '') {
-      // Si la barra de búsqueda está vacía, restaurar el zoom y la posición iniciales
       setSelectedCenter(null); // Esto hará que el mapa vuelva a su vista inicial
     } else if (filteredCenters.length > 0 && searchQuery) {
       const position = filteredCenters[0]?.position;
@@ -65,32 +65,30 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
     }
   }, [filteredCenters, searchQuery]);
 
-  // Función para obtener la ubicación actual del usuario
   const handleLocateUser = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserPosition([latitude, longitude]);
-          setSelectedCenter([latitude, longitude]); // Asegurarse de que la vista se centre en la ubicación
+          setSelectedCenter([latitude, longitude]);
         },
         async (error) => {
           console.error("Error al obtener la ubicación del usuario:", error);
-          // Intentar obtener la ubicación a partir de localStorage si la geolocalización falla
           const userData = JSON.parse(localStorage.getItem('userData') || '{}');
           if (userData && userData.address && userData.city && userData.postalCode) {
             const fullAddress = `${userData.address}, ${userData.city.name}, ${userData.postalCode}`;
             const coordinates = await getCoordinatesFromAddress(fullAddress);
             if (coordinates) {
               setUserPosition(coordinates);
-              setSelectedCenter(coordinates); // Asegurarse de aplicar el zoom correctamente
+              setSelectedCenter(coordinates);
             }
           } else {
             alert("No se pudo obtener la ubicación actual ni la ubicación guardada.");
           }
         },
         {
-          timeout: 10000, // Puedes ajustar el tiempo de espera
+          timeout: 10000,
           maximumAge: 0,
         }
       );
@@ -99,7 +97,6 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
     }
   };
 
-  // Función para convertir una dirección en coordenadas
   const getCoordinatesFromAddress = async (fullAddress: string): Promise<[number, number] | null> => {
     const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullAddress)}`;
 
@@ -120,8 +117,8 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
   return (
     <div className="relative w-full mt-5 justify-center items-center">
       <MapContainer
-        center={userPosition || [40.1168, -2.7038]} // Madrid como centro si no hay ubicación del usuario
-        zoom={userPosition ? 13 : 6} // Ajuste de zoom
+        center={userPosition || [40.1168, -2.7038]}
+        zoom={userPosition ? 13 : 6}
         style={{ height: '500px', width: '100%', borderRadius: '20px', overflow: 'hidden' }}
       >
         <TileLayer
@@ -155,6 +152,7 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
                 <div style={{ width: '200px' }}>
                   <img src={center.imageUrl} alt={center.name} style={{ width: '100%', height: 'auto' }} />
                   <h3>{center.name}</h3>
+                  <Link to={`/center/${center.centerId}`} className="text-blue-500 hover:underline">Ver detalles</Link>
                 </div>
               </Popup>
             </Marker>
@@ -167,13 +165,12 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
         <SearchBar onSearch={onSearch} />
       </div>
 
-      {/* Botón para centrar la ubicación del usuario */}
       <button
         onClick={handleLocateUser}
         className="absolute bottom-5 right-5 bg-blue-500 text-white p-3 rounded-full shadow-lg"
         style={{ zIndex: 1000 }}
       >
-        <FaCrosshairs size={20} /> {/* Ícono para representar la acción de centrar */}
+        <FaCrosshairs size={20} />
       </button>
     </div>
   );

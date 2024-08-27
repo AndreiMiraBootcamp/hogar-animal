@@ -39,7 +39,7 @@ public class User {
     private String phoneNumber;
 
     @ManyToOne
-    @JoinColumn(name = "city_id", nullable = false)
+    @JoinColumn(name = "city_id", nullable = true)
     private City city;
 
     @Column(name = "address", length = 255)

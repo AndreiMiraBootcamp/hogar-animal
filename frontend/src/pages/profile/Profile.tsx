@@ -11,16 +11,16 @@ const Profile: React.FC = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const [formState, setFormState] = useState(() => {
-    const cityData = userData?.city && typeof userData.city !== 'string' ? userData.city as City : null;
-
+    const cityData = (userData?.city && typeof userData.city !== 'string') ? userData.city as City : null;
+  
     return {
       confirmPassword: "",
-      email: userData?.email || "", // Maneja email
-      address: userData?.address || "", // Maneja address que puede ser null
-      city: cityData?.name?.toString() || "", // Maneja city que puede ser null
-      state: cityData?.state?.stateId?.toString() || "", // Maneja state que puede ser null
-      postalCode: userData?.postalCode?.toString() || "", // Maneja postalCode que puede ser null
-      phoneNumber: userData?.phoneNumber || "", // Maneja phoneNumber que puede ser null
+      email: userData?.email || "",
+      address: userData?.address || "",
+      city: cityData?.cityId?.toString() || "",
+      state: cityData?.stateId?.toString() || "", // Ahora usamos stateId directamente
+      postalCode: userData?.postalCode?.toString() || "",
+      phoneNumber: userData?.phoneNumber || "",
     };
   });
 
@@ -78,24 +78,25 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     if (userData && typeof userData.city !== 'string') {
-      const cityData = userData.city as City; // Forzar el tipo aquí
+      const cityData = userData.city;
 
       setFormState((prevState) => ({
         ...prevState,
         email: userData.email || "",
         address: userData.address || "",
-        city: cityData?.cityId?.toString() || "", // Asegúrate de que cityId existe
-        state: cityData?.state?.stateId?.toString() || "", // Asegúrate de que state existe
+        city: cityData?.cityId?.toString() || "", // Usando cityId
+        state: cityData?.state?.stateId?.toString() || "", // Usando stateId directamente
         postalCode: userData.postalCode?.toString() || "",
         phoneNumber: userData.phoneNumber || "",
       }));
 
+      // Filtrar las ciudades según el stateId
       const filtered = cities.filter(
-        (city) => city.state.stateId === cityData?.state?.stateId
+        (city) => city.stateId === cityData?.state?.stateId
       );
       setFilteredCities(filtered);
     }
-  }, [userData, states, cities]);
+  }, [userData, cities]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -115,7 +116,7 @@ const Profile: React.FC = () => {
     }));
 
     const filtered = cities.filter(
-      (city) => city.state.stateId === parseInt(selectedStateId, 10)
+      (city) => city.stateId === parseInt(selectedStateId, 10)
     );
     setFilteredCities(filtered);
   };
@@ -135,7 +136,7 @@ const Profile: React.FC = () => {
     if (selectedCity) {
       setFormState((prevState) => ({
         ...prevState,
-        state: selectedCity.state.stateId.toString(),
+        state: selectedCity.stateId.toString(),
       }));
     }
   };
@@ -182,15 +183,11 @@ const Profile: React.FC = () => {
       if (formState.address !== userData?.address) {
         formData.append("address", formState.address);
       }
-      if (userData.city && typeof userData.city !== 'string') {
-        const cityData = userData.city as City; // Forzar el tipo aquí
-
-        if (formState.city !== cityData.cityId.toString()) {
-          formData.append("cityId", formState.city);
-        }
-        if (formState.state !== cityData.state.stateId.toString()) {
-          formData.append("stateId", formState.state);
-        }
+      if (formState.city !== userData?.city?.cityId?.toString()) {
+        formData.append("cityId", formState.city);
+      }
+      if (formState.state !== userData?.city?.state?.stateId?.toString()) {
+        formData.append("stateId", formState.state);
       }
       if (formState.postalCode !== userData?.postalCode?.toString()) {
         formData.append("postalCode", formState.postalCode);
