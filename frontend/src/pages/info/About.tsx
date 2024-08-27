@@ -1,20 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const About: React.FC = () => {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const openModal = (image: string) => {
+    setSelectedImage(image);
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+  };
+
   return (
     <div className="p-6 space-y-8">
-      {/* Título de la sección */}
       <h2 className="text-3xl font-bold mb-6">Sobre Nosotros</h2>
-
-      {/* Introducción */}
       <div className="flex flex-col md:flex-row md:space-x-8">
         <div className="flex-shrink-0">
-        <img 
-          src="/images/group.jpeg" 
-          alt="Imagen de Hogar Animal" 
-          className="w-[400px] h-[300px] object-cover rounded-lg shadow-md"
-        />
-
+          <img 
+            src="/images/group.jpeg" 
+            alt="Imagen de Hogar Animal" 
+            className="w-[400px] h-[300px] object-cover rounded-lg shadow-md cursor-pointer"
+            onClick={() => openModal('/images/group.jpeg')} // Abre el modal con la imagen al hacer clic
+          />
         </div>
         <div className="mt-4 md:mt-0">
           <p className="text-lg">
@@ -26,7 +33,6 @@ const About: React.FC = () => {
         </div>
       </div>
 
-      {/* Misión */}
       <section className="bg-gray-100 p-6 rounded-lg shadow-md">
         <h3 className="text-2xl font-semibold mb-4">Nuestra Misión</h3>
         <p className="text-lg">
@@ -38,11 +44,12 @@ const About: React.FC = () => {
         <h3 className="text-2xl font-semibold mb-4">Conoce a Nuestro Equipo</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
+          <div className="bg-white p-6 rounded-lg shadow-md text-center transform transition duration-300 hover:scale-105">
             <img 
               src="/images/rafel.jpeg" 
               alt="Rafel" 
-              className="w-24 h-24 rounded-full mx-auto mb-4"
+              className="w-24 h-24 rounded-full mx-auto mb-4 cursor-pointer"
+              onClick={() => openModal('/images/rafel.jpeg')}
             />
             <h4 className="text-xl font-semibold">Rafel</h4>
             <p className="text-gray-600">Frontend Developer</p>
@@ -51,12 +58,12 @@ const About: React.FC = () => {
             </p>
           </div>
 
-          
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
+          <div className="bg-white p-6 rounded-lg shadow-md text-center transform transition duration-300 hover:scale-105">
             <img 
               src="/images/anouar.jpeg" 
               alt="Anouar" 
-              className="w-24 h-24 rounded-full mx-auto mb-4"
+              className="w-24 h-24 rounded-full mx-auto mb-4 cursor-pointer"
+              onClick={() => openModal('/images/anouar.jpeg')}
             />
             <h4 className="text-xl font-semibold">Anouar</h4>
             <p className="text-gray-600">Frontend Developer</p>
@@ -65,12 +72,12 @@ const About: React.FC = () => {
             </p>
           </div>
 
-          
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
+          <div className="bg-white p-6 rounded-lg shadow-md text-center transform transition duration-300 hover:scale-105">
             <img 
               src="/images/andrei.jpeg" 
               alt="Andrei" 
-              className="w-24 h-24 rounded-full mx-auto mb-4"
+              className="w-24 h-24 rounded-full mx-auto mb-4 cursor-pointer"
+              onClick={() => openModal('/images/andrei.jpeg')}
             />
             <h4 className="text-xl font-semibold">Andrei</h4>
             <p className="text-gray-600">Backend Developer</p>
@@ -79,21 +86,35 @@ const About: React.FC = () => {
             </p>
           </div>
 
-         
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
+          <div className="bg-white p-6 rounded-lg shadow-md text-center transform transition duration-300 hover:scale-105">
             <img 
               src="/images/mihail.jpeg" 
               alt="Mihail" 
-              className="w-24 h-24 rounded-full mx-auto mb-4"
+              className="w-24 h-24 rounded-full mx-auto mb-4 cursor-pointer"
+              onClick={() => openModal('/images/mihail.jpeg')}
             />
-            <h4 className="text-xl font-semibold">Mihail</h4>
+            <h4 className="text-xl font-semibold">Mihai</h4>
             <p className="text-gray-600">Backend Developer</p>
             <p className="mt-2">
               Mihail trabaja en el desarrollo backend con un enfoque en la optimización del rendimiento y la integración de sistemas. Su habilidad en la arquitectura de software y bases de datos es clave para el éxito de nuestros proyectos.
             </p>
           </div>
+
         </div>
       </section>
+
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+          onClick={closeModal}
+        >
+          <img 
+            src={selectedImage} 
+            alt="Imagen seleccionada" 
+            className="max-w-full max-h-full rounded-lg shadow-lg"
+          />
+        </div>
+      )}
     </div>
   );
 };
