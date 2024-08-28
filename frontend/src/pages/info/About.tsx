@@ -49,12 +49,12 @@ const About: React.FC = () => {
               src="/images/rafel.jpeg" 
               alt="Rafel" 
               className="w-24 h-24 rounded-full mx-auto mb-4 cursor-pointer"
-              onClick={() => openModal('/images/rafel.jpeg')}
+              onClick={() => openModal('/images/anouar.jpeg')}
             />
-            <h4 className="text-xl font-semibold">Rafel</h4>
+            <h4 className="text-xl font-semibold">Anouar</h4>
             <p className="text-gray-600">Frontend Developer</p>
             <p className="mt-2">
-              Rafel es uno de nuestros desarrolladores frontend, especializado en crear interfaces de usuario intuitivas y atractivas. Su experiencia en tecnologías web asegura que nuestras plataformas sean fáciles de usar y visualmente agradables.
+              Anouar es uno de nuestros desarrolladores frontend, especializado en crear interfaces de usuario intuitivas y atractivas. Su experiencia en tecnologías web asegura que nuestras plataformas sean fáciles de usar y visualmente agradables.
             </p>
           </div>
 
@@ -63,12 +63,12 @@ const About: React.FC = () => {
               src="/images/anouar.jpeg" 
               alt="Anouar" 
               className="w-24 h-24 rounded-full mx-auto mb-4 cursor-pointer"
-              onClick={() => openModal('/images/anouar.jpeg')}
+              onClick={() => openModal('/images/rafel.jpeg')}
             />
-            <h4 className="text-xl font-semibold">Anouar</h4>
+            <h4 className="text-xl font-semibold">Rafel</h4>
             <p className="text-gray-600">Frontend Developer</p>
             <p className="mt-2">
-              Anouar es nuestro experto en frontend, con un enfoque en la optimización y el diseño responsivo. Se asegura de que nuestras aplicaciones sean accesibles y funcionales en todos los dispositivos.
+              Rafel es nuestro experto en frontend, con un enfoque en la optimización y el diseño responsivo. Se asegura de que nuestras aplicaciones sean accesibles y funcionales en todos los dispositivos.
             </p>
           </div>
 
