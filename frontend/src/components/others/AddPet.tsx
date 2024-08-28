@@ -1,8 +1,6 @@
-// src/pages/AddPet.tsx
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ConfirmDialog from "../others/ConfirmDialog"; // Ajusta la ruta según la ubicación de tu componente
+import ConfirmDialog from "../others/ConfirmDialog";
 
 interface AddPetProps {
   selectedCenter: number | null;
@@ -85,7 +83,7 @@ const AddPet: React.FC<AddPetProps> = ({ selectedCenter }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/pets/add", {
+      const response = await fetch("http://localhost:8080/api/pets", {
         method: "POST",
         body: data
       });
@@ -93,7 +91,7 @@ const AddPet: React.FC<AddPetProps> = ({ selectedCenter }) => {
       if (response.ok) {
         setDialogTitle("Éxito");
         setDialogMessage("Animal añadido exitosamente.");
-        setDialogAction(() => () => navigate("/")); // Redirige a la página principal o al panel de administración
+        setDialogAction(() => () => navigate("/")); 
         setDialogOpen(true);
       } else {
         const errorText = await response.text();

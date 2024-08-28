@@ -20,6 +20,7 @@ import AnimalDetail from "./pages/AnimalDetail";
 import ScrollUpButton from "./components/others/ScrollUpButton";
 import AdminPanel from "./pages/profile/AdminPanel";
 
+
 const App: React.FC = () => {
   return (
     <AuthProvider> 
@@ -49,7 +50,6 @@ const App: React.FC = () => {
                     <CenterDetail />
                   </>
                 } />      
-                       
                 </Routes>
             </div>
           </div>
