@@ -18,6 +18,7 @@ const fetchPetCountsForCenter = async (centerId: number) => {
     }
 };
 
+// Función para obtener todos los centros
 export const fetchCenters = async (): Promise<Center[]> => {
     try {
         const response = await fetch('http://localhost:8080/api/adoption-centers');
@@ -71,5 +72,33 @@ export const loadCenters = async (): Promise<Center[]> => {
         // Fetch en segundo plano para actualizar si es necesario
         fetchCenters().catch(error => console.error('Error fetching centers in the background:', error));
         return parsedCachedCenters;
+    }
+};
+
+// Nueva función para actualizar la información del refugio
+export const updateCenter = async (centerId: number, updatedData: Partial<Center>): Promise<void> => {
+    try {
+        const response = await fetch(`http://localhost:8080/api/adoption-centers/${centerId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al actualizar el refugio con ID: ' + centerId);
+        }
+
+        // Opcional: Actualizar el caché local después de la actualización
+        const centers = await fetchCenters();
+        localStorage.setItem('centers', JSON.stringify(centers));
+        
+        // Disparar evento personalizado si es necesario
+        const event = new Event('centers-updated');
+        window.dispatchEvent(event);
+    } catch (error) {
+        console.error('Error al actualizar el refugio:', error);
+        throw error;
     }
 };
