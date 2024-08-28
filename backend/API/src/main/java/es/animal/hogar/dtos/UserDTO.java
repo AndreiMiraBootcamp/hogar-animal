@@ -12,6 +12,7 @@ public class UserDTO {
     private CityDTO city; // Cambiado para incluir CityDTO
     private Integer postalCode;
     private byte[] image;
+    private String role;
 
     // CityDTO para representar la ciudad y su estado
     @Data
