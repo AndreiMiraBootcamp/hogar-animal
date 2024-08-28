@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import CreateCenter from "../../components/others/CreateCenter";
-import AddPet from "../../components/others/AddPet";
+import CreateCenter from "../../components/admin/CreateCenter";
+import AddPet from "../../components/admin/AddPet";
 import { fetchCenters, loadCenters } from "../../api/centers"; // Ajusta la ruta según la ubicación del archivo
 
 const AdminPanel: React.FC = () => {
