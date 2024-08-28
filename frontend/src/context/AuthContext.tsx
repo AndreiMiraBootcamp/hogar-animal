@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 // Define la estructura de los datos del usuario
 interface UserData {
-    isAdmin: any;
+    isAdmin: boolean;
     userId: number;
     username: string;
     email: string;
@@ -37,7 +37,7 @@ export const useAuth = () => {
 // Proveedor de contexto
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [userData, setUserData] = useState<UserData | null>(null);
-    const [token, setToken] = useState<string | null>(null); // Añadir estado para el token
+    const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
         const storedUserData = localStorage.getItem("userData");
@@ -45,19 +45,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const expirationTime = localStorage.getItem("expirationTime");
 
         if (expirationTime && new Date().getTime() > parseInt(expirationTime, 10)) {
-            // Si la hora actual es mayor que la de expiración, borra los datos
+            // Si la hora actual es mayor que la de expiración, borra los datos y desconecta al usuario
             localStorage.removeItem("userData");
             localStorage.removeItem("token");
             localStorage.removeItem("expirationTime");
             setUserData(null);
             setToken(null);
         } else if (storedUserData && storedToken) {
+            // Si los datos del usuario y el token aún son válidos, los carga desde localStorage
             try {
                 const parsedData: UserData = JSON.parse(storedUserData);
                 setUserData(parsedData);
                 setToken(storedToken);
             } catch (error) {
-                console.error("Error parsing user data or token from localStorage", error);
+                console.error("Error al analizar los datos del usuario o el token desde localStorage", error);
             }
         }
     }, []);
@@ -72,12 +73,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const logout = () => {
-        localStorage.removeItem("userData");
-        localStorage.removeItem("token");
-        localStorage.removeItem("expirationTime");
+        localStorage.clear(); // Limpia todos los elementos del localStorage
         setUserData(null);
         setToken(null); 
-        window.location.href = "/"; 
+        window.location.href = "/"; // Redirige al usuario a la página principal después de cerrar sesión
     };
 
     return (

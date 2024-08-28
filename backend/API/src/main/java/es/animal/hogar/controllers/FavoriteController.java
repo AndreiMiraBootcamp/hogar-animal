@@ -21,21 +21,19 @@ public class FavoriteController {
         return favoriteService.getAllFavorites();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Favorite> getFavoriteById(@PathVariable Integer id) {
-        Favorite favorite = favoriteService.getFavoriteById(id);
-        return favorite != null ? ResponseEntity.ok(favorite) : ResponseEntity.notFound().build();
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<FavoriteDTO>> getFavoritesByUserId(@PathVariable Integer userId) {
+        List<FavoriteDTO> favorites = favoriteService.getFavoritesByUserId(userId);
+        return !favorites.isEmpty() ? ResponseEntity.ok(favorites) : ResponseEntity.notFound().build();
     }
 
-    // Modificado para aceptar petId y userId
     @PostMapping
-    public ResponseEntity<Favorite> createFavorite(@RequestBody FavoriteDTO favoriteDTO) {
-        Favorite createdFavorite = favoriteService.createFavorite(favoriteDTO.getPetId(), favoriteDTO.getUserId());
+    public ResponseEntity<Favorite> createFavorite(
+            @RequestParam Integer petId, @RequestParam Integer userId) {
+        Favorite createdFavorite = favoriteService.createFavorite(petId, userId);
         return createdFavorite != null ? ResponseEntity.ok(createdFavorite) : ResponseEntity.badRequest().build();
     }
 
-
-    // Modificado para aceptar userId
     @PutMapping("/{favoriteId}/user/{userId}")
     public ResponseEntity<Favorite> updateFavorite(
             @PathVariable Integer favoriteId, @PathVariable Integer userId, @RequestBody Favorite favoriteDetails) {
@@ -43,8 +41,13 @@ public class FavoriteController {
         return updatedFavorite != null ? ResponseEntity.ok(updatedFavorite) : ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFavorite(@PathVariable Integer id) {
-        return favoriteService.deleteFavorite(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    @DeleteMapping
+    public ResponseEntity<Void> deleteFavorite(
+            @RequestParam Integer petId, @RequestParam Integer userId) {
+        boolean deleted = favoriteService.deleteFavorite(petId, userId);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
+
+
+
