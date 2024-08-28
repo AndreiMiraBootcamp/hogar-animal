@@ -7,12 +7,17 @@ import { useAuth } from '../context/AuthContext'; // Importa el hook de autentic
 const Home: React.FC = () => {
   const { userData } = useAuth();
   const userId = userData?.userId || null;
-  
+
   return (
     <main className="flex flex-col items-center">
       <Filtros />
-      <Destacados showFavorites={!!userId} userId={userId} />
-      <Destacados/>
+      {userId && (
+        <>
+          <Destacados showFavorites={true} userId={userId} />
+          <Destacados showFavorites={false} userId={userId} />
+        </>
+      )}
+      {!userId && <Destacados />}
       <AdoptionTips />
     </main>
   );

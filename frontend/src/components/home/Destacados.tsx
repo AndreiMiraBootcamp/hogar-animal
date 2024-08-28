@@ -29,33 +29,52 @@ interface DestacadosProps {
 const Destacados: React.FC<DestacadosProps> = ({ showFavorites = false, userId }) => {
   const [pets, setPets] = useState<Pet[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [favoritePetIds, setFavoritePetIds] = useState<number[]>([]); // Estado para almacenar IDs de favoritos
 
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        if (showFavorites && userId) {
-          // Obtener favoritos del usuario
-          const favorites = await getFavoritesByUserId(userId);
-          const favoritePetIds = favorites.map(fav => fav.petId);
+        const petsData = await getAllPets();
+        let filteredPets: Pet[] = petsData;
 
-          if (favoritePetIds.length > 0) {
-            const petsData = await getAllPets();
-            const favoritePets = petsData.filter(pet => favoritePetIds.includes(pet.petId));
-            setPets(favoritePets);
+        if (userId) {
+          // Si el usuario ha iniciado sesión, obtener favoritos
+          const favorites = await getFavoritesByUserId(userId);
+          const favoriteIds = favorites.map(fav => fav.petId);
+          setFavoritePetIds(favoriteIds);
+
+          if (showFavorites) {
+            // Mostrar solo favoritos si se solicita
+            filteredPets = petsData.filter(pet => favoriteIds.includes(pet.petId));
           } else {
-            // Si no hay favoritos, no mostrar nada
-            setPets([]);
+            // Mostrar destacados excluyendo los favoritos
+            const daysToFilter = 1000;
+            const now = new Date().getTime();
+            const daysInMillis = daysToFilter * 24 * 60 * 60 * 1000;
+
+            filteredPets = petsData
+              .filter(pet => {
+                const isAvailable = pet.available;
+                const createdAtDate = new Date(pet.createdAt);
+
+                if (isNaN(createdAtDate.getTime())) {
+                  console.error(`Invalid date: ${pet.createdAt}`);
+                  return false;
+                }
+
+                const isRecent = now - createdAtDate.getTime() <= daysInMillis;
+                return isAvailable && isRecent && !favoriteIds.includes(pet.petId); // Excluir favoritos
+              })
+              .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
           }
         } else {
-          // Mostrar todos los animales destacados
-          const petsData = await getAllPets();
+          // Si no hay sesión iniciada, mostrar solo destacados recientes
           const daysToFilter = 1000;
           const now = new Date().getTime();
           const daysInMillis = daysToFilter * 24 * 60 * 60 * 1000;
 
-          const filterPets = petsData
-            .filter((pet) => {
+          filteredPets = petsData
+            .filter(pet => {
               const isAvailable = pet.available;
               const createdAtDate = new Date(pet.createdAt);
 
@@ -68,11 +87,12 @@ const Destacados: React.FC<DestacadosProps> = ({ showFavorites = false, userId }
               return isAvailable && isRecent;
             })
             .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-
-          setPets(filterPets);
         }
+
+        setPets(filteredPets);
       } catch (err) {
-        setError("Failed to fetch pets");
+        console.error("Error fetching pets:", err);
+        setPets([]); // Asegurarse de que no se muestren animales en caso de error
       } finally {
         setLoading(false);
       }
@@ -82,15 +102,11 @@ const Destacados: React.FC<DestacadosProps> = ({ showFavorites = false, userId }
   }, [showFavorites, userId]);
 
   if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
+    return null; // No renderizar nada mientras carga
   }
 
   if (pets.length === 0) {
-    return showFavorites ? <p>No hay animales favoritos para mostrar.</p> : null;
+    return null; // No renderizar nada si no hay animales a mostrar
   }
 
   const settings = {
@@ -121,50 +137,25 @@ const Destacados: React.FC<DestacadosProps> = ({ showFavorites = false, userId }
 
   return (
     <div className="w-full mt-6">
-      {showFavorites && userId && pets.length > 0 ? (
-        <>
-          <h1 className="text-4xl font-semibold">Tus Favoritos</h1>
-            {pets.length >= 4 ? (
-              <Slider {...settings}>
-                {pets.map((pet) => (
-                  <div key={pet.petId} className="py-6 px-3">
-                    <AnimalCard pet={pet} userId={userId} />
-                  </div>
-                ))}
-              </Slider>
-            ) : (
-              <div className="flex justify-center flex-wrap">
-                {pets.map((pet) => (
-                  <div key={pet.petId} className="py-6 px-3 card-width">
-                    <AnimalCard pet={pet} userId={userId} />
-                  </div>
-                ))}
-              </div>
-            )}
-        </>
-      ) : !showFavorites ? (
-        <>
-          <h1 className="text-4xl font-semibold">Destacados</h1>
-          {pets.length >= 4 ? (
-            <Slider {...settings}>
-              {pets.map((pet) => (
-                <div key={pet.petId} className="py-6 px-3">
-                  <AnimalCard pet={pet} userId={userId} />
-                </div>
-              ))}
-            </Slider>
-          ) : (
-            <div className="flex justify-center flex-wrap">
-              {pets.map((pet) => (
-                <div key={pet.petId} className="py-6 px-3 card-width">
-                  <AnimalCard pet={pet} userId={userId} />
-                </div>
-              ))}
+      <h1 className="text-4xl font-semibold">
+        {showFavorites && userId ? "Tus Favoritos" : "Destacados"}
+      </h1>
+      {pets.length >= 4 ? (
+        <Slider {...settings}>
+          {pets.map((pet) => (
+            <div key={pet.petId} className="py-6 px-3">
+              <AnimalCard pet={pet} userId={userId} />
             </div>
-          )}
-        </>
+          ))}
+        </Slider>
       ) : (
-        <p>No hay animales favoritos para mostrar.</p>
+        <div className="flex justify-center flex-wrap">
+          {pets.map((pet) => (
+            <div key={pet.petId} className="py-6 px-3 card-width">
+              <AnimalCard pet={pet} userId={userId} />
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
