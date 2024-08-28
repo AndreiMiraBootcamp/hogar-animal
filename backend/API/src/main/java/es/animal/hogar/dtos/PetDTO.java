@@ -21,5 +21,5 @@ public class PetDTO {
     private String photoUrl;
     private Boolean available;
     private Integer centerId;
-    private Date createdAt; // Usar java.sql.Date
+    private Date createdAt; 
 }

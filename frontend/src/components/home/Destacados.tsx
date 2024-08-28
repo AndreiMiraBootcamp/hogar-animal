@@ -5,6 +5,7 @@ import { Pet } from "../../interfaces/Pet";
 import { getAllPets } from "../../api/pets";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "./Destacados.css";
 
 const CustomArrow = (props: any) => {
   const { className, style, onClick } = props;
@@ -36,8 +37,7 @@ const Destacados: React.FC = () => {
           .filter((pet) => {
             const isAvailable = pet.available;
             const createdAtDate = new Date(pet.createdAt);
-            
-            // Verificamos si la conversión fue exitosa y si createdAtDate es una instancia de Date válida
+
             if (isNaN(createdAtDate.getTime())) {
               console.error(`Invalid date: ${pet.createdAt}`);
               return false;
@@ -46,8 +46,8 @@ const Destacados: React.FC = () => {
             const isRecent = now - createdAtDate.getTime() <= daysInMillis;
             return isAvailable && isRecent;
           })
-          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()); // Ordenar de más reciente a más antiguo
-        
+          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
         setPets(filterPets);
       } catch (err) {
         setError("Failed to fetch pets");
@@ -68,7 +68,7 @@ const Destacados: React.FC = () => {
   }
 
   if (pets.length === 0) {
-    return null; // No mostrar el componente si no hay mascotas
+    return null;
   }
 
   const settings = {
@@ -99,13 +99,23 @@ const Destacados: React.FC = () => {
 
   return (
     <div className="w-full mt-6">
-      <Slider {...settings}>
-        {pets.map((pet) => (
-          <div key={pet.petId} className="py-6 px-3">
-            <AnimalCard pet={pet} />
-          </div>
-        ))}
-      </Slider>
+      {pets.length >= 4 ? (
+        <Slider {...settings}>
+          {pets.map((pet) => (
+            <div key={pet.petId} className="py-6 px-3">
+              <AnimalCard pet={pet} />
+            </div>
+          ))}
+        </Slider>
+      ) : (
+        <div className="flex justify-center flex-wrap">
+          {pets.map((pet) => (
+            <div key={pet.petId} className="py-6 px-3 card-width"> {/* Aplicar la clase card-width */}
+              <AnimalCard pet={pet} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

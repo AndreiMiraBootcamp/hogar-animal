@@ -1,5 +1,6 @@
 package es.animal.hogar.controllers;
 
+import es.animal.hogar.dtos.FavoriteDTO;
 import es.animal.hogar.entities.Favorite;
 import es.animal.hogar.services.FavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,19 @@ public class FavoriteController {
         return favorite != null ? ResponseEntity.ok(favorite) : ResponseEntity.notFound().build();
     }
 
+    // Modificado para aceptar petId y userId
     @PostMapping
-    public Favorite createFavorite(@RequestBody Favorite favorite) {
-        return favoriteService.createFavorite(favorite);
+    public ResponseEntity<Favorite> createFavorite(@RequestBody FavoriteDTO favoriteDTO) {
+        Favorite createdFavorite = favoriteService.createFavorite(favoriteDTO.getPetId(), favoriteDTO.getUserId());
+        return createdFavorite != null ? ResponseEntity.ok(createdFavorite) : ResponseEntity.badRequest().build();
     }
 
-    @PutMapping("/{id}")
+
+    // Modificado para aceptar userId
+    @PutMapping("/{favoriteId}/user/{userId}")
     public ResponseEntity<Favorite> updateFavorite(
-            @PathVariable Integer id, @RequestBody Favorite favoriteDetails) {
-        Favorite updatedFavorite = favoriteService.updateFavorite(id, favoriteDetails);
+            @PathVariable Integer favoriteId, @PathVariable Integer userId, @RequestBody Favorite favoriteDetails) {
+        Favorite updatedFavorite = favoriteService.updateFavorite(favoriteId, userId, favoriteDetails);
         return updatedFavorite != null ? ResponseEntity.ok(updatedFavorite) : ResponseEntity.notFound().build();
     }
 
