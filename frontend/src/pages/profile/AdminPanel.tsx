@@ -1,12 +1,11 @@
-// src/pages/AdminPanel.tsx
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import CreateCenter from "../../components/others/CreateCenter"; // Ajusta la ruta según la ubicación del componente
-import AddPet from "../../components/others/AddPet"; // Ajusta la ruta según la ubicación del componente
+import CreateCenter from "../../components/others/CreateCenter";
+import AddPet from "../../components/others/AddPet";
+import { fetchCenters, loadCenters } from "../../api/centers"; // Ajusta la ruta según la ubicación del archivo
 
 const AdminPanel: React.FC = () => {
-  const [centers, setCenters] = useState<Array<{ center_id: number; name: string }>>([]);
+  const [centers, setCenters] = useState<Array<{ center_id: number; name: string; imageUrl: string }>>([]);
   const [selectedCenter, setSelectedCenter] = useState<number | null>(null);
   const [showCreateCenter, setShowCreateCenter] = useState(false);
   const [showAddPet, setShowAddPet] = useState(false);
@@ -15,13 +14,8 @@ const AdminPanel: React.FC = () => {
   useEffect(() => {
     const fetchCenters = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/centers");
-        if (response.ok) {
-          const data = await response.json();
-          setCenters(data);
-        } else {
-          throw new Error("Error fetching centers");
-        }
+        const centersData = await loadCenters();
+        setCenters(centersData);
       } catch (error) {
         console.error("Error fetching centers:", error);
       }
@@ -43,9 +37,8 @@ const AdminPanel: React.FC = () => {
   };
 
   const handleCenterCreated = () => {
-    // Reload centers after creating a new one
     setShowCreateCenter(false);
-    fetchCenters();
+    fetchCenters(); 
   };
 
   const handleCenterSelected = (center_id: number) => {
@@ -53,33 +46,8 @@ const AdminPanel: React.FC = () => {
     setShowAddPet(true);
   };
 
-  const fetchCenters = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/centers");
-      if (response.ok) {
-        const data = await response.json();
-        setCenters(data);
-      } else {
-        throw new Error("Error fetching centers");
-      }
-    } catch (error) {
-      console.error("Error fetching centers:", error);
-    }
-  };
-
   return (
     <div className="w-full p-6 m-4 shadow-md rounded-md mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">Panel de Administración</h1>
-
-      <div className="mb-6">
-        <button
-          onClick={handleAddPet}
-          className="w-full p-2 bg-gray-700 text-white rounded hover:bg-gray-800"
-        >
-          Añadir Animal
-        </button>
-      </div>
-
       {centers.length === 0 && (
         <div className="mb-6">
           <p className="text-center">No tienes refugios registrados.</p>
