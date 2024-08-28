@@ -48,6 +48,12 @@ public class AdoptionCenter {
 
     @Column(name = "photoURL", length = 255)
     private String photoUrl;
+    
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
 
     @OneToMany(mappedBy = "adoptionCenter", fetch = FetchType.LAZY)
     @JsonIgnore

@@ -55,6 +55,8 @@ public class AdoptionCenterService {
             adoptionCenter.setWebsite(adoptionCenterDTO.getWebsite());
             adoptionCenter.setFoundationYear(adoptionCenterDTO.getFoundationYear());
             adoptionCenter.setPhotoUrl(adoptionCenterDTO.getPhotoUrl());
+            adoptionCenter.setLatitude(adoptionCenterDTO.getLatitude()); // Actualiza la latitud
+            adoptionCenter.setLongitude(adoptionCenterDTO.getLongitude()); // Actualiza la longitud
             AdoptionCenter updatedAdoptionCenter = adoptionCenterRepository.save(adoptionCenter);
             return convertToDTO(updatedAdoptionCenter);
         }).orElse(null);
@@ -79,7 +81,9 @@ public class AdoptionCenterService {
             adoptionCenter.getPhone(),
             adoptionCenter.getWebsite(),
             adoptionCenter.getFoundationYear(),
-            adoptionCenter.getPhotoUrl()
+            adoptionCenter.getPhotoUrl(),
+            adoptionCenter.getLatitude(), // Incluye la latitud en el DTO
+            adoptionCenter.getLongitude() // Incluye la longitud en el DTO
         );
     }
 
@@ -98,7 +102,9 @@ public class AdoptionCenterService {
             adoptionCenterDTO.getWebsite(),
             adoptionCenterDTO.getFoundationYear(),
             adoptionCenterDTO.getPhotoUrl(),
-            null // Ignoramos la relación de Pets aquí
+            adoptionCenterDTO.getLatitude(),
+            adoptionCenterDTO.getLongitude()
+            , null
         );
     }
 }

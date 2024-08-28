@@ -27,13 +27,20 @@ public class AdoptionCenterController {
     }
 
     @PostMapping
-    public AdoptionCenterDTO createAdoptionCenter(@RequestBody AdoptionCenterDTO adoptionCenterDTO) {
-        return adoptionCenterService.createAdoptionCenter(adoptionCenterDTO);
+    public ResponseEntity<AdoptionCenterDTO> createAdoptionCenter(@RequestBody AdoptionCenterDTO adoptionCenterDTO) {
+        if (adoptionCenterDTO.getLatitude() == null || adoptionCenterDTO.getLongitude() == null) {
+            return ResponseEntity.badRequest().body(null); // Respuesta con error si faltan las coordenadas
+        }
+        AdoptionCenterDTO createdAdoptionCenter = adoptionCenterService.createAdoptionCenter(adoptionCenterDTO);
+        return ResponseEntity.ok(createdAdoptionCenter);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AdoptionCenterDTO> updateAdoptionCenter(
             @PathVariable Integer id, @RequestBody AdoptionCenterDTO adoptionCenterDTO) {
+        if (adoptionCenterDTO.getLatitude() == null || adoptionCenterDTO.getLongitude() == null) {
+            return ResponseEntity.badRequest().body(null); // Respuesta con error si faltan las coordenadas
+        }
         AdoptionCenterDTO updatedAdoptionCenter = adoptionCenterService.updateAdoptionCenter(id, adoptionCenterDTO);
         return updatedAdoptionCenter != null ? ResponseEntity.ok(updatedAdoptionCenter) : ResponseEntity.notFound().build();
     }

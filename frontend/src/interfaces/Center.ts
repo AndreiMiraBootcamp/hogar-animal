@@ -17,7 +17,8 @@ export interface Center {
     foundationYear: number;
     photoUrl: string;
     imageUrl?: string;
-    position?: [number, number];
+    latitude?: number;
+    longitude?: number;
     animals: {
         type: string;
         quantity: number;
