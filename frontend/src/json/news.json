@@ -1,0 +1,30 @@
+[
+    {
+      "id": 1,
+      "title": "Nuevo Refugio Abierto en Madrid",
+      "description": "Un nuevo refugio para perros ha sido inaugurado en el centro de Madrid, ofreciendo más de 100 plazas para animales en situación de abandono.",
+      "imageURL": "/images/news/animal-shelter-volunteer-caring-for-dog.webp",
+      "date": "2024-08-29"
+    },
+    {
+      "id": 2,
+      "title": "Adopta, No Compres: La Campaña del Año",
+      "description": "La campaña nacional 'Adopta, No Compres' ha ganado fuerza, logrando que miles de animales encuentren un hogar permanente.",
+      "imageURL": "/images/news/refugio_madrid.webp",
+      "date": "2024-08-25"
+    },
+    {
+      "id": 3,
+      "title": "Voluntarios Salvan a 50 Perros",
+      "description": "Un grupo de voluntarios ha rescatado a 50 perros de una situación de maltrato en una finca abandonada. Ahora están buscando hogares para ellos.",
+      "imageURL": "/images/news/voluntarios.webp",
+      "date": "2024-08-22"
+    },
+    {
+      "id": 4,
+      "title": "Jornada de Puertas Abiertas en Refugio Local",
+      "description": "Este sábado, el refugio de animales de la ciudad abrirá sus puertas para que los visitantes puedan conocer a los animales disponibles para adopción.",
+      "imageURL": "/images/news/nuevo_refugio.webp",
+      "date": "2024-08-20"
+    }
+  ]
