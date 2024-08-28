@@ -15,7 +15,7 @@ interface ConfirmDialogProps {
     open: boolean;
     title: string;
     message: string;
-    isError?: boolean; // Añadimos este prop para determinar si es un mensaje de error
+    isError?: boolean;
     onClose: () => void;
     onConfirm: () => void;
 }
@@ -24,7 +24,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     open,
     title,
     message,
-    isError = false, // Valor por defecto false
+    isError = false,
     onClose,
     onConfirm
 }) => {
@@ -66,7 +66,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                 <Button
                     onClick={onConfirm}
                     variant="contained"
-                    color="inherit"
+                    color={isError ? "error" : "primary"}
                     style={{
                         padding: '8px 16px',
                         fontSize: '0.9rem',

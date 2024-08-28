@@ -145,6 +145,7 @@ public class UserService {
 
         dto.setPostalCode(user.getPostalCode());
         dto.setImage(user.getImage());
+        dto.setRole(user.getRole().name()); // Mapeo del rol
         return dto;
     }
 }

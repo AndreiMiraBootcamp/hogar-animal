@@ -8,3 +8,11 @@ body {
   overflow-x: hidden;
 }
 
+.user-icon-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Hacer circular */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

@@ -1,15 +1,17 @@
 package es.animal.hogar.services;
 
-import es.animal.hogar.dtos.PetDTO;
-import es.animal.hogar.entities.Pet;
-import es.animal.hogar.entities.AdoptionCenter;
-import es.animal.hogar.repository.PetRepository;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import es.animal.hogar.dtos.PetDTO;
+import es.animal.hogar.entities.AdoptionCenter;
+import es.animal.hogar.entities.Pet;
+import es.animal.hogar.repository.PetRepository;
 
 @Service
 public class PetService {
@@ -34,6 +36,14 @@ public class PetService {
     
     public List<Pet> getPetsByAdoptionCenterId(Integer centerId) {
         return petRepository.findByAdoptionCenterCenterId(centerId);
+    }
+    
+    public Map<String, Long> getPetCountsBySpeciesInCenter(Integer centerId) {
+        List<Object[]> results = petRepository.countPetsBySpeciesInCenter(centerId);
+        return results.stream().collect(Collectors.toMap(
+            result -> ((Pet.Species) result[0]).name().toLowerCase(), // Convierte la especie a string en minúsculas
+            result -> (Long) result[1] // El conteo
+        ));
     }
 
     public PetDTO updatePet(Integer id, PetDTO petDTO) {

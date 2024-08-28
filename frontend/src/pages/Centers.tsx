@@ -1,9 +1,8 @@
-// src/pages/Centers.tsx
 import React, { useEffect, useState } from 'react';
 import Mapa from '../components/others/Mapa';
 import CenterList from '../components/container/CenterList';
 import { Center } from '../interfaces/Center';
-import { fetchCenters } from '../api/centers'; // Importar la función desde la API
+import { loadCenters } from '../api/centers'; // Importar la función desde la API
 
 const Centers: React.FC = () => {
   const [centers, setCenters] = useState<Center[]>([]);
@@ -12,10 +11,24 @@ const Centers: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
-    const loadCenters = async () => {
+    const loadCentersData = async () => {
       try {
-        const centersData = await fetchCenters();
+        const centersData = await loadCenters();
         setCenters(centersData);
+
+        // Escuchar el evento para actualizar los datos si cambian
+        const handleStorageUpdate = () => {
+          const updatedCenters = localStorage.getItem('centers');
+          if (updatedCenters) {
+            setCenters(JSON.parse(updatedCenters));
+          }
+        };
+
+        window.addEventListener('centers-updated', handleStorageUpdate);
+
+        return () => {
+          window.removeEventListener('centers-updated', handleStorageUpdate);
+        };
       } catch (error) {
         setError('Error al cargar los datos de la API');
       } finally {
@@ -23,7 +36,7 @@ const Centers: React.FC = () => {
       }
     };
 
-    loadCenters();
+    loadCentersData();
   }, []);
 
   if (loading) {

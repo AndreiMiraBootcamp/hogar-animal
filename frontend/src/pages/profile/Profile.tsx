@@ -12,7 +12,7 @@ const Profile: React.FC = () => {
 
   const [formState, setFormState] = useState(() => {
     const cityData = (userData?.city && typeof userData.city !== 'string') ? userData.city as City : null;
-  
+
     return {
       confirmPassword: "",
       email: userData?.email || "",
@@ -78,21 +78,22 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     if (userData && typeof userData.city !== 'string') {
-      const cityData = userData.city;
+      const cityData = userData.city as City;
+      const stateData = cityData.state as State;
 
       setFormState((prevState) => ({
         ...prevState,
         email: userData.email || "",
         address: userData.address || "",
-        city: cityData?.cityId?.toString() || "", // Usando cityId
-        state: cityData?.state?.stateId?.toString() || "", // Usando stateId directamente
+        city: cityData?.cityId?.toString() || "",
+        state: stateData?.stateId?.toString() || "",
         postalCode: userData.postalCode?.toString() || "",
         phoneNumber: userData.phoneNumber || "",
       }));
 
       // Filtrar las ciudades según el stateId
       const filtered = cities.filter(
-        (city) => city.stateId === cityData?.state?.stateId
+        (city) => city.stateId === stateData.stateId
       );
       setFilteredCities(filtered);
     }
@@ -259,7 +260,7 @@ const Profile: React.FC = () => {
   return (
     <div className="container mx-auto p-6">
       <div className="flex flex-col lg:flex-row bg-white gap-4 overflow-hidden">
-        <div className="flex flex-col items-center p-6 bg-gray-100 lg:w-1/3 lg:max-h-[400px] h-auto shadow-lg rounded-lg flex-shrink-0">
+        <div className="flex flex-col items-center p-6 bg-gradient-to-r from-blue-50 to-blue-100 lg:w-1/3 lg:max-h-[400px] h-auto shadow-lg rounded-lg flex-shrink-0">
           <img
             src={previewImage || `data:image/jpeg;base64,${userData.image}`}
             alt="Perfil"
@@ -269,7 +270,7 @@ const Profile: React.FC = () => {
           <button
             type="button"
             onClick={() => document.getElementById("imageUpload")?.click()}
-            className="p-2 text-sm bg-gray-700 text-white rounded-lg hover:bg-gray-800"
+            className="p-2 text-sm text-white rounded-lg bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800"
           >
             Subir Nueva Foto
           </button>
@@ -380,7 +381,7 @@ const Profile: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="p-2 text-sm bg-gray-700 text-white rounded-lg hover:bg-gray-800"
+              className="p-2 text-sm text-white rounded-lg w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800"
             >
               Actualizar Información
             </button>

@@ -16,6 +16,10 @@ export interface Center {
     website: string;
     foundationYear: number;
     photoUrl: string;
-    imageUrl?: string; // Campo opcional
-    position?: [number, number]; // Campo opcional
+    imageUrl?: string;
+    position?: [number, number];
+    animals: {
+        type: string;
+        quantity: number;
+    }[];
 }
