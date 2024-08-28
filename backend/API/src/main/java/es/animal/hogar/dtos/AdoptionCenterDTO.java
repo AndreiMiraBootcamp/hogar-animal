@@ -19,4 +19,6 @@ public class AdoptionCenterDTO {
     private String website;
     private Integer foundationYear;
     private String photoUrl;
+    private Double latitude;
+    private Double longitude;
 }

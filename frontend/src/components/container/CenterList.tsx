@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CenterCard from '../cards/CenterCard';
 import { Center } from '../../interfaces/Center';
 
@@ -16,6 +16,23 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
       prev.includes(type) ? prev.filter((item) => item !== type) : [...prev, type]
     );
   };
+
+  // Calcular totales de cada tipo de animal
+  const totals = centers.reduce(
+    (acc, center) => {
+      center.pets.forEach((pet) => {
+        if (pet.type.toLowerCase() === 'dog') {
+          acc.dogs += pet.quantity;
+        } else if (pet.type.toLowerCase() === 'cat') {
+          acc.cats += pet.quantity;
+        } else {
+          acc.others += pet.quantity;
+        }
+      });
+      return acc;
+    },
+    { dogs: 0, cats: 0, others: 0 }
+  );
 
   const filteredCenters = centers
     .filter((center) => {
@@ -81,7 +98,7 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
                   checked={animalTypeFilter.includes('dog')}
                   onChange={() => handleAnimalTypeChange('dog')}
                 />
-                Perros
+                Perros ({totals.dogs})
               </label>
               <label className="flex items-center">
                 <input
@@ -90,7 +107,7 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
                   checked={animalTypeFilter.includes('cat')}
                   onChange={() => handleAnimalTypeChange('cat')}
                 />
-                Gatos
+                Gatos ({totals.cats})
               </label>
               <label className="flex items-center">
                 <input
@@ -99,7 +116,7 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
                   checked={animalTypeFilter.includes('other')}
                   onChange={() => handleAnimalTypeChange('other')}
                 />
-                Otros
+                Otros ({totals.others})
               </label>
             </div>
           </div>

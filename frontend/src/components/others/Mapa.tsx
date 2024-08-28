@@ -13,22 +13,27 @@ interface MapaProps {
   onSearch: (query: string) => void;
 }
 
-const HandleUserLocation: React.FC<{ position: [number, number] | null; zoom: number }> = ({ position, zoom }) => {
+const HandleBounds: React.FC<{ centers: Center[], userPosition: [number, number] | null }> = ({ centers, userPosition }) => {
   const map = useMap();
 
   useEffect(() => {
-    if (position) {
-      map.setView(position, zoom);
+    if (userPosition) {
+      map.setView(userPosition, 13);
+    } else if (centers.length > 0) {
+      const bounds = L.latLngBounds(centers.map(center => [center.latitude!, center.longitude!] as L.LatLngTuple));
+      map.fitBounds(bounds, { padding: [50, 50] });
+
+      // Hacer un poco menos de zoom después de ajustar los límites
+      const zoomLevel = map.getZoom() - 0.5; // Disminuir el zoom en 0.5 nivel
+      map.setZoom(zoomLevel);
     }
-  }, [position, zoom, map]);
+  }, [centers, userPosition, map]);
 
   return null;
 };
 
 const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
-  const [selectedCenter, setSelectedCenter] = useState<[number, number] | null>(null);
-  const [zoomLevel, setZoomLevel] = useState(6);
   const [userIcon, setUserIcon] = useState<L.Icon | null>(null);
 
   useEffect(() => {
@@ -38,9 +43,9 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
       const userIcon = L.divIcon({
         className: 'user-icon',
         html: `<div class="user-icon-image" style="background-image: url('${imageUrl}');"></div>`,
-        iconSize: [40, 40], // Tamaño del icono
-        iconAnchor: [20, 40], // Punto de anclaje
-        popupAnchor: [0, -40], // Anclaje del popup
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40],
       });
       setUserIcon(userIcon);
     } else {
@@ -70,40 +75,15 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
     center.address.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  useEffect(() => {
-    if (searchQuery.trim() === '') {
-    } else if (filteredCenters.length > 0) {
-      const position = filteredCenters[0]?.position;
-      if (position) {
-        setSelectedCenter(position);
-        setZoomLevel(13);
-      }
-    }
-  }, [filteredCenters, searchQuery]);
-
   const handleLocateUser = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserPosition([latitude, longitude]);
-          setSelectedCenter([latitude, longitude]);
-          setZoomLevel(13);
         },
-        async (error) => {
+        (error) => {
           console.error("Error al obtener la ubicación del usuario:", error);
-          const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-          if (userData && userData.address && userData.city && userData.postalCode) {
-            const fullAddress = `${userData.address}, ${userData.city.name}, ${userData.postalCode}`;
-            const coordinates = await getCoordinatesFromAddress(fullAddress);
-            if (coordinates) {
-              setUserPosition(coordinates);
-              setSelectedCenter(coordinates);
-              setZoomLevel(13);
-            }
-          } else {
-            alert("No se pudo obtener la ubicación actual ni la ubicación guardada.");
-          }
         },
         {
           timeout: 10000,
@@ -115,40 +95,22 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
     }
   };
 
-  const getCoordinatesFromAddress = async (fullAddress: string): Promise<[number, number] | null> => {
-    const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullAddress)}`;
-
-    try {
-      const response = await fetch(geocodeUrl);
-      const data = await response.json();
-
-      if (data && data.length > 0) {
-        return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-      }
-    } catch (error) {
-      console.error('Error al obtener coordenadas:', error);
-    }
-
-    return null;
-  };
-
   const resetZoom = () => {
-    setZoomLevel(6);
-    setSelectedCenter([40.1168, -2.7038]);
+    setUserPosition(null); // Resetea la posición del usuario
   };
 
   return (
     <div className="relative w-full mt-5 justify-center items-center">
       <MapContainer
         center={userPosition || [40.1168, -2.7038]}
-        zoom={zoomLevel}
+        zoom={6}
         style={{ height: '500px', width: '100%', borderRadius: '20px', overflow: 'hidden' }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; OpenStreetMap contributors'
         />
-        <HandleUserLocation position={selectedCenter} zoom={zoomLevel} />
+        <HandleBounds centers={filteredCenters} userPosition={userPosition} />
         {userPosition && userIcon && (
           <Marker position={userPosition} icon={userIcon}>
             <Popup>
@@ -157,21 +119,13 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
           </Marker>
         )}
         {filteredCenters.map((center, index) => {
-          if (!center.position) return null;
+          if (!center.latitude || !center.longitude) return null;
 
           return (
             <Marker
               key={index}
-              position={center.position}
+              position={[center.latitude, center.longitude]}
               icon={centerIcon}
-              eventHandlers={{
-                click: () => {
-                  if (center.position) {
-                    setSelectedCenter(center.position);
-                    setZoomLevel(13);
-                  }
-                },
-              }}
             >
               <Popup>
                 <div style={{ width: '200px' }}>
