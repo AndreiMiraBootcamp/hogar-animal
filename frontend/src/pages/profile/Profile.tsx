@@ -11,14 +11,14 @@ const Profile: React.FC = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const [formState, setFormState] = useState(() => {
-    const cityData = (userData?.city && typeof userData.city !== 'string') ? userData.city as City : null;
+    const cityData = userData?.city && typeof userData.city !== 'string' ? userData.city as City : null;
 
     return {
       confirmPassword: "",
       email: userData?.email || "",
       address: userData?.address || "",
       city: cityData?.cityId?.toString() || "",
-      state: cityData?.stateId?.toString() || "", // Ahora usamos stateId directamente
+      state: cityData?.stateId?.toString() || "", 
       postalCode: userData?.postalCode?.toString() || "",
       phoneNumber: userData?.phoneNumber || "",
     };
@@ -77,9 +77,9 @@ const Profile: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (userData && typeof userData.city !== 'string') {
+    if (userData && userData.city && typeof userData.city !== 'string') {
       const cityData = userData.city as City;
-      const stateData = cityData.state as State;
+      const stateData = cityData?.state as State;
 
       setFormState((prevState) => ({
         ...prevState,
@@ -91,9 +91,8 @@ const Profile: React.FC = () => {
         phoneNumber: userData.phoneNumber || "",
       }));
 
-      // Filtrar las ciudades según el stateId
       const filtered = cities.filter(
-        (city) => city.stateId === stateData.stateId
+        (city) => city.stateId === stateData?.stateId
       );
       setFilteredCities(filtered);
     }
@@ -147,7 +146,6 @@ const Profile: React.FC = () => {
       const file = e.target.files[0];
       setSelectedImage(file);
 
-      // Crear una URL de objeto para la previsualización de la imagen
       const previewUrl = URL.createObjectURL(file);
       setPreviewImage(previewUrl);
     }
@@ -230,7 +228,6 @@ const Profile: React.FC = () => {
           setDialogAction(() => () => window.location.reload());
           setDialogOpen(true);
         } else {
-          // Configurar el diálogo para el error al obtener los datos actualizados
           setDialogTitle('Error');
           setDialogMessage('Error al obtener los datos actualizados.');
           setDialogAction(() => () => navigate('/'));
