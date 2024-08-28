@@ -1,8 +1,6 @@
-// src/pages/AddPet.tsx
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ConfirmDialog from "../others/ConfirmDialog"; // Ajusta la ruta según la ubicación de tu componente
+import ConfirmDialog from "../others/ConfirmDialog";
 
 interface AddPetProps {
   selectedCenter: number | null;
@@ -19,30 +17,11 @@ const AddPet: React.FC<AddPetProps> = ({ selectedCenter }) => {
     available: true,
     photo: null as File | null
   });
-  const [centers, setCenters] = useState<Array<{ center_id: number; name: string }>>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogAction, setDialogAction] = useState<() => void>(() => {});
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchCenters = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/api/centers");
-        if (response.ok) {
-          const data = await response.json();
-          setCenters(data);
-        } else {
-          throw new Error("Error fetching centers");
-        }
-      } catch (error) {
-        console.error("Error fetching centers:", error);
-      }
-    };
-
-    fetchCenters();
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -63,7 +42,7 @@ const AddPet: React.FC<AddPetProps> = ({ selectedCenter }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (selectedCenter === null) {
       setDialogTitle("Error");
       setDialogMessage("Debes seleccionar un refugio.");
@@ -85,7 +64,7 @@ const AddPet: React.FC<AddPetProps> = ({ selectedCenter }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/pets/add", {
+      const response = await fetch("http://localhost:8080/api/pets", {
         method: "POST",
         body: data
       });
@@ -93,7 +72,7 @@ const AddPet: React.FC<AddPetProps> = ({ selectedCenter }) => {
       if (response.ok) {
         setDialogTitle("Éxito");
         setDialogMessage("Animal añadido exitosamente.");
-        setDialogAction(() => () => navigate("/")); // Redirige a la página principal o al panel de administración
+        setDialogAction(() => () => navigate("/")); 
         setDialogOpen(true);
       } else {
         const errorText = await response.text();
@@ -115,28 +94,7 @@ const AddPet: React.FC<AddPetProps> = ({ selectedCenter }) => {
     <div className="w-1/2 p-6 m-4 shadow-md rounded-md mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-center">Añadir Animal</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block mb-2 text-sm">Selecciona un Refugio</label>
-          <select
-            name="center_id"
-            className="w-full p-2 border rounded"
-            value={selectedCenter ?? ""}
-            onChange={(e) => setSelectedCenter(Number(e.target.value))}
-            required
-          >
-            <option value="" disabled>Seleccione un refugio</option>
-            {centers.map(center => (
-              <option key={center.center_id} value={center.center_id}>
-                {center.name}
-              </option>
-            ))}
-          </select>
-          <div className="mt-2">
-            <a href="/create-center" className="text-blue-500 hover:underline">
-              Crear nuevo refugio
-            </a>
-          </div>
-        </div>
+        {/* Elimina el selector de refugio */}
         <div className="mb-4">
           <label className="block mb-2 text-sm">Nombre del Animal</label>
           <input

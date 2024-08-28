@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ConfirmDialog from "../others/ConfirmDialog"; // Ajusta la ruta según la ubicación de tu componente
+import ConfirmDialog from "../others/ConfirmDialog"; 
 
 interface CreateCenterProps {
   onCenterCreated: () => void;
@@ -57,7 +57,7 @@ const CreateCenter: React.FC<CreateCenterProps> = ({ onCenterCreated }) => {
         setDialogTitle("Éxito");
         setDialogMessage("Refugio creado exitosamente.");
         setDialogAction(() => () => {
-          onCenterCreated(); // Llama al callback
+          onCenterCreated();
           setDialogOpen(false);
         });
         setDialogOpen(true);
@@ -170,7 +170,6 @@ const CreateCenter: React.FC<CreateCenterProps> = ({ onCenterCreated }) => {
         </button>
       </form>
 
-      {/* Diálogo de confirmación */}
       <ConfirmDialog
         open={dialogOpen}
         title={dialogTitle}
