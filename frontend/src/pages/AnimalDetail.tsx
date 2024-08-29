@@ -147,8 +147,8 @@ const AnimalDetail: React.FC = () => {
       </div>
 
       <div className="w-full lg:w-1/2 p-4 bg-white rounded-xl shadow-lg space-y-6">
-        <h1 className="text-4xl font-extrabold mb-4 text-blue-800 flex items-center justify-between">
-          <span><FaPaw className="mr-3 text-blue-600" /> {pet.name}</span>
+        <h1 className="text-4xl font-extrabold mb-4 text-blue-800 flex items-center">
+          <FaPaw className="mr-3 text-blue-600" /> {pet.name}
         </h1>
         <p className="text-lg text-gray-700"><strong>Especie:</strong> {translateSpecies(pet.species)}</p>
         <p className="text-lg text-gray-700"><strong>Raza:</strong> {pet.breed}</p>

@@ -1,13 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Center } from '../../interfaces/Center';
-import { FaUserPlus, FaUserCheck, FaPhone } from 'react-icons/fa'; // Asegúrate de importar ambos iconos
+import { FaUserPlus, FaUserCheck, FaPhone } from 'react-icons/fa';
+import { createFollow, deleteFollow, getFolllowsByUserId } from '../../api/follows'; // Importa la función para obtener los follows por userId
 
-const CenterCard: React.FC<{ center: Center }> = ({ center }) => {
+interface CenterCardProps {
+  center: Center;
+  userId?: number | null; // Prop opcional para el userId
+}
+
+const CenterCard: React.FC<CenterCardProps> = ({ center, userId }) => {
   const [liked, setLiked] = useState(false);
 
-  const toggleLike = () => {
-    setLiked(!liked);
+  // Verificar si el usuario sigue el centro
+  const checkIfLiked = async () => {
+    if (userId) {
+      const follows = await getFolllowsByUserId(userId);
+      const isLiked = follows.some((follow: { centerId: number }) => follow.centerId === center.centerId);
+      setLiked(isLiked);
+    }
+  };
+
+  useEffect(() => {
+    checkIfLiked();
+  }, [userId, center.centerId, liked]);
+
+  // Alternar el estado de seguimiento
+  const toggleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!userId) {
+      alert('Por favor, inicia sesión para seguir un centro.');
+      return;
+    }
+
+    if (!liked) {
+      const success = await createFollow(userId, center.centerId);
+      if (success) {
+        setLiked(true);
+      }
+    } else {
+      const success = await deleteFollow(userId, center.centerId);
+      if (success) {
+        setLiked(false);
+      }
+    }
   };
 
   return (
@@ -19,7 +56,7 @@ const CenterCard: React.FC<{ center: Center }> = ({ center }) => {
           className="w-full h-full object-cover rounded-lg"
         />
         <button
-          className={`absolute top-2 right-2 text-2xl ${liked ? 'text-blue-600' : 'text-white'}`}
+          className={`absolute top-2 right-2 text-2xl ${liked ? 'text-blue-600' : 'text-blue-400'}`}
           onClick={toggleLike}
         >
           {liked ? <FaUserCheck /> : <FaUserPlus />}
@@ -38,7 +75,6 @@ const CenterCard: React.FC<{ center: Center }> = ({ center }) => {
           </p>
           <p className="text-gray-500">{center.city.name}</p>
         </div>
-        {/* Botón abajo del todo */}
         <div className="mt-auto w-full">
           <Link
             to={`/center/${center.centerId}`}

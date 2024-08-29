@@ -8,7 +8,6 @@ import NewsCarousel from '../components/home/NewsCarrousel';
 const Home: React.FC = () => {
   const { userData } = useAuth();
   const userId = userData?.userId || null;
-
   return (
     
     <main className="flex flex-col items-center"> 
@@ -20,7 +19,7 @@ const Home: React.FC = () => {
         </>
       )}
       {!userId && <Destacados />}
-        <h1 className="text-3xl font-bold text-center my-6">Últimas Noticias</h1>
+        <h1 className="text-3xl font-bold text-center mt-6">Últimas Noticias</h1>
         <NewsCarousel />
       <AdoptionTips />
     </main>

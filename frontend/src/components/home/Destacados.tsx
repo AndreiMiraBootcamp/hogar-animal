@@ -38,6 +38,7 @@ const Destacados: React.FC<DestacadosProps> = ({ showFavorites = false, userId }
         let filteredPets: Pet[] = petsData;
 
         if (userId) {
+          
           // Si el usuario ha iniciado sesión, obtener favoritos
           const favorites = await getFavoritesByUserId(userId);
           const favoriteIds = favorites.map(fav => fav.petId);
@@ -48,7 +49,7 @@ const Destacados: React.FC<DestacadosProps> = ({ showFavorites = false, userId }
             filteredPets = petsData.filter(pet => favoriteIds.includes(pet.petId));
           } else {
             // Mostrar destacados excluyendo los favoritos
-            const daysToFilter = 1000;
+            const daysToFilter = 90;
             const now = new Date().getTime();
             const daysInMillis = daysToFilter * 24 * 60 * 60 * 1000;
 
@@ -69,7 +70,7 @@ const Destacados: React.FC<DestacadosProps> = ({ showFavorites = false, userId }
           }
         } else {
           // Si no hay sesión iniciada, mostrar solo destacados recientes
-          const daysToFilter = 1000;
+          const daysToFilter = 90;
           const now = new Date().getTime();
           const daysInMillis = daysToFilter * 24 * 60 * 60 * 1000;
 

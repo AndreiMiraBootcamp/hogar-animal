@@ -17,14 +17,15 @@ public class FavoriteController {
     private FavoriteService favoriteService;
 
     @GetMapping
-    public List<Favorite> getAllFavorites() {
-        return favoriteService.getAllFavorites();
+    public ResponseEntity<List<Favorite>> getAllFavorites() {
+        List<Favorite> favorites = favoriteService.getAllFavorites();
+        return ResponseEntity.ok(favorites);  // Retorna un array vacío si no hay favoritos
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<FavoriteDTO>> getFavoritesByUserId(@PathVariable Integer userId) {
         List<FavoriteDTO> favorites = favoriteService.getFavoritesByUserId(userId);
-        return !favorites.isEmpty() ? ResponseEntity.ok(favorites) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(favorites); // Retorna un array vacío si no hay favoritos
     }
 
     @PostMapping
@@ -38,16 +39,13 @@ public class FavoriteController {
     public ResponseEntity<Favorite> updateFavorite(
             @PathVariable Integer favoriteId, @PathVariable Integer userId, @RequestBody Favorite favoriteDetails) {
         Favorite updatedFavorite = favoriteService.updateFavorite(favoriteId, userId, favoriteDetails);
-        return updatedFavorite != null ? ResponseEntity.ok(updatedFavorite) : ResponseEntity.notFound().build();
+        return updatedFavorite != null ? ResponseEntity.ok(updatedFavorite) : ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteFavorite(
             @RequestParam Integer petId, @RequestParam Integer userId) {
         boolean deleted = favoriteService.deleteFavorite(petId, userId);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
     }
 }
-
-
-

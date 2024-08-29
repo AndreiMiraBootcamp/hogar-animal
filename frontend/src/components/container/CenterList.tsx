@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CenterCard from '../cards/CenterCard';
 import { Center } from '../../interfaces/Center';
+import { useAuth } from '../../context/AuthContext'; // Importa el hook de autenticación
 
 interface CenterListProps {
   centers: Center[];
@@ -10,6 +11,9 @@ interface CenterListProps {
 const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
   const [animalTypeFilter, setAnimalTypeFilter] = useState<string[]>([]);
   const [sortOption, setSortOption] = useState<string>('default');
+
+  const { userData } = useAuth(); // Obtén userData del contexto
+  const userId = userData?.userId || null; // Extrae el userId del usuario
 
   const handleAnimalTypeChange = (type: string) => {
     setAnimalTypeFilter((prev) =>
@@ -138,7 +142,7 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
         <div className="flex-grow p-2 w-full">
           <div className="space-y-4">
             {filteredCenters.map((center) => (
-              <CenterCard key={center.centerId} center={center} />
+              <CenterCard key={center.centerId} center={center} userId={userId} />
             ))}
           </div>
         </div>
