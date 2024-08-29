@@ -12,12 +12,6 @@ const Home: React.FC = () => {
   return (
     
     <main className="flex flex-col items-center"> 
-        <Filtros />
-        <Destacados />
-        <h1 className="text-3xl font-bold text-center my-6">Últimas Noticias</h1>
-        <NewsCarousel />
-        <AdoptionTips />
-    <main className="flex flex-col items-center">
       <Filtros />
       {userId && (
         <>
@@ -26,6 +20,8 @@ const Home: React.FC = () => {
         </>
       )}
       {!userId && <Destacados />}
+        <h1 className="text-3xl font-bold text-center my-6">Últimas Noticias</h1>
+        <NewsCarousel />
       <AdoptionTips />
     </main>
   );
