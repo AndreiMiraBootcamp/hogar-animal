@@ -44,7 +44,7 @@ const NewsCarousel: React.FC = () => {
           {newsItems.map((item) => (
             <div
               key={item.id}
-              className="min-w-1/2 flex-shrink-0 w-1/2 px-2 box-border" 
+              className="min-w-1/2 flex-shrink-0 w-1/2 px-8 box-border" 
             >
               <div className="bg-white rounded-lg shadow-lg">
                 <img
