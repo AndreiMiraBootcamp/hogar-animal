@@ -1,34 +1,67 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Pet } from '../../interfaces/Pet';
-import { FaHeart } from "react-icons/fa";
+import { FaHeart } from 'react-icons/fa';
+import { createFavorite, deleteFavorite, getFavoritesByUserId } from '../../api/favourites';
 
-const AnimalCard: React.FC<{ pet: Pet }> = ({ pet }) => {
-  const [liked, setLiked] = useState(false); // Estado para manejar si el corazón está "liked"
+interface AnimalCardProps {
+  pet: Pet;
+  userId?: number | null;
+}
+
+const AnimalCard: React.FC<AnimalCardProps> = ({ pet, userId }) => {
+  const [liked, setLiked] = useState(false);
   const navigate = useNavigate();
+
+  const checkIfLiked = async () => {
+    if (userId) {
+      const favorites = await getFavoritesByUserId(userId);
+      const isLiked = favorites.some((fav: { petId: number }) => fav.petId === pet.petId);
+      setLiked(isLiked);
+    }
+  };
+
+  // Cargar los likes del usuario al montar el componente o cuando se actualiza `liked`
+  useEffect(() => {
+    checkIfLiked();
+  }, [userId, pet.petId, liked]);
 
   const handleClick = () => {
     navigate(`/animal/${pet.petId}`);
   };
 
-  const toggleLike = (e: React.MouseEvent) => {
+  const toggleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    setLiked(!liked);
+
+    if (!userId) {
+      alert('Por favor, inicia sesión para dar like a una mascota.');
+      return;
+    }
+
+    if (!liked) {
+      const success = await createFavorite(userId, pet.petId);
+      if (success) {
+        setLiked(true);
+      }
+    } else {
+      const success = await deleteFavorite(userId, pet.petId);
+      if (success) {
+        setLiked(false);
+      }
+    }
   };
 
   return (
-    <div 
+    <div
       className="relative w-full rounded-lg overflow-hidden shadow-md cursor-pointer transition-transform transform hover:scale-105"
       onClick={handleClick}
     >
-      {/* Imagen de la mascota */}
       <img
         className="w-full h-72 object-cover"
         src={`/images/pets/pet_${pet.petId}/pet_1.jpg`}
         alt={`Foto de ${pet.name}`}
       />
 
-      {/* Icono de corazón en la esquina superior derecha */}
       <FaHeart
         className={`absolute top-2 right-2 text-2xl ${liked ? 'text-red-600' : 'text-gray-400'}`}
         onClick={toggleLike}

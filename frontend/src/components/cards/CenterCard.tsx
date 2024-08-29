@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Center } from '../../interfaces/Center';
-import { FaHeart, FaPhone } from 'react-icons/fa';
+import { FaUserPlus, FaUserCheck, FaPhone } from 'react-icons/fa'; // Asegúrate de importar ambos iconos
 
 const CenterCard: React.FC<{ center: Center }> = ({ center }) => {
   const [liked, setLiked] = useState(false);
@@ -19,10 +19,10 @@ const CenterCard: React.FC<{ center: Center }> = ({ center }) => {
           className="w-full h-full object-cover rounded-lg"
         />
         <button
-          className={`absolute top-2 right-2 text-2xl ${liked ? 'text-red-600' : 'text-gray-400'}`}
+          className={`absolute top-2 right-2 text-2xl ${liked ? 'text-blue-600' : 'text-white'}`}
           onClick={toggleLike}
         >
-          <FaHeart />
+          {liked ? <FaUserCheck /> : <FaUserPlus />}
         </button>
       </div>
       <div className="flex flex-col justify-between w-full h-full">
