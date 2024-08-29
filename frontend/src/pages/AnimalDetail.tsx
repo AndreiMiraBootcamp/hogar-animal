@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { translateSpecies, translateGender } from '../utils/translation';
 import { createFavorite, deleteFavorite, getFavoritesByUserId } from '../api/favourites';
 import { useAuth } from '../context/AuthContext'; // Importa el hook de autenticación
+import ErrorAlert from '../error/ErrorAlert';
 
 const AnimalDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -61,7 +62,7 @@ const AnimalDetail: React.FC = () => {
 
   const toggleLike = async () => {
     if (!userId || !pet) {
-      alert('Por favor, inicia sesión para dar like a una mascota.');
+      setError('Por favor, inicia sesión para dar like a una mascota.');
       return;
     }
 

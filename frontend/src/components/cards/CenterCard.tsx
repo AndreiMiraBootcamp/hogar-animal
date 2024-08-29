@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Center } from '../../interfaces/Center';
 import { FaUserPlus, FaUserCheck, FaPhone } from 'react-icons/fa';
-import { createFollow, deleteFollow, getFolllowsByUserId } from '../../api/follows'; // Importa la función para obtener los follows por userId
+import { createFollow, deleteFollow, getFolllowsByUserId } from '../../api/follows'; 
+import ErrorAlert from '../../error/ErrorAlert';
 
 interface CenterCardProps {
   center: Center;
@@ -11,7 +12,7 @@ interface CenterCardProps {
 
 const CenterCard: React.FC<CenterCardProps> = ({ center, userId }) => {
   const [liked, setLiked] = useState(false);
-
+  const [error, setError] = useState<string | null>(null);
   // Verificar si el usuario sigue el centro
   const checkIfLiked = async () => {
     if (userId) {
@@ -30,7 +31,7 @@ const CenterCard: React.FC<CenterCardProps> = ({ center, userId }) => {
     e.stopPropagation();
 
     if (!userId) {
-      alert('Por favor, inicia sesión para seguir un centro.');
+      setError('Por favor, inicia sesión para seguir un centro.');
       return;
     }
 

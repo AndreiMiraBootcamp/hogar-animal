@@ -5,9 +5,9 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { FaMapMarkerAlt, FaPhone, FaGlobe, FaBuilding } from 'react-icons/fa';
 import { getPetsByCenterId } from '../api/pets';
-import AnimalCard from '../components/cards/AnimalCard'; // Asegúrate de que esta ruta sea correcta
+import AnimalCard from '../components/cards/AnimalCard';
 
-import markerIcon from 'leaflet/dist/images/marker-icon.png'; // Importando el icono de Leaflet
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
 
 const customIcon = new L.Icon({
   iconUrl: markerIcon,
@@ -40,24 +40,19 @@ const CenterDetail: React.FC = () => {
   const [pets, setPets] = useState<Pet[]>([]);
 
   useEffect(() => {
-    // Obtener los detalles del centro desde localStorage
     const storedCenters = JSON.parse(localStorage.getItem('centers') || '[]');
-
-    // Buscar el centro con el centerId correcto
     const storedCenter = storedCenters.find((center: any) => center.centerId === parseInt(id!, 10));
 
     if (storedCenter) {
       setCenter(storedCenter);
 
-      // Asignar las coordenadas utilizando latitude y longitude
       if (storedCenter.latitude && storedCenter.longitude) {
         setCoordinates([storedCenter.latitude, storedCenter.longitude]);
       }
 
-      // Obtener todas las mascotas asociadas a este centro utilizando el centerId
       const fetchPets = async () => {
         try {
-          const petsData = await getPetsByCenterId(storedCenter.centerId); // Usar el centerId para obtener todas las mascotas del centro
+          const petsData = await getPetsByCenterId(storedCenter.centerId);
           setPets(petsData);
         } catch (error) {
           console.error('Error fetching pets:', error);
@@ -74,10 +69,7 @@ const CenterDetail: React.FC = () => {
 
   return (
     <div className="w-full p-6 bg-white shadow-lg rounded-lg m-4">
-      {/* Título del centro */}
       <h1 className="text-4xl font-bold text-center text-blue-800 mb-6">{center.name}</h1>
-
-      {/* Imagen principal grande */}
       <div className="w-full mb-6">
         <img
           src={center.imageUrl}
@@ -86,11 +78,9 @@ const CenterDetail: React.FC = () => {
         />
       </div>
 
-      {/* Card para la información del centro y el mapa */}
       <div className="w-full bg-gradient-to-r from-blue-50 to-blue-100 shadow-md mb-6 p-6">
         <div className="flex flex-col lg:flex-row w-full">
-          {/* Información del centro a la izquierda */}
-          <div className="lg:w-1/2 p-4 flex flex-col">
+          <div className="lg:w-1/2 p-4 flex flex-col gap-5">
             <p className="text-lg flex items-center mb-2">
               <FaMapMarkerAlt className="text-blue-600 mr-2" />
               <span className="font-semibold">Dirección: </span> {center.address}, {center.city.name}, {center.city.state.name}
@@ -120,7 +110,6 @@ const CenterDetail: React.FC = () => {
             </p>
           </div>
 
-          {/* Mapa a la derecha */}
           {coordinates ? (
             <div className="lg:w-1/2 p-4 lg:ps-6">
               <MapContainer center={coordinates} zoom={13} className="h-64 shadow-md">
@@ -141,13 +130,12 @@ const CenterDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Lista de mascotas */}
       <div className="mt-6">
         <h2 className="text-2xl font-bold text-blue-800 mb-4">Animales en el Refugio</h2>
         {pets.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {pets.map((pet: Pet) => (
-              <AnimalCard key={pet.petId} pet={pet} />
+              <AnimalCard key={pet.petId} pet={pet} onClick={true} />
             ))}
           </div>
         ) : (

@@ -66,7 +66,7 @@ const Destacados: React.FC<DestacadosProps> = ({ showFavorites = false, userId }
                 const isRecent = now - createdAtDate.getTime() <= daysInMillis;
                 return isAvailable && isRecent && !favoriteIds.includes(pet.petId); // Excluir favoritos
               })
-              .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+              .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
           }
         } else {
           // Si no hay sesión iniciada, mostrar solo destacados recientes
@@ -87,7 +87,7 @@ const Destacados: React.FC<DestacadosProps> = ({ showFavorites = false, userId }
               const isRecent = now - createdAtDate.getTime() <= daysInMillis;
               return isAvailable && isRecent;
             })
-            .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         }
 
         setPets(filteredPets);

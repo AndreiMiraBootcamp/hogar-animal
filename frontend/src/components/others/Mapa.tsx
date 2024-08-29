@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Center } from '../../interfaces/Center';
 import SearchBar from './SearchBarCenters';
 import { FaCrosshairs } from 'react-icons/fa';
+import ErrorAlert from '../../error/ErrorAlert';
 
 interface MapaProps {
   centers: Center[];
@@ -42,6 +43,7 @@ const HandleBounds: React.FC<{ centers: Center[], userPosition: [number, number]
 const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
   const [userIcon, setUserIcon] = useState<L.Icon | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');
@@ -98,7 +100,7 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
         }
       );
     } else {
-      alert("Geolocalización no soportada en este navegador.");
+      setError("Geolocalización no soportada en este navegador.");
     }
   };
 
