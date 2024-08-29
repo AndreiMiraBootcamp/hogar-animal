@@ -1,8 +1,8 @@
 // src/pages/CreateCenter.tsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ConfirmDialog from "../others/ConfirmDialog"; 
+import ConfirmDialog from "../others/ConfirmDialog";
 
 interface CreateCenterProps {
   onCenterCreated: () => void;
@@ -12,19 +12,38 @@ const CreateCenter: React.FC<CreateCenterProps> = ({ onCenterCreated }) => {
   const [formData, setFormData] = useState({
     name: "",
     address: "",
-    city_id: "",
+    cityName: "",
     postal_code: "",
     phone: "",
     website: "",
     foundation_year: "",
     photoURL: ""
   });
+  const [cities, setCities] = useState<Array<{ id: number; name: string }>>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogAction, setDialogAction] = useState<() => void>(() => {});
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/cities");
+        if (response.ok) {
+          const data = await response.json();
+          setCities(data);
+        } else {
+          throw new Error("Error fetching cities");
+        }
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      }
+    };
+
+    fetchCities();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -36,11 +55,20 @@ const CreateCenter: React.FC<CreateCenterProps> = ({ onCenterCreated }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    // Buscar el city_id a partir del nombre de la ciudad
+    const city = cities.find(city => city.name.toLowerCase() === formData.cityName.toLowerCase());
+    if (!city) {
+      setDialogTitle("Error");
+      setDialogMessage("Ciudad no encontrada.");
+      setDialogOpen(true);
+      return;
+    }
+
     const data = new FormData();
     data.append("name", formData.name);
     data.append("address", formData.address);
-    data.append("city_id", formData.city_id);
+    data.append("city_id", String(city.id));
     data.append("postal_code", formData.postal_code);
     data.append("phone", formData.phone);
     data.append("website", formData.website);
@@ -103,12 +131,12 @@ const CreateCenter: React.FC<CreateCenterProps> = ({ onCenterCreated }) => {
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-2 text-sm">Ciudad ID</label>
+          <label className="block mb-2 text-sm">Nombre de la Ciudad</label>
           <input
-            type="number"
-            name="city_id"
+            type="text"
+            name="cityName"
             className="w-full p-2 border rounded"
-            value={formData.city_id}
+            value={formData.cityName}
             onChange={handleChange}
           />
         </div>

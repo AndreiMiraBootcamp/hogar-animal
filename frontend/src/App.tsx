@@ -19,6 +19,7 @@ import CenterDetail from "./pages/CenterDetail";
 import AnimalDetail from "./pages/AnimalDetail";
 import ScrollUpButton from "./components/others/ScrollUpButton";
 import AdminPanel from "./pages/profile/AdminPanel";
+import NewsCarousel from "./components/home/NewsCarrousel";
 
 
 const App: React.FC = () => {
@@ -43,7 +44,8 @@ const App: React.FC = () => {
                 <Route path="/privacity" element={<Privacity />} />
                 <Route path="/scrollupbutton" element={<ScrollUpButton />} />
                 <Route path="/center/:id" element={<CenterDetail />} />
-                <Route path="/admin" element={<AdminPanel />} /> 
+                <Route path="/admin" element={<AdminPanel />} />
+                <Route path="/newscarrousel" element={<NewsCarousel />} />  
                 <Route path="/animal/:id" element={
                   <>
                     <AnimalDetail />
