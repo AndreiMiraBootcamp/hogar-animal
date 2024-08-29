@@ -57,8 +57,15 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
       return matchesGlobalFilter && matchesAnimalTypeFilter;
     })
     .sort((a, b) => {
+      // Si se seleccionó un filtro de orden, priorízalo
+      if (sortOption === 'name') {
+        return a.name.localeCompare(b.name);
+      } else if (sortOption === 'city') {
+        return a.city.name.localeCompare(b.city.name);
+      }
+
+      // Si no hay filtro de orden, ordenar por la cantidad de animales del tipo seleccionado
       if (animalTypeFilter.length > 0) {
-        // Ordenar por la cantidad de animales del tipo seleccionado
         const getAnimalCount = (center: Center) =>
           animalTypeFilter.reduce((count, type) => {
             const pet = center.pets?.find((pet) => pet.type.toLowerCase() === type.toLowerCase());
@@ -71,13 +78,7 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
         return bCount - aCount; // Ordenar de mayor a menor
       }
 
-      // Ordenar por nombre o ciudad si no hay filtro de tipo de animal
-      if (sortOption === 'name') {
-        return a.name.localeCompare(b.name);
-      } else if (sortOption === 'city') {
-        return a.city.name.localeCompare(b.city.name);
-      }
-
+      // Si no hay un filtro de tipo de animal, puedes retornar 0 para mantener el orden original
       return 0;
     });
 
