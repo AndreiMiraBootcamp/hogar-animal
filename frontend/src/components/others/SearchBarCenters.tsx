@@ -29,7 +29,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onResetZoom }) => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={handleKeyPress}
                 className="p-2 border rounded w-full"
-                placeholder="Buscar por ciudad, provincia o nombre del centro"
+                placeholder="Buscar por ciudad, dirección o nombre del centro"
             />
             <button
                 onClick={handleSearch}

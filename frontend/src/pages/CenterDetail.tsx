@@ -49,9 +49,9 @@ const CenterDetail: React.FC = () => {
     if (storedCenter) {
       setCenter(storedCenter);
 
-      // Solo asignar las coordenadas si están definidas y son válidas
-      if (storedCenter.position && Array.isArray(storedCenter.position) && storedCenter.position.length === 2) {
-        setCoordinates(storedCenter.position);
+      // Asignar las coordenadas utilizando latitude y longitude
+      if (storedCenter.latitude && storedCenter.longitude) {
+        setCoordinates([storedCenter.latitude, storedCenter.longitude]);
       }
 
       // Obtener todas las mascotas asociadas a este centro utilizando el centerId
