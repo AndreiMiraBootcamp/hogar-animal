@@ -1,5 +1,6 @@
 package es.animal.hogar.services;
 
+import es.animal.hogar.dtos.FavoriteDTO;
 import es.animal.hogar.entities.Favorite;
 import es.animal.hogar.entities.Pet;
 import es.animal.hogar.entities.User;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FavoriteService {
@@ -29,9 +31,14 @@ public class FavoriteService {
         return favoriteRepository.findAll();
     }
 
-    public Favorite getFavoriteById(Integer id) {
-        Optional<Favorite> optionalFavorite = favoriteRepository.findById(id);
-        return optionalFavorite.orElse(null);
+    public List<FavoriteDTO> getFavoritesByUserId(Integer userId) {
+        List<Favorite> favorites = favoriteRepository.findByAdopterUserId(userId);
+        return favorites.stream()
+                .map(favorite -> new FavoriteDTO(
+                        favorite.getFavoriteId(),
+                        favorite.getPet().getPetId(),
+                        favorite.getAdopter().getUserId()))
+                .collect(Collectors.toList());
     }
 
     public Favorite createFavorite(Integer petId, Integer userId) {
@@ -65,10 +72,18 @@ public class FavoriteService {
     }
 
 
-    public boolean deleteFavorite(Integer id) {
-        if (favoriteRepository.existsById(id)) {
-            favoriteRepository.deleteById(id);
-            return true;
+    public boolean deleteFavorite(Integer petId, Integer userId) {
+        // Verificar que tanto el usuario como la mascota existan
+        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<Pet> petOptional = petRepository.findById(petId);
+
+        if (userOptional.isPresent() && petOptional.isPresent()) {
+            // Buscar el favorito por userId y petId usando la consulta personalizada
+            Optional<Favorite> favoriteOptional = favoriteRepository.findByUserIdAndPetId(petId, userId);
+            if (favoriteOptional.isPresent()) {
+                favoriteRepository.delete(favoriteOptional.get());
+                return true;
+            }
         }
         return false;
     }
