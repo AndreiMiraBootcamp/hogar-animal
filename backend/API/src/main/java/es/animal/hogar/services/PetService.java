@@ -29,9 +29,18 @@ public class PetService {
     }
 
     public PetDTO createPet(PetDTO petDTO) {
+        // 1. Convertir el DTO en una entidad
         Pet pet = convertToEntity(petDTO);
+
         Pet savedPet = petRepository.save(pet);
-        return convertToDTO(savedPet);
+
+        String photoUrl = "images/pets/" + savedPet.getPetId();
+
+        savedPet.setPhotoUrl(photoUrl);
+
+        Pet updatedPet = petRepository.save(savedPet);
+
+        return convertToDTO(updatedPet);
     }
     
     public List<Pet> getPetsByAdoptionCenterId(Integer centerId) {

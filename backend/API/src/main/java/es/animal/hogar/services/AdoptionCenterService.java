@@ -40,7 +40,14 @@ public class AdoptionCenterService {
 
     public AdoptionCenterDTO createAdoptionCenter(AdoptionCenterDTO adoptionCenterDTO) {
         AdoptionCenter adoptionCenter = convertToEntity(adoptionCenterDTO);
+
         AdoptionCenter savedAdoptionCenter = adoptionCenterRepository.save(adoptionCenter);
+
+        String photoURL = "images/centers/" + savedAdoptionCenter.getCenterId();
+        savedAdoptionCenter.setPhotoUrl(photoURL);
+
+        adoptionCenterRepository.save(savedAdoptionCenter);
+
         return convertToDTO(savedAdoptionCenter);
     }
 

@@ -1,13 +1,37 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ConfirmDialog from "../others/ConfirmDialog";
+import React, { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Checkbox,
+  FormControlLabel,
+  DialogContentText,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 interface AddPetProps {
   selectedCenter: number | null;
+  open: boolean;
+  onClose: () => void;
 }
 
-const AddPet: React.FC<AddPetProps> = ({ selectedCenter }) => {
-  const [formData, setFormData] = useState({
+// Styled InputLabel with background and padding
+const StyledInputLabel = styled(InputLabel)({
+  backgroundColor: "white",
+  padding: "0 4px",
+  left: "-4px",
+  zIndex: 1,
+});
+
+const AddPet: React.FC<AddPetProps> = ({ selectedCenter, open, onClose }) => {
+  const initialFormData = {
     name: "",
     species: "dog",
     breed: "",
@@ -15,192 +39,233 @@ const AddPet: React.FC<AddPetProps> = ({ selectedCenter }) => {
     gender: "male",
     description: "",
     available: true,
-    photo: null as File | null
-  });
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState("");
-  const [dialogTitle, setDialogTitle] = useState("");
-  const [dialogAction, setDialogAction] = useState<() => void>(() => {});
-  const navigate = useNavigate();
+  };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const [formData, setFormData] = useState(initialFormData);
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+
+  // Resetear el formulario cada vez que se cierra el diálogo
+  useEffect(() => {
+    if (!open) {
+      setFormData(initialFormData);
+      setSelectedImages([]); // Limpiar las imágenes seleccionadas
+    }
+  }, [open]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData(prevState => ({
-        ...prevState,
-        photo: e.target.files[0]
-      }));
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      const images = files.map((file) => URL.createObjectURL(file));
+      setSelectedImages(images);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (selectedCenter === null) {
-      setDialogTitle("Error");
-      setDialogMessage("Debes seleccionar un refugio.");
-      setDialogOpen(true);
+    if (selectedCenter === null || selectedCenter === undefined) {
+      alert("Debes seleccionar un refugio.");
       return;
     }
 
-    const data = new FormData();
-    data.append("center_id", String(selectedCenter));
-    data.append("name", formData.name);
-    data.append("species", formData.species);
-    data.append("breed", formData.breed);
-    data.append("age", formData.age);
-    data.append("gender", formData.gender);
-    data.append("description", formData.description);
-    data.append("available", formData.available ? "1" : "0");
-    if (formData.photo) {
-      data.append("photo", formData.photo);
-    }
+    // Crear el objeto de datos para enviar
+    const data = {
+      name: formData.name,
+      species: formData.species,
+      breed: formData.breed,
+      age: Number(formData.age), // Asegúrate de que la edad sea un número
+      gender: formData.gender,
+      description: formData.description,
+      available: formData.available,
+      centerId: selectedCenter,
+    };
 
     try {
       const response = await fetch("http://localhost:8080/api/pets", {
         method: "POST",
-        body: data
+        headers: {
+          "Content-Type": "application/json", // Establecer el encabezado Content-Type como application/json
+        },
+        body: JSON.stringify(data), // Convertir el objeto de datos a JSON
       });
 
       if (response.ok) {
-        setDialogTitle("Éxito");
-        setDialogMessage("Animal añadido exitosamente.");
-        setDialogAction(() => () => navigate("/")); 
-        setDialogOpen(true);
+        setConfirmationDialogOpen(true); // Mostrar diálogo de confirmación
       } else {
         const errorText = await response.text();
-        setDialogTitle("Error");
-        setDialogMessage("Error al añadir el animal: " + errorText);
-        setDialogAction(() => () => window.location.reload());
-        setDialogOpen(true);
+        alert("Error al añadir el animal: " + errorText);
       }
     } catch (error) {
       console.error("Error al añadir el animal:", error);
-      setDialogTitle("Error");
-      setDialogMessage("Ocurrió un error al añadir el animal.");
-      setDialogAction(() => () => window.location.reload());
-      setDialogOpen(true);
+      alert("Ocurrió un error al añadir el animal.");
     }
   };
 
+  const handleConfirmationClose = () => {
+    setConfirmationDialogOpen(false);
+    onClose(); // Cerrar el formulario de añadir animal
+  };
+
   return (
-    <div className="w-1/2 p-6 m-4 shadow-md rounded-md mx-auto">
-      <h2 className="text-2xl font-bold mb-6 text-center">Añadir Animal</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Elimina el selector de refugio */}
-        <div className="mb-4">
-          <label className="block mb-2 text-sm">Nombre del Animal</label>
-          <input
-            type="text"
-            name="name"
-            className="w-full p-2 border rounded"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2 text-sm">Especie</label>
-          <select
-            name="species"
-            className="w-full p-2 border rounded"
-            value={formData.species}
-            onChange={handleChange}
-          >
-            <option value="dog">Perro</option>
-            <option value="cat">Gato</option>
-            <option value="other">Otro</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2 text-sm">Raza</label>
-          <input
-            type="text"
-            name="breed"
-            className="w-full p-2 border rounded"
-            value={formData.breed}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2 text-sm">Edad</label>
-          <input
-            type="number"
-            name="age"
-            className="w-full p-2 border rounded"
-            value={formData.age}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2 text-sm">Género</label>
-          <select
-            name="gender"
-            className="w-full p-2 border rounded"
-            value={formData.gender}
-            onChange={handleChange}
-          >
-            <option value="male">Masculino</option>
-            <option value="female">Femenino</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2 text-sm">Descripción</label>
-          <textarea
-            name="description"
-            className="w-full p-2 border rounded"
-            value={formData.description}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2 text-sm">Disponible</label>
-          <input
-            type="checkbox"
-            name="available"
-            checked={formData.available}
-            onChange={(e) => setFormData(prevState => ({
-              ...prevState,
-              available: e.target.checked
-            }))}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2 text-sm">Foto</label>
-          <input
-            type="file"
-            name="photo"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full p-2 bg-gray-700 text-white rounded hover:bg-gray-800"
-        >
-          Añadir Animal
-        </button>
-      </form>
+    <>
+      <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+        <DialogTitle>Añadir Animal</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Nombre del Animal"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+            <FormControl fullWidth margin="normal">
+              <StyledInputLabel id="species-label">Especie</StyledInputLabel>
+              <Select
+                labelId="species-label"
+                name="species"
+                value={formData.species}
+                onChange={handleChange}
+              >
+                <MenuItem value="dog">Perro</MenuItem>
+                <MenuItem value="cat">Gato</MenuItem>
+                <MenuItem value="other">Otro</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Raza"
+              name="breed"
+              value={formData.breed}
+              onChange={handleChange}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Edad"
+              name="age"
+              type="number"
+              value={formData.age}
+              onChange={handleChange}
+            />
+            <FormControl fullWidth margin="normal">
+              <StyledInputLabel id="gender-label">Género</StyledInputLabel>
+              <Select
+                labelId="gender-label"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+              >
+                <MenuItem value="male">Masculino</MenuItem>
+                <MenuItem value="female">Femenino</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Descripción"
+              name="description"
+              multiline
+              rows={4}
+              value={formData.description}
+              onChange={handleChange}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formData.available}
+                  onChange={(e) =>
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      available: e.target.checked,
+                    }))
+                  }
+                  name="available"
+                />
+              }
+              label="Disponible"
+            />
+
+            {/* Campo para subir imágenes dentro de una caja con borde */}
+            <div
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                padding: "10px",
+                marginTop: "20px",
+              }}
+            >
+              <StyledInputLabel id="images-label" style={{ marginBottom: "10px" }}>
+                Imágenes
+              </StyledInputLabel>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFileChange}
+                style={{ marginBottom: "10px" }}
+              />
+              <div
+                className="image-preview"
+                style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}
+              >
+                {selectedImages.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`Preview ${index + 1}`}
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      objectFit: "cover",
+                      borderRadius: "4px",
+                      border: "1px solid #ccc",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={handleSubmit} color="primary">
+            Añadir Animal
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Diálogo de confirmación */}
-      <ConfirmDialog
-        open={dialogOpen}
-        title={dialogTitle}
-        message={dialogMessage}
-        onClose={() => setDialogOpen(false)}
-        onConfirm={() => {
-          dialogAction();
-          setDialogOpen(false);
-        }}
-      />
-    </div>
+      <Dialog open={confirmationDialogOpen} onClose={handleConfirmationClose}>
+        <DialogTitle>Animal Creado</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            El animal ha sido añadido exitosamente.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmationClose} color="primary">
+            Aceptar
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

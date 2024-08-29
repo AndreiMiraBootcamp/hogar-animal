@@ -8,7 +8,7 @@ import ErrorAlert from '../../error/ErrorAlert';
 interface AnimalCardProps {
   pet: Pet;
   userId?: number | null;
-  onClick?: boolean;  // onClick es un booleano opcional
+  onClick?: boolean | false;  // onClick es un booleano opcional
 }
 
 const AnimalCard: React.FC<AnimalCardProps> = ({ pet, userId, onClick = true }) => {
@@ -36,9 +36,6 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ pet, userId, onClick = true }) 
     navigate(`/animal/${pet.petId}`);
   };
 
-  if (onClick){
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
 
   const toggleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();

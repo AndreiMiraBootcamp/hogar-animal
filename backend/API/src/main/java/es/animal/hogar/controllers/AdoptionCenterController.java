@@ -28,10 +28,15 @@ public class AdoptionCenterController {
 
     @PostMapping
     public ResponseEntity<AdoptionCenterDTO> createAdoptionCenter(@RequestBody AdoptionCenterDTO adoptionCenterDTO) {
-        if (adoptionCenterDTO.getLatitude() == null || adoptionCenterDTO.getLongitude() == null) {
-            return ResponseEntity.badRequest().body(null); // Respuesta con error si faltan las coordenadas
+        if (adoptionCenterDTO.getLatitude() == null) {
+            adoptionCenterDTO.setLatitude(43.043398);
         }
+        if (adoptionCenterDTO.getLongitude() == null) {
+            adoptionCenterDTO.setLongitude(-7.527535);
+        }
+
         AdoptionCenterDTO createdAdoptionCenter = adoptionCenterService.createAdoptionCenter(adoptionCenterDTO);
+
         return ResponseEntity.ok(createdAdoptionCenter);
     }
 

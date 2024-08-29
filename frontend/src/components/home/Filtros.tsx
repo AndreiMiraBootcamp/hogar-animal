@@ -5,7 +5,7 @@ import { FaDog, FaCat, FaQuestion } from 'react-icons/fa';
 
 const Filtros: React.FC = () => {
   const [search, setSearch] = useState('');
-  const [animal, setAnimal] = useState('');
+  const [animal, setAnimal] = useState<string | null>(null); // Ahora permite null
   const navigate = useNavigate();
 
   const searchs = [
@@ -80,7 +80,7 @@ const Filtros: React.FC = () => {
                       key={animalOption.name}
                       className={`p-4 rounded-lg flex flex-col items-center 
                         ${animal === animalOption.value ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}
-                      onClick={() => setAnimal(animalOption.value)}
+                      onClick={() => setAnimal(animal === animalOption.value ? null : animalOption.value)} // Cambiado
                     >
                       {animalOption.icon}
                       <span className="mt-2 text-sm">{animalOption.name}</span>

@@ -103,7 +103,7 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
                   checked={animalTypeFilter.includes('dog')}
                   onChange={() => handleAnimalTypeChange('dog')}
                 />
-                Perros ({totals.dogs})
+                Perros
               </label>
               <label className="flex items-center">
                 <input
@@ -112,7 +112,7 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
                   checked={animalTypeFilter.includes('cat')}
                   onChange={() => handleAnimalTypeChange('cat')}
                 />
-                Gatos ({totals.cats})
+                Gatos
               </label>
               <label className="flex items-center">
                 <input
@@ -121,7 +121,7 @@ const CenterList: React.FC<CenterListProps> = ({ centers, searchQuery }) => {
                   checked={animalTypeFilter.includes('other')}
                   onChange={() => handleAnimalTypeChange('other')}
                 />
-                Otros ({totals.others})
+                Otros
               </label>
             </div>
           </div>

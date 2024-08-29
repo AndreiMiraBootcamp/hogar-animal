@@ -7,7 +7,16 @@ const fetchPetCountsForCenter = async (centerId: number) => {
         if (!response.ok) {
             throw new Error('Error al cargar los conteos de mascotas para el centro con ID: ' + centerId);
         }
-        const petCounts = await response.json();
+
+        // Verifica si la respuesta contiene contenido antes de intentar analizarla
+        const textResponse = await response.text();
+
+        if (!textResponse) {
+            console.warn('La respuesta está vacía para el centro con ID: ' + centerId);
+            return [];
+        }
+
+        const petCounts = JSON.parse(textResponse);
         return Object.keys(petCounts).map(species => ({
             type: species,
             quantity: petCounts[species],
@@ -93,7 +102,7 @@ export const updateCenter = async (centerId: number, updatedData: Partial<Center
         // Opcional: Actualizar el caché local después de la actualización
         const centers = await fetchCenters();
         localStorage.setItem('centers', JSON.stringify(centers));
-        
+
         // Disparar evento personalizado si es necesario
         const event = new Event('centers-updated');
         window.dispatchEvent(event);
