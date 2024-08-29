@@ -13,11 +13,18 @@ interface MapaProps {
   onSearch: (query: string) => void;
 }
 
-const HandleBounds: React.FC<{ centers: Center[], userPosition: [number, number] | null }> = ({ centers, userPosition }) => {
+const HandleBounds: React.FC<{ centers: Center[], userPosition: [number, number] | null, searchQuery: string }> = ({ centers, userPosition, searchQuery }) => {
   const map = useMap();
 
   useEffect(() => {
-    if (userPosition) {
+    if (searchQuery && centers.length > 0) {
+      const bounds = L.latLngBounds(centers.map(center => [center.latitude!, center.longitude!] as L.LatLngTuple));
+      map.fitBounds(bounds, { padding: [50, 50] });
+
+      // Hacer un poco menos de zoom después de ajustar los límites
+      const zoomLevel = map.getZoom() - 0.5; // Disminuir el zoom en 0.5 nivel
+      map.setZoom(zoomLevel);
+    } else if (userPosition) {
       map.setView(userPosition, 13);
     } else if (centers.length > 0) {
       const bounds = L.latLngBounds(centers.map(center => [center.latitude!, center.longitude!] as L.LatLngTuple));
@@ -27,7 +34,7 @@ const HandleBounds: React.FC<{ centers: Center[], userPosition: [number, number]
       const zoomLevel = map.getZoom() - 0.5; // Disminuir el zoom en 0.5 nivel
       map.setZoom(zoomLevel);
     }
-  }, [centers, userPosition, map]);
+  }, [centers, userPosition, map, searchQuery]);
 
   return null;
 };
@@ -110,7 +117,7 @@ const Mapa: React.FC<MapaProps> = ({ centers, searchQuery, onSearch }) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; OpenStreetMap contributors'
         />
-        <HandleBounds centers={filteredCenters} userPosition={userPosition} />
+        <HandleBounds centers={filteredCenters} userPosition={userPosition} searchQuery={searchQuery} />
         {userPosition && userIcon && (
           <Marker position={userPosition} icon={userIcon}>
             <Popup>
