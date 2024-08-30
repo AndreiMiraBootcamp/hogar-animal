@@ -64,7 +64,7 @@ const CenterDetail: React.FC = () => {
   }, [id]);
 
   if (!center) {
-    return <div className="text-center mt-10 text-2xl font-semibold text-gray-600">No se encontró el centro.</div>;
+    return <div className="text-center mt-10 text-2xl font-semibold text-gray-600"></div>;
   }
 
   return (
