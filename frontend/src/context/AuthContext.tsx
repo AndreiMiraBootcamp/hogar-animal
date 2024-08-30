@@ -73,10 +73,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const logout = () => {
-        localStorage.clear(); // Limpia todos los elementos del localStorage
+        localStorage.removeItem('userData'); // Elimina solo el elemento 'userData'
+        localStorage.removeItem('token'); // Elimina solo el elemento 'token'
+        localStorage.removeItem('expirationTime'); // Elimina solo el elemento 'expirationTime'
+        
         setUserData(null);
         setToken(null); 
-        window.location.href = "/"; // Redirige al usuario a la página principal después de cerrar sesión
+        window.location.href = "/";
     };
 
     return (
