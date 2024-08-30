@@ -40,6 +40,10 @@ const Header: React.FC = () => {
     setDrawerOpen(open);
   };
 
+  const userRole = localStorage.getItem('userData')
+    ? JSON.parse(localStorage.getItem('userData')!).role
+    : null;
+
   return (
     <header className={`text-black py-4 px-10 flex justify-around items-center transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} bg-white shadow-md`}>
       <div className="flex items-center">
@@ -78,9 +82,11 @@ const Header: React.FC = () => {
               <MenuItem onClick={handleMenuClose}>
                 <Link to="/profile" className="text-gray-700 hover:text-gray-900 w-full">Editar Perfil</Link>
               </MenuItem>
+              {userRole === 'admin' && (
                 <MenuItem onClick={handleMenuClose}>
                   <Link to="/admin" className="text-gray-700 hover:text-gray-900 w-full">Panel de Administración</Link>
                 </MenuItem>
+              )}
               <MenuItem
                 onClick={() => {
                   logout();
@@ -110,15 +116,15 @@ const Header: React.FC = () => {
             <ListItem button component={Link} to="/colabora" onClick={toggleDrawer(false)}>
               <ListItemText primary="Contacto" />
             </ListItem>
+            {userRole === 'admin' && (
+              <ListItem button component={Link} to="/admin" onClick={toggleDrawer(false)}>
+                <ListItemText primary="Panel de Administración" />
+              </ListItem>
+            )}
             {userData && (
-              <>
-                <ListItem button component={Link} to="/admin" onClick={toggleDrawer(false)}>
-                    <ListItemText primary="Panel de Administración" />
-                  </ListItem>
-                <ListItem button onClick={() => { logout(); toggleDrawer(false)(); }}>
-                  <ListItemText primary="Cerrar sesión" />
-                </ListItem>
-              </>
+              <ListItem button onClick={() => { logout(); toggleDrawer(false)(); }}>
+                <ListItemText primary="Cerrar sesión" />
+              </ListItem>
             )}
           </List>
         </Drawer>
