@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.user-icon-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Hacer circular */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
